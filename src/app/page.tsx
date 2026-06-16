@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import {
-  Shield, Users, Settings, AlertTriangle, CheckSquare,
-  ArrowRight, CheckCircle2, MapPin, Clock, ChevronRight,
-  Zap, BarChart3, Building2,
+  Shield, Users, Settings, AlertTriangle, CheckSquare, BarChart3,
+  Building2, ArrowRight, CheckCircle2, Zap, MapPin,
 } from "lucide-react";
 
-/* ─── B Logo ─────────────────────────────────────────────────────── */
+/* ─── Logo ───────────────────────────────────────────────────────── */
 function BLogo({ size = 24, color = "currentColor" }: { size?: number; color?: string }) {
   return (
     <svg viewBox="0 0 400 425" width={size} height={size} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,119 +16,99 @@ function BLogo({ size = 24, color = "currentColor" }: { size?: number; color?: s
   );
 }
 
-/* ─── Inline dashboard mockup ─────────────────────────────────────── */
+/* ─── Dashboard Mockup ───────────────────────────────────────────── */
 function DashboardMockup() {
   return (
-    <div className="w-full max-w-[640px] select-none" style={{ filter: "drop-shadow(0 32px 64px rgba(0,0,0,0.18))" }}>
-      {/* Browser chrome */}
-      <div className="border" style={{ background: "#f0f0f0", borderColor: "#d0d0d0" }}>
-        <div className="flex items-center gap-2 px-4 py-2.5 border-b" style={{ borderColor: "#d0d0d0" }}>
-          <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-full" style={{ background: "#ff6058" }} />
-            <div className="w-3 h-3 rounded-full" style={{ background: "#ffbd2e" }} />
-            <div className="w-3 h-3 rounded-full" style={{ background: "#28c840" }} />
+    <div style={{ width: "100%", filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.12))", userSelect: "none" }}>
+      <div style={{ border: "1px solid #d8d8d8", background: "#f0f0f0" }}>
+        {/* Browser chrome */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "10px 16px", borderBottom: "1px solid #d0d0d0" }}>
+          <div style={{ display: "flex", gap: "6px" }}>
+            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ff6058" }} />
+            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#ffbd2e" }} />
+            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#28c840" }} />
           </div>
-          <div className="flex-1 mx-4 px-3 py-1 text-[11px] text-center border" style={{ background: "#ffffff", borderColor: "#d8d8d8", color: "#888" }}>
+          <div style={{ flex: 1, margin: "0 16px", padding: "4px 12px", fontSize: "11px", textAlign: "center", border: "1px solid #d8d8d8", background: "#fff", color: "#888" }}>
             app.briesa.com/safety/incidents
           </div>
         </div>
-
-        {/* App shell */}
-        <div className="flex overflow-hidden" style={{ height: "380px", background: "#fafafa" }}>
-
+        {/* App */}
+        <div style={{ display: "flex", height: "420px", background: "#fafafa", overflow: "hidden" }}>
           {/* Sidebar */}
-          <div className="flex-shrink-0 w-[150px] border-r overflow-hidden" style={{ background: "#ffffff", borderColor: "#e0e0e0" }}>
-            <div className="px-2 py-2.5 space-y-px">
-              {/* Dashboard item */}
-              <div className="flex items-center gap-2 px-2.5 py-1.5 text-[10px]" style={{ color: "#999" }}>
-                <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "#e0e0e0" }} />
-                Dashboard
-              </div>
-              {/* Section label */}
-              <div className="px-2.5 pt-2 pb-0.5 text-[8.5px] font-bold uppercase tracking-widest" style={{ color: "#bbb" }}>Modules</div>
-              {/* Safety — active */}
-              <div className="flex items-center gap-2 px-2.5 py-1.5 text-[10px] font-semibold" style={{ background: "#e0e0e0", color: "#171717" }}>
-                <Shield className="w-2.5 h-2.5" style={{ color: "#1a8a4a" }} />
-                Safety
-              </div>
-              {/* Sub items */}
-              <div className="ml-3 pl-2 border-l space-y-px" style={{ borderColor: "#e0e0e0" }}>
-                {["Incidents","Actions","Toolbox","Prestart","SWMS","Permits"].map((s, i) => (
-                  <div key={s} className="px-2 py-1 text-[9.5px]" style={{ color: i === 0 ? "#171717" : "#aaa", background: i === 0 ? "#ebebeb" : "transparent", fontWeight: i === 0 ? 600 : 400 }}>{s}</div>
-                ))}
-              </div>
-              {/* Other modules collapsed */}
-              {[["Users","People"],["Settings","Operations"],["AlertTriangle","Risk"]].map(([,name]) => (
-                <div key={name} className="flex items-center gap-2 px-2.5 py-1.5 text-[10px]" style={{ color: "#bbb" }}>
-                  <div className="w-2.5 h-2.5 rounded-sm" style={{ background: "#eee" }} />
-                  {name}
-                </div>
+          <div style={{ width: "155px", flexShrink: 0, borderRight: "1px solid #e8e8e8", background: "#fff", padding: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 8px 10px", borderBottom: "1px solid #f0f0f0", marginBottom: "8px" }}>
+              <BLogo size={13} color="#1a8a4a" />
+              <span style={{ fontSize: "11px", fontWeight: 700, color: "#111" }}>Briesa</span>
+            </div>
+            <div style={{ fontSize: "8.5px", fontWeight: 700, letterSpacing: "0.1em", color: "#bbb", textTransform: "uppercase", padding: "0 8px 6px" }}>Modules</div>
+            {/* Safety active */}
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 8px", background: "#f0f0f0", fontSize: "10px", fontWeight: 600, color: "#111" }}>
+              <Shield style={{ width: "10px", height: "10px", color: "#1a8a4a" }} />
+              Safety
+            </div>
+            <div style={{ marginLeft: "12px", paddingLeft: "8px", borderLeft: "1px solid #e8e8e8" }}>
+              {["Incidents", "Actions", "Toolbox", "Prestart", "SWMS", "Permits"].map((s, i) => (
+                <div key={s} style={{ padding: "4px 8px", fontSize: "9.5px", color: i === 0 ? "#111" : "#bbb", background: i === 0 ? "#ebebeb" : "transparent", fontWeight: i === 0 ? 600 : 400 }}>{s}</div>
               ))}
             </div>
+            {[["Training"], ["People"], ["Risk"]].map(([name]) => (
+              <div key={name} style={{ display: "flex", alignItems: "center", gap: "6px", padding: "6px 8px", fontSize: "10px", color: "#ccc" }}>
+                <div style={{ width: "10px", height: "10px", background: "#eee" }} />
+                {name}
+              </div>
+            ))}
           </div>
-
-          {/* Main content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Top bar */}
-            <div className="flex items-center gap-3 px-4 h-[36px] border-b flex-shrink-0" style={{ background: "#ffffff", borderColor: "#e0e0e0" }}>
-              <BLogo size={14} color="#1a8a4a" />
-              <div className="w-px h-3" style={{ background: "#d0d0d0" }} />
-              <span className="text-[10px] font-semibold" style={{ color: "#171717" }}>Demo Organisation</span>
-              <span className="text-[7.5px] font-bold px-1.5 py-0.5" style={{ background: "#e6f7ed", color: "#1a8a4a" }}>OWNER</span>
-              <div className="w-px h-3" style={{ background: "#d0d0d0" }} />
-              <span className="text-[10px]" style={{ color: "#999" }}>Safety</span>
-              <div className="w-px h-3" style={{ background: "#d0d0d0" }} />
-              <span className="text-[10px] font-semibold" style={{ color: "#171717" }}>Incidents</span>
+          {/* Main */}
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+            {/* Topbar */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "0 16px", height: "38px", borderBottom: "1px solid #ebebeb", background: "#fff", flexShrink: 0 }}>
+              <span style={{ fontSize: "10px", color: "#bbb" }}>Safety</span>
+              <span style={{ fontSize: "10px", color: "#ccc" }}>/</span>
+              <span style={{ fontSize: "10px", fontWeight: 600, color: "#111" }}>Incidents</span>
+              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "4px" }}>
+                <span style={{ fontSize: "9px", fontWeight: 700, padding: "2px 6px", background: "#e6f7ed", color: "#1a8a4a" }}>OWNER</span>
+                <span style={{ fontSize: "9px", color: "#bbb" }}>Demo Org</span>
+              </div>
             </div>
-
             {/* Page header */}
-            <div className="px-4 pt-3 pb-2.5 border-b flex items-center justify-between flex-shrink-0" style={{ background: "#ffffff", borderColor: "#e8e8e8" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", borderBottom: "1px solid #f0f0f0", background: "#fff", flexShrink: 0 }}>
               <div>
-                <div className="text-[12px] font-bold" style={{ color: "#171717" }}>Incidents</div>
-                <div className="text-[9px] mt-0.5" style={{ color: "#aaa" }}>Report, investigate and close out incidents</div>
+                <div style={{ fontSize: "13px", fontWeight: 700, color: "#111" }}>Incidents</div>
+                <div style={{ fontSize: "9px", color: "#bbb", marginTop: "2px" }}>Report, investigate and close out incidents</div>
               </div>
-              <div className="px-2.5 py-1 text-[9px] font-semibold border" style={{ background: "#e6f7ed", borderColor: "#b3e6c9", color: "#1a8a4a" }}>
-                + Report Incident
-              </div>
+              <div style={{ padding: "4px 10px", fontSize: "9px", fontWeight: 600, border: "1px solid #b3e6c9", background: "#e6f7ed", color: "#1a8a4a" }}>+ Report</div>
             </div>
-
             {/* Stats strip */}
-            <div className="flex border-b flex-shrink-0" style={{ background: "#ffffff", borderColor: "#e8e8e8" }}>
-              {[["2","Open","1 high severity","red"],["1","Under Invest.","INC-044 · day 3","yellow"],["3","Closed","this month","green"],["1.2","TRIFR","target &lt;2.0",""]].map(([val,label,sub,hl]) => (
-                <div key={label} className="flex-1 px-3 py-2 border-r" style={{ borderColor: "#f0f0f0" }}>
-                  <div className="text-[13px] font-bold" style={{ color: hl === "red" ? "#f06060" : hl === "yellow" ? "#b58a1b" : hl === "green" ? "#1a8a4a" : "#171717" }}>{val}</div>
-                  <div className="text-[8.5px] font-semibold" style={{ color: "#555" }}>{label}</div>
-                  <div className="text-[8px]" style={{ color: "#bbb" }} dangerouslySetInnerHTML={{ __html: sub }} />
+            <div style={{ display: "flex", borderBottom: "1px solid #f0f0f0", background: "#fff", flexShrink: 0 }}>
+              {[["2","Open","#f06060"],["1","Under Invest.","#b58a1b"],["3","Closed","#1a8a4a"],["1.2","TRIFR","#555"]].map(([v, l, c]) => (
+                <div key={l} style={{ flex: 1, padding: "8px 12px", borderRight: "1px solid #f5f5f5" }}>
+                  <div style={{ fontSize: "16px", fontWeight: 800, color: c, lineHeight: 1 }}>{v}</div>
+                  <div style={{ fontSize: "8.5px", fontWeight: 600, color: "#555", marginTop: "2px" }}>{l}</div>
                 </div>
               ))}
             </div>
-
-            {/* Incident rows */}
-            <div className="flex-1 overflow-hidden px-3 py-2 space-y-1.5">
+            {/* Rows */}
+            <div style={{ flex: 1, overflow: "hidden", padding: "10px 12px", display: "flex", flexDirection: "column", gap: "6px" }}>
               {[
-                { ref:"INC-044", type:"Near Miss",        loc:"Site 01 — Level 3",  sev:"High",   status:"Under Investigation", days:3,    sevColor:"#f06060" },
-                { ref:"INC-043", type:"First Aid Injury", loc:"Site 02 — Laydown",  sev:"Low",    status:"Closed",              days:null, sevColor:"#1a8a4a" },
-                { ref:"INC-042", type:"Property Damage",  loc:"Site 01 — B-Block",  sev:"Medium", status:"Closed",              days:null, sevColor:"#b58a1b" },
-                { ref:"INC-041", type:"Near Miss",        loc:"Site 03 — Basement", sev:"Medium", status:"Open",                days:16,   sevColor:"#b58a1b" },
+                { ref:"INC-044", type:"Near Miss",         loc:"Site 01 — Level 3",  sev:"High",   c:"#f06060" },
+                { ref:"INC-043", type:"First Aid Injury",  loc:"Site 02 — Laydown",  sev:"Low",    c:"#1a8a4a" },
+                { ref:"INC-042", type:"Property Damage",   loc:"Site 01 — B-Block",  sev:"Medium", c:"#b58a1b" },
+                { ref:"INC-041", type:"Near Miss",         loc:"Site 03 — Basement", sev:"Medium", c:"#b58a1b" },
               ].map(r => (
-                <div key={r.ref} className="flex items-center border overflow-hidden" style={{ borderColor: "#e8e8e8", background: "#fff" }}>
-                  <div className="w-0.5 self-stretch flex-shrink-0" style={{ background: r.sevColor }} />
-                  <div className="flex-1 flex items-center justify-between px-2.5 py-1.5 gap-3">
+                <div key={r.ref} style={{ display: "flex", alignItems: "center", border: "1px solid #ebebeb", background: "#fff", overflow: "hidden" }}>
+                  <div style={{ width: "3px", alignSelf: "stretch", background: r.c, flexShrink: 0 }} />
+                  <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 10px", gap: "8px" }}>
                     <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[9px] font-bold font-mono" style={{ color: "#171717" }}>{r.ref}</span>
-                        <span className="text-[8.5px]" style={{ color: "#555" }}>{r.type}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span style={{ fontSize: "9px", fontWeight: 700, fontFamily: "monospace", color: "#111" }}>{r.ref}</span>
+                        <span style={{ fontSize: "8.5px", color: "#555" }}>{r.type}</span>
                       </div>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <MapPin className="w-2 h-2" style={{ color: "#bbb" }} />
-                        <span className="text-[8px]" style={{ color: "#bbb" }}>{r.loc}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "2px" }}>
+                        <MapPin style={{ width: "8px", height: "8px", color: "#ccc" }} />
+                        <span style={{ fontSize: "8px", color: "#bbb" }}>{r.loc}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="text-[8px] font-bold px-1.5 py-0.5" style={{ background: r.sevColor + "20", color: r.sevColor }}>{r.sev}</span>
-                      <span className="text-[8px]" style={{ color: r.status === "Closed" ? "#bbb" : "#555" }}>{r.status}</span>
-                      {r.days && <span className="text-[8px] font-bold px-1" style={{ background: r.days > 14 ? "#fee" : "#fef3d6", color: r.days > 14 ? "#f06060" : "#b58a1b" }}>{r.days}d</span>}
-                    </div>
+                    <span style={{ fontSize: "8px", fontWeight: 700, padding: "2px 6px", background: r.c + "20", color: r.c, flexShrink: 0 }}>{r.sev}</span>
                   </div>
                 </div>
               ))}
@@ -141,104 +120,124 @@ function DashboardMockup() {
   );
 }
 
-/* ─── Module cards ────────────────────────────────────────────────── */
+/* ─── Section number divider ─────────────────────────────────────── */
+function SectionLabel({ n, label }: { n: string; label: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "72px" }}>
+      <span style={{ fontFamily: "monospace", fontSize: "12px", fontWeight: 700, color: "#ccc", letterSpacing: "0.02em" }}>[{n}]</span>
+      <span style={{ fontSize: "12px", color: "#d5d5d5" }}>//</span>
+      <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa" }}>{label}</span>
+      <div style={{ flex: 1, height: "1px", background: "#ebebeb" }} />
+    </div>
+  );
+}
+
+/* ─── Card tag ───────────────────────────────────────────────────── */
+function Tag({ label, accent }: { label: string; accent?: boolean }) {
+  return (
+    <span style={{
+      display: "inline-block",
+      fontFamily: "monospace",
+      fontSize: "10px",
+      fontWeight: 700,
+      letterSpacing: "0.06em",
+      padding: "2px 7px",
+      border: `1px solid ${accent ? "#b3e6c9" : "#e0e0e0"}`,
+      color: accent ? "#1a8a4a" : "#999",
+      background: accent ? "#f0faf4" : "#fafafa",
+    }}>
+      [{label}]
+    </span>
+  );
+}
+
+/* ─── Data ───────────────────────────────────────────────────────── */
 const MODULES = [
-  {
-    icon: Shield, key: "safety", name: "Safety", color: "#f06060",
-    desc: "Incidents, SWMS, toolbox talks, permits and prestart checks in one place.",
-    features: ["Incident reporting & investigation", "SWMS with sign-off & revision control", "Permit management for HRCW"],
-  },
-  {
-    icon: Users, key: "people", name: "People", color: "#1a6ddb",
-    desc: "Workforce credentials, contractor management and health monitoring.",
-    features: ["Site inductions & White Card register", "Contractor onboarding & insurance", "Fatigue management & RTW plans"],
-  },
-  {
-    icon: Settings, key: "operations", name: "Operations", color: "#b58a1b",
-    desc: "Work planning, plant inspections and traffic management on site.",
-    features: ["Daily work planning with controls", "Plant pre-op checks & defect logging", "Work zone & TMP management"],
-  },
-  {
-    icon: AlertTriangle, key: "risk", name: "Risk Management", color: "#f06060",
-    desc: "Hazard register, risk assessments and critical risk control verification.",
-    features: ["Hazard register by residual risk level", "Daily CRC verification dashboard", "HRCW & psychosocial risk tracking"],
-  },
-  {
-    icon: CheckSquare, key: "compliance", name: "Compliance", color: "#1a8a4a",
-    desc: "Audits, legislative register and HRCW compliance evidence.",
-    features: ["Inspections & audit scheduling", "Legislative register & notices", "SWMS register with review dates"],
-  },
-  {
-    icon: BarChart3, key: "insights", name: "Insights", color: "#8b5cf6",
-    desc: "Live WHS performance metrics, TRIFR tracking and custom reporting.",
-    features: ["Live WHS performance dashboard", "TRIFR, LTIFR & incident analytics", "Leading & lagging indicator tracking"],
-  },
+  { icon: Shield,        name: "Safety",          color: "#f06060", tags: ["CORE", "AI"],   desc: "Incidents, SWMS, toolbox talks, permits and prestart checks — everything from ground level to audit-ready." },
+  { icon: Users,         name: "People",           color: "#1a6ddb", tags: ["CORE"],         desc: "Workforce credentials, contractor onboarding, site inductions and health monitoring in one register." },
+  { icon: Settings,      name: "Operations",       color: "#b58a1b", tags: ["CORE"],         desc: "Work planning, plant pre-op inspections, defect logging and traffic management controls." },
+  { icon: AlertTriangle, name: "Risk",             color: "#e06030", tags: ["CORE"],         desc: "Hazard register, risk assessments, critical risk control verification and HRCW tracking." },
+  { icon: CheckSquare,   name: "Compliance",       color: "#1a8a4a", tags: ["CORE"],         desc: "Audits, legislative register, SWMS review schedules and HRCW compliance evidence storage." },
+  { icon: BarChart3,     name: "Insights",         color: "#8b5cf6", tags: ["AI"],           desc: "Live WHS performance metrics, TRIFR tracking, leading indicators and custom board reporting." },
+  { icon: Building2,     name: "Training",         color: "#0ea5e9", tags: ["CORE", "AI"],   desc: "Course builder, training register, competency licences, induction builder and training matrix." },
 ];
 
 const INDUSTRIES = [
   {
     name: "Construction",
-    icon: Building2,
-    desc: "From SWMS and HRCW permits to plant pre-ops and work zone management — everything a construction site needs.",
-    modules: ["Incidents · SWMS · Permits", "White Card Register", "Plant & Equipment", "High Risk Work", "Work Zone Controls"],
-    accent: "#1a8a4a",
+    tag: "OPEN",
+    desc: "From SWMS and HRCW permits to plant pre-ops and work zone management. Built to the requirements of SafeWork NSW and state equivalents.",
+    items: ["Incidents · SWMS · Permits", "White Card Register", "Plant & Equipment", "High Risk Work Licensing", "Work Zone Controls"],
   },
   {
     name: "Industrial",
-    icon: Settings,
+    tag: "OPEN",
     desc: "Permits to Work, LOTO procedures, JSA/JSEA and chemical process risk built for manufacturing and industrial facilities.",
-    modules: ["Permits to Work · LOTO", "JSA / JSEA", "Chemical & Process Risk", "Health Monitoring", "Operational Readiness"],
-    accent: "#1a6ddb",
+    items: ["Permits to Work · LOTO", "JSA / JSEA Management", "Chemical & Process Risk", "Health Monitoring", "Operational Readiness"],
   },
   {
     name: "Facilities",
-    icon: Building2,
-    desc: "Building warden registers, isolation & shutdown procedures and statutory obligations for facility managers.",
-    modules: ["Warden Register", "Isolation & Shutdown", "Essential Safety Measures", "Statutory Obligations", "Visitor & Access"],
-    accent: "#b58a1b",
+    tag: "OPEN",
+    desc: "Building warden registers, isolation and shutdown procedures and statutory compliance obligations for facility managers.",
+    items: ["Warden Register", "Isolation & Shutdown", "Essential Safety Measures", "Statutory Obligations", "Visitor & Access Control"],
   },
 ];
 
-/* ─── Page ────────────────────────────────────────────────────────── */
+/* ─── Page ───────────────────────────────────────────────────────── */
 export default function LandingPage() {
   return (
-    <div style={{ background: "#fafafa", color: "#171717", fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div style={{ background: "#fff", color: "#0a0a0a", fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* ── NAV ── */}
-      <header
-        className="sticky top-0 z-50 border-b"
-        style={{ background: "rgba(250,250,250,0.92)", backdropFilter: "blur(12px)", borderColor: "#e0e0e0" }}
-      >
-        <div className="max-w-[1200px] mx-auto px-6 h-[58px] flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            <BLogo size={22} color="#1a8a4a" />
-            <span style={{ fontSize: "17px", fontWeight: 700, color: "#171717", letterSpacing: "-0.02em" }}>Briesa</span>
+      <header style={{
+        position: "sticky", top: 0, zIndex: 50,
+        background: "rgba(255,255,255,0.96)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid #f0f0f0",
+      }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", height: "56px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          {/* Brand */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <BLogo size={20} color="#1a8a4a" />
+            <span style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "-0.03em", color: "#0a0a0a" }}>Briesa</span>
+            <span style={{ fontFamily: "monospace", fontSize: "9px", fontWeight: 700, color: "#ccc", marginLeft: "2px" }}>V1.0</span>
           </div>
 
-          {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-7">
-            {[["#features","Features"],["#industries","Industries"],["#ai","AI"],["#pricing","Pricing"]].map(([href, label]) => (
-              <a key={href} href={href} style={{ fontSize: "13.5px", fontWeight: 500, color: "#666", textDecoration: "none" }}
-                onMouseOver={e => (e.currentTarget.style.color = "#171717")}
+          {/* Nav */}
+          <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+            {[
+              ["#features",    "Platform"],
+              ["#industries",  "Industries"],
+              ["#ai",          "AI"],
+              ["/pricing",     "Pricing"],
+            ].map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                style={{ fontSize: "13.5px", fontWeight: 500, color: "#666", textDecoration: "none" }}
+                onMouseOver={e => (e.currentTarget.style.color = "#0a0a0a")}
                 onMouseOut={e => (e.currentTarget.style.color = "#666")}
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          {/* Right CTAs */}
-          <div className="flex items-center gap-3">
+          {/* CTAs */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <Link
               href="/login"
-              style={{ fontSize: "13.5px", fontWeight: 500, color: "#555", textDecoration: "none", padding: "7px 16px", border: "1px solid #d0d0d0" }}
+              style={{ fontSize: "13px", fontWeight: 500, color: "#555", textDecoration: "none", padding: "7px 16px", border: "1px solid #e0e0e0" }}
+              onMouseOver={e => (e.currentTarget.style.borderColor = "#bbb")}
+              onMouseOut={e => (e.currentTarget.style.borderColor = "#e0e0e0")}
             >
               Log in
             </Link>
             <Link
               href="/login"
-              style={{ fontSize: "13.5px", fontWeight: 600, color: "#171717", textDecoration: "none", padding: "7px 18px", background: "#e6f7ed", border: "1px solid #b3e6c9" }}
+              style={{ fontSize: "13px", fontWeight: 700, color: "#fff", textDecoration: "none", padding: "7px 18px", background: "#0a0a0a", border: "1px solid #0a0a0a" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#222"; (e.currentTarget as HTMLElement).style.borderColor = "#222"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#0a0a0a"; (e.currentTarget as HTMLElement).style.borderColor = "#0a0a0a"; }}
             >
               Get started
             </Link>
@@ -247,495 +246,353 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section style={{ background: "#ffffff", borderBottom: "1px solid #e8e8e8" }}>
-        <div className="max-w-[1200px] mx-auto px-6 py-20 flex flex-col lg:flex-row items-center gap-16">
+      <section style={{ background: "#fff", paddingTop: "88px", borderBottom: "1px solid #f0f0f0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
 
-          {/* Left */}
-          <div className="flex-1 max-w-[520px]">
-            <div
-              className="inline-flex items-center gap-2 px-3 py-1.5 border mb-6"
-              style={{ background: "#e6f7ed", borderColor: "#b3e6c9", fontSize: "12px", fontWeight: 600, color: "#1a8a4a", letterSpacing: "0.05em", textTransform: "uppercase" }}
+          {/* Platform label */}
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "36px" }}>
+            <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#ccc" }}>[WHS PLATFORM]</span>
+            <span style={{ fontSize: "11px", color: "#e0e0e0" }}>//</span>
+            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a" }}>Australian Industry</span>
+          </div>
+
+          {/* Headline */}
+          <h1 style={{
+            fontSize: "clamp(48px, 6.5vw, 80px)",
+            fontWeight: 800,
+            lineHeight: 1.03,
+            letterSpacing: "-0.04em",
+            color: "#0a0a0a",
+            margin: "0 0 24px",
+            maxWidth: "820px",
+          }}>
+            WHS your team<br />will actually use.
+          </h1>
+
+          {/* Subheading */}
+          <p style={{ fontSize: "18px", lineHeight: 1.65, color: "#666", maxWidth: "520px", margin: "0 0 44px" }}>
+            Incidents, SWMS, permits and critical risk controls — all in one place. Built for Australian construction, industrial and facilities teams.
+          </p>
+
+          {/* CTAs */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "72px" }}>
+            <Link
+              href="/login"
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 700, color: "#fff", background: "#0a0a0a", textDecoration: "none", border: "1px solid #0a0a0a" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#222"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#0a0a0a"; }}
             >
-              <Zap className="w-3.5 h-3.5" />
-              Built for Australian Industry
-            </div>
-
-            <h1 style={{ fontSize: "clamp(36px,5vw,56px)", fontWeight: 800, lineHeight: 1.07, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
-              WHS your team<br />will actually use
-            </h1>
-
-            <p style={{ fontSize: "17px", lineHeight: 1.65, color: "#666", marginTop: "20px", maxWidth: "460px" }}>
-              Incidents, SWMS, permits and critical risk controls — all in one place.
-              Built for Australian construction, industrial and facilities teams.
-            </p>
-
-            {/* CTA row */}
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              <Link
-                href="/login"
-                className="flex items-center gap-2"
-                style={{ fontSize: "14.5px", fontWeight: 700, color: "#171717", textDecoration: "none", padding: "11px 24px", background: "#e6f7ed", border: "1px solid #b3e6c9" }}
-              >
-                Start for free <ArrowRight className="w-4 h-4" style={{ color: "#1a8a4a" }} />
-              </Link>
-              <Link
-                href="/login"
-                style={{ fontSize: "14.5px", fontWeight: 500, color: "#555", textDecoration: "none", padding: "11px 24px", border: "1px solid #d8d8d8" }}
-              >
-                View live demo
-              </Link>
-            </div>
-
-            {/* Industry chips */}
-            <div className="flex flex-wrap items-center gap-2 mt-6">
-              <span style={{ fontSize: "12px", color: "#aaa" }}>Built for</span>
-              {["Construction","Industrial","Facilities"].map(ind => (
-                <span key={ind} style={{ fontSize: "12px", fontWeight: 600, padding: "3px 10px", border: "1px solid #e0e0e0", color: "#555", background: "#f5f5f5" }}>{ind}</span>
-              ))}
-            </div>
-
-            {/* Trust line */}
-            <div className="flex items-center gap-2 mt-6">
-              {[0,1,2,3].map(i => (
-                <div key={i} className="w-7 h-7 flex items-center justify-center text-[11px] font-bold" style={{ background: "#e0e0e0", color: "#888" }}>
-                  {["A","B","C","D"][i]}
-                </div>
-              ))}
-              <span style={{ fontSize: "12.5px", color: "#999", marginLeft: "4px" }}>
-                Trusted by leading Australian construction teams
-              </span>
-            </div>
+              Get started free <ArrowRight size={15} />
+            </Link>
+            <Link
+              href="/login"
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 500, color: "#555", background: "#fff", textDecoration: "none", border: "1px solid #e0e0e0" }}
+              onMouseOver={e => (e.currentTarget.style.borderColor = "#bbb")}
+              onMouseOut={e => (e.currentTarget.style.borderColor = "#e0e0e0")}
+            >
+              View live demo
+            </Link>
           </div>
 
-          {/* Right — mockup */}
-          <div className="flex-1 flex justify-center lg:justify-end w-full">
-            <DashboardMockup />
-          </div>
+          {/* Dashboard mockup — full width */}
+          <DashboardMockup />
         </div>
       </section>
 
       {/* ── STATS BAR ── */}
-      <section style={{ background: "#111111", borderBottom: "1px solid #222" }}>
-        <div className="max-w-[1200px] mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section style={{ background: "#0a0a0a", borderBottom: "1px solid #1a1a1a" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
           {[
-            ["5 modules",  "All core WHS modules covered"],
+            ["9 modules",    "All core WHS disciplines covered"],
             ["3 industries", "Construction · Industrial · Facilities"],
-            ["41+ pages",  "Submodule pages, fully interactive"],
-            ["AI-powered", "Contextual AI across Safety module"],
+            ["AI-powered",   "Claude AI woven into every module"],
+            ["Australian",   "SafeWork & state WHS compliant"],
           ].map(([stat, label]) => (
-            <div key={stat} className="text-center">
-              <div style={{ fontSize: "22px", fontWeight: 800, color: "#3ecf8e", letterSpacing: "-0.02em" }}>{stat}</div>
-              <div style={{ fontSize: "12.5px", color: "#666", marginTop: "4px" }}>{label}</div>
+            <div key={stat} style={{ padding: "36px 0", borderRight: "1px solid #1a1a1a", textAlign: "center" }}>
+              <div style={{ fontSize: "20px", fontWeight: 800, color: "#1a8a4a", letterSpacing: "-0.02em" }}>{stat}</div>
+              <div style={{ fontSize: "12px", color: "#555", marginTop: "4px" }}>{label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── FEATURES / MODULES ── */}
-      <section id="features" style={{ background: "#fafafa", borderBottom: "1px solid #e8e8e8", padding: "96px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-14">
-            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a", marginBottom: "12px" }}>Platform</div>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
-              Everything you need,<br />nothing you don&apos;t
-            </h2>
-            <p style={{ fontSize: "16px", color: "#888", marginTop: "14px", maxWidth: "500px", marginInline: "auto" }}>
-              Five purpose-built modules that cover every aspect of WHS management, from ground level to board reporting.
-            </p>
-          </div>
+      {/* ── [01] PLATFORM ── */}
+      <section id="features" style={{ background: "#fff", padding: "96px 0", borderBottom: "1px solid #f0f0f0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <SectionLabel n="01" label="Platform" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MODULES.map(({ icon: Icon, name, desc, features, color }) => (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "#f0f0f0", border: "1px solid #f0f0f0" }}>
+            {MODULES.map(({ icon: Icon, name, color, tags, desc }) => (
               <div
                 key={name}
-                className="p-6 border flex flex-col gap-4 group"
-                style={{ background: "#ffffff", borderColor: "#e0e0e0", transition: "border-color 150ms, box-shadow 150ms" }}
-                onMouseOver={e => { (e.currentTarget as HTMLElement).style.borderColor = "#c0c0c0"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.06)"; }}
-                onMouseOut={e => { (e.currentTarget as HTMLElement).style.borderColor = "#e0e0e0"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}
+                style={{ background: "#fff", padding: "28px 26px", display: "flex", flexDirection: "column", gap: "16px", transition: "background 120ms" }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#fafafa"}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#fff"}
               >
-                <div className="flex items-start justify-between">
-                  <div className="w-9 h-9 flex items-center justify-center border" style={{ background: color + "15", borderColor: color + "30" }}>
-                    <Icon className="w-4.5 h-4.5" style={{ color }} />
+                {/* Icon + tags row */}
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                  <div style={{ width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${color}25`, background: `${color}10` }}>
+                    <Icon style={{ width: "16px", height: "16px", color }} />
                   </div>
-                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#aaa" }} />
+                  <div style={{ display: "flex", gap: "5px" }}>
+                    {tags.map(t => <Tag key={t} label={t} accent={t === "AI"} />)}
+                  </div>
                 </div>
+                {/* Content */}
                 <div>
-                  <div style={{ fontSize: "15px", fontWeight: 700, color: "#171717" }}>{name}</div>
-                  <div style={{ fontSize: "13px", color: "#888", marginTop: "6px", lineHeight: 1.6 }}>{desc}</div>
+                  <div style={{ fontSize: "15px", fontWeight: 700, color: "#0a0a0a", marginBottom: "8px", letterSpacing: "-0.01em" }}>{name}</div>
+                  <p style={{ fontSize: "13px", color: "#777", lineHeight: 1.65, margin: 0 }}>{desc}</p>
                 </div>
-                <ul className="space-y-1.5 mt-auto">
-                  {features.map(f => (
-                    <li key={f} className="flex items-start gap-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: "#1a8a4a" }} />
-                      <span style={{ fontSize: "12.5px", color: "#666" }}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── INDUSTRIES ── */}
-      <section id="industries" style={{ background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "96px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-14">
-            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a", marginBottom: "12px" }}>Industries</div>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
-              Purpose-built for<br />your industry
-            </h2>
-            <p style={{ fontSize: "16px", color: "#888", marginTop: "14px", maxWidth: "480px", marginInline: "auto" }}>
-              Different industries have different WHS requirements. Briesa adapts to show only the modules relevant to your team.
-            </p>
-          </div>
+      {/* ── [02] INDUSTRIES ── */}
+      <section id="industries" style={{ background: "#fafafa", padding: "96px 0", borderBottom: "1px solid #f0f0f0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <SectionLabel n="02" label="Industries" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {INDUSTRIES.map(({ name, desc, modules, accent }) => (
-              <div key={name} className="border flex flex-col overflow-hidden" style={{ borderColor: "#e0e0e0", background: "#fafafa" }}>
-                {/* Card header */}
-                <div className="px-6 py-5 border-b" style={{ borderColor: "#e8e8e8", background: "#ffffff" }}>
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-2 h-2" style={{ background: accent }} />
-                    <span style={{ fontSize: "16px", fontWeight: 800, color: "#0d0d0d" }}>{name}</span>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
+            {INDUSTRIES.map(({ name, tag, desc, items }) => (
+              <div key={name} style={{ background: "#fff", border: "1px solid #ebebeb", display: "flex", flexDirection: "column" }}>
+                {/* Header */}
+                <div style={{ padding: "24px 24px 20px", borderBottom: "1px solid #f5f5f5" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                    <span style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "-0.02em", color: "#0a0a0a" }}>{name}</span>
+                    <Tag label={tag} />
                   </div>
                   <p style={{ fontSize: "13px", color: "#777", lineHeight: 1.65, margin: 0 }}>{desc}</p>
                 </div>
-                {/* Module list */}
-                <div className="px-6 py-5 flex-1">
-                  <div style={{ fontSize: "10.5px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#aaa", marginBottom: "10px" }}>
-                    Included submodules
-                  </div>
-                  <ul className="space-y-2">
-                    {modules.map(m => (
-                      <li key={m} className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 flex-shrink-0" style={{ background: accent }} />
-                        <span style={{ fontSize: "12.5px", color: "#555" }}>{m}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="px-6 py-4 border-t" style={{ borderColor: "#e8e8e8" }}>
-                  <Link
-                    href="/login"
-                    className="flex items-center gap-1.5"
-                    style={{ fontSize: "13px", fontWeight: 600, color: accent, textDecoration: "none" }}
-                  >
-                    Explore {name} <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AI SECTION ── */}
-      <section id="ai" style={{ background: "#111111", borderBottom: "1px solid #1e1e1e", padding: "96px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="max-w-[600px]">
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-8 flex items-center justify-center border" style={{ background: "rgba(62,207,142,0.1)", borderColor: "rgba(62,207,142,0.25)" }}>
-                <Zap className="w-3.5 h-3.5" style={{ color: "#3ecf8e" }} />
-              </div>
-              <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#3ecf8e" }}>
-                AI-powered
-              </span>
-            </div>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#ffffff", margin: 0 }}>
-              Documentation that writes itself
-            </h2>
-            <p style={{ fontSize: "16px", lineHeight: 1.7, color: "#777", marginTop: "16px" }}>
-              Briesa uses Claude (Anthropic) to generate contextual WHS content as you work —
-              from toolbox talking points to SWMS descriptions, permit controls and prestart defect summaries.
-            </p>
-            <ul className="mt-8 space-y-4">
-              {[
-                ["Toolbox talks", "Generate numbered speaker talking points from a selected topic in seconds"],
-                ["SWMS drafting", "Draft task descriptions and key hazards from the HRCW category"],
-                ["Permit controls", "Suggest safety controls based on permit type and location"],
-                ["Incident actions", "Recommend immediate actions based on incident type and severity"],
-              ].map(([title, desc]) => (
-                <li key={title} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-1" style={{ color: "#3ecf8e" }} />
-                  <div>
-                    <span style={{ fontSize: "14px", fontWeight: 600, color: "#ffffff" }}>{title}</span>
-                    <span style={{ fontSize: "13.5px", color: "#666" }}> — {desc}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MOBILE READY ── */}
-      <section style={{ background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "80px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1">
-            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a", marginBottom: "12px" }}>
-              Field-first
-            </div>
-            <h2 style={{ fontSize: "clamp(24px,3.5vw,36px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
-              Built for the workers,<br />not just the office
-            </h2>
-            <p style={{ fontSize: "15px", color: "#777", lineHeight: 1.7, marginTop: "14px" }}>
-              Most WHS platforms are designed for compliance managers behind a desk.
-              Briesa is designed for the foreman on Level 3, the plant operator at 06:30,
-              and the safety advisor who needs to report an incident before the ambulance leaves site.
-            </p>
-          </div>
-          <div className="flex-1 grid grid-cols-2 gap-3">
-            {[
-              ["Full mobile access",   "Report incidents, run prestarts and sign SWMS from your phone"],
-              ["Offline capable",      "Core safety forms work without a network connection on site"],
-              ["Real-time sync",       "All records sync instantly when connectivity is restored"],
-              ["Role-based access",    "Workers see what they need, managers see everything"],
-            ].map(([title, desc]) => (
-              <div key={title} className="p-4 border" style={{ background: "#fafafa", borderColor: "#e0e0e0" }}>
-                <div style={{ fontSize: "13px", fontWeight: 700, color: "#171717" }}>{title}</div>
-                <div style={{ fontSize: "12px", color: "#888", marginTop: "5px", lineHeight: 1.6 }}>{desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ── */}
-      <section id="pricing" style={{ background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "96px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="text-center mb-14">
-            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a", marginBottom: "12px" }}>Pricing</div>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
-              Simple, honest pricing
-            </h2>
-            <p style={{ fontSize: "16px", color: "#888", marginTop: "14px", maxWidth: "480px", marginInline: "auto" }}>
-              Flat monthly pricing based on your workforce size. No per-user fees, no per-module charges. Everything included.
-            </p>
-          </div>
-
-          {/* Plan cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-            {([
-              {
-                name: "Small",
-                price: "$249",
-                period: "/ month",
-                tagline: "For small crews up to 15 workers on site.",
-                highlight: false,
-                badge: null,
-                specs: [
-                  { label: "Workers on site",     value: "1 – 15" },
-                  { label: "Storage",             value: "25 GB" },
-                  { label: "Docs per month",      value: "100 – 300" },
-                  { label: "AI generations",      value: "~150–300 calls" },
-                  { label: "Token cap",           value: "500K / month" },
-                  { label: "Est. monthly usage",  value: "~150 MB" },
-                ],
-                features: [
-                  "All 9 WHS modules",
-                  "Unlimited team members",
-                  "Full mobile access",
-                  "Australian compliance templates",
-                  "Email support",
-                ],
-                cta: "Get started",
-              },
-              {
-                name: "Medium",
-                price: "$449",
-                period: "/ month",
-                tagline: "For growing teams with 15–50 workers across sites.",
-                highlight: true,
-                badge: "Most Popular",
-                specs: [
-                  { label: "Workers on site",     value: "15 – 50" },
-                  { label: "Storage",             value: "75 GB" },
-                  { label: "Docs per month",      value: "300 – 800" },
-                  { label: "AI generations",      value: "~600–1,200 calls" },
-                  { label: "Token cap",           value: "2M / month" },
-                  { label: "Est. monthly usage",  value: "~400 MB" },
-                ],
-                features: [
-                  "Everything in Small",
-                  "Priority support",
-                  "Advanced analytics & reporting",
-                  "API access",
-                  "Custom induction builder",
-                ],
-                cta: "Get started",
-              },
-              {
-                name: "Large",
-                price: "$649",
-                period: "/ month",
-                tagline: "For large organisations with 50–200+ workers.",
-                highlight: false,
-                badge: null,
-                specs: [
-                  { label: "Workers on site",     value: "50 – 200+" },
-                  { label: "Storage",             value: "200 GB" },
-                  { label: "Docs per month",      value: "800 – 2,500" },
-                  { label: "AI generations",      value: "~2,000–4,000 calls" },
-                  { label: "Token cap",           value: "6M / month" },
-                  { label: "Est. monthly usage",  value: "~1.2 GB" },
-                ],
-                features: [
-                  "Everything in Medium",
-                  "Dedicated account manager",
-                  "SSO & custom integrations",
-                  "Webhook & API advanced",
-                  "On-site onboarding",
-                ],
-                cta: "Get started",
-              },
-            ] as const).map(plan => (
-              <div
-                key={plan.name}
-                style={{
-                  border: `1px solid ${plan.highlight ? "#1a8a4a" : "#e0e0e0"}`,
-                  background: plan.highlight ? "#f0faf4" : "#fafafa",
-                  display: "flex",
-                  flexDirection: "column",
-                  position: "relative",
-                }}
-              >
-                {plan.badge && (
-                  <div style={{
-                    position: "absolute", top: "-1px", left: "50%", transform: "translateX(-50%)",
-                    background: "#1a8a4a", color: "#ffffff", fontSize: "10px", fontWeight: 700,
-                    letterSpacing: "0.08em", padding: "4px 14px", textTransform: "uppercase",
-                  }}>
-                    {plan.badge}
-                  </div>
-                )}
-
-                {/* Plan header */}
-                <div style={{ padding: "28px 24px 20px", borderBottom: `1px solid ${plan.highlight ? "#b3e6c9" : "#e8e8e8"}` }}>
-                  <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: plan.highlight ? "#1a8a4a" : "#999", marginBottom: "8px" }}>
-                    {plan.name}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "8px" }}>
-                    <span style={{ fontSize: "42px", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d" }}>{plan.price}</span>
-                    <span style={{ fontSize: "14px", color: "#999" }}>{plan.period}</span>
-                  </div>
-                  <p style={{ fontSize: "13px", color: "#777", margin: 0, lineHeight: 1.5 }}>{plan.tagline}</p>
-                </div>
-
-                {/* Specs */}
-                <div style={{ padding: "16px 24px", borderBottom: `1px solid ${plan.highlight ? "#b3e6c9" : "#e8e8e8"}` }}>
-                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#bbb", marginBottom: "10px" }}>Capacity</div>
-                  {plan.specs.map(s => (
-                    <div key={s.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0", borderBottom: "1px solid #f0f0f0" }}>
-                      <span style={{ fontSize: "12px", color: "#888" }}>{s.label}</span>
-                      <span style={{ fontSize: "12px", fontWeight: 600, color: "#333" }}>{s.value}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Features */}
-                <div style={{ padding: "16px 24px", flex: 1 }}>
-                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#bbb", marginBottom: "10px" }}>Includes</div>
+                {/* Items */}
+                <div style={{ padding: "20px 24px", flex: 1 }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#ccc", marginBottom: "12px" }}>Included</div>
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-                    {plan.features.map(f => (
-                      <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-                        <CheckCircle2 style={{ width: "14px", height: "14px", flexShrink: 0, marginTop: "1px", color: "#1a8a4a" }} />
-                        <span style={{ fontSize: "13px", color: "#555" }}>{f}</span>
+                    {items.map(item => (
+                      <li key={item} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ width: "4px", height: "4px", background: "#1a8a4a", flexShrink: 0 }} />
+                        <span style={{ fontSize: "12.5px", color: "#555" }}>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-
-                {/* CTA */}
-                <div style={{ padding: "20px 24px" }}>
+                <div style={{ padding: "16px 24px", borderTop: "1px solid #f5f5f5" }}>
                   <Link
                     href="/login"
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
-                      height: "44px", fontSize: "14px", fontWeight: 700, textDecoration: "none",
-                      background: plan.highlight ? "#1a8a4a" : "#f0f0f0",
-                      color: plan.highlight ? "#ffffff" : "#333",
-                      border: `1px solid ${plan.highlight ? "#156a39" : "#e0e0e0"}`,
-                    }}
+                    style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px", fontWeight: 600, color: "#0a0a0a", textDecoration: "none" }}
+                    onMouseOver={e => (e.currentTarget.style.color = "#1a8a4a")}
+                    onMouseOut={e => (e.currentTarget.style.color = "#0a0a0a")}
                   >
-                    {plan.cta} <ArrowRight style={{ width: "14px", height: "14px" }} />
+                    Explore {name} <ArrowRight size={13} />
                   </Link>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Bottom note */}
-          <div style={{ textAlign: "center", paddingTop: "8px" }}>
-            <p style={{ fontSize: "13px", color: "#aaa" }}>
-              All plans include a 14-day free trial · No credit card required · Cancel anytime
-            </p>
-            <p style={{ fontSize: "13px", color: "#aaa", marginTop: "6px" }}>
-              Need more than 200 workers or custom storage? <a href="#" style={{ color: "#1a8a4a", textDecoration: "none" }}>Contact us for Enterprise pricing →</a>
-            </p>
+      {/* ── [03] AI ── */}
+      <section id="ai" style={{ background: "#0a0a0a", padding: "96px 0", borderBottom: "1px solid #161616" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <SectionLabel n="03" label="AI" />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
+            {/* Left */}
+            <div>
+              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
+                <div style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(26,138,74,0.3)", background: "rgba(26,138,74,0.08)" }}>
+                  <Zap style={{ width: "14px", height: "14px", color: "#1a8a4a" }} />
+                </div>
+                <Tag label="AI" accent />
+              </div>
+
+              <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#fff", margin: "0 0 20px", lineHeight: 1.1 }}>
+                Documentation<br />that writes itself.
+              </h2>
+
+              <p style={{ fontSize: "16px", lineHeight: 1.7, color: "#555", margin: "0 0 36px" }}>
+                Briesa uses Claude (Anthropic) to generate contextual WHS content as you work — from toolbox talking points to SWMS descriptions, permit controls and training outlines.
+              </p>
+
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
+                {[
+                  ["Toolbox talks",        "Generate numbered speaker talking points from a topic in seconds"],
+                  ["SWMS drafting",        "Draft task descriptions and key hazards from the HRCW category"],
+                  ["Permit controls",      "Suggest safety controls based on permit type and location"],
+                  ["Incident actions",     "Recommend corrective actions from incident type and severity"],
+                  ["Course outlines",      "Build structured training content and learning objectives"],
+                  ["Licence suggestions",  "Map required tickets and licences to a worker&apos;s role"],
+                ].map(([title, desc]) => (
+                  <li key={title} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                    <CheckCircle2 style={{ width: "16px", height: "16px", color: "#1a8a4a", flexShrink: 0, marginTop: "2px" }} />
+                    <div>
+                      <span style={{ fontSize: "14px", fontWeight: 600, color: "#fff" }}>{title}</span>
+                      <span style={{ fontSize: "13.5px", color: "#444" }}> — {desc}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Right — terminal-style AI card */}
+            <div style={{ border: "1px solid #1e1e1e", background: "#0d0d0d" }}>
+              {/* Terminal header */}
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "12px 16px", borderBottom: "1px solid #1e1e1e" }}>
+                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff6058" }} />
+                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
+                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#28c840" }} />
+                <span style={{ marginLeft: "8px", fontSize: "10px", fontFamily: "monospace", color: "#444" }}>briesa — ai generate — toolbox talk</span>
+              </div>
+              {/* Content */}
+              <div style={{ padding: "20px", fontFamily: "monospace", fontSize: "12px", lineHeight: 1.8, color: "#555" }}>
+                <div><span style={{ color: "#1a8a4a" }}>$</span> <span style={{ color: "#888" }}>briesa generate toolbox</span></div>
+                <div style={{ color: "#444" }}>→ Topic: Working at Heights — EWP Operations</div>
+                <div style={{ color: "#444" }}>→ Site: Level 3, Site 01</div>
+                <br />
+                <div style={{ color: "#3ecf8e" }}>Generating talk points...</div>
+                <br />
+                {[
+                  "1. Pre-use inspection of the EWP — check tyres, controls, safety cage and harness anchor points before commencing work.",
+                  "2. Exclusion zones — establish and mark a 2m exclusion zone around the EWP base. Spotter required at all times.",
+                  "3. Weather limits — cease EWP operations if wind exceeds 45 km/h or lightning is within 10 km.",
+                  "4. Emergency descent — demonstrate manual lowering procedure before commencing elevated work.",
+                ].map((line, i) => (
+                  <div key={i} style={{ color: "#666", marginBottom: "4px" }}>{line}</div>
+                ))}
+                <br />
+                <div style={{ color: "#444" }}>→ <span style={{ color: "#1a8a4a" }}>4 talk points generated</span> · 12s · gpt-4o via Anthropic</div>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "16px" }}>
+                  <div style={{ width: "8px", height: "8px", background: "#1a8a4a", borderRadius: "50%", animation: "pulse 1.5s infinite" }} />
+                  <span style={{ color: "#333" }}>Ready to copy or attach to toolbox record</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── [04] WHY BRIESA ── */}
+      <section style={{ background: "#fff", padding: "96px 0", borderBottom: "1px solid #f0f0f0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <SectionLabel n="04" label="Built for the field" />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
+            {/* Left */}
+            <div>
+              <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#0a0a0a", margin: "0 0 20px", lineHeight: 1.1 }}>
+                Built for the workers,<br />not just the office.
+              </h2>
+              <p style={{ fontSize: "16px", lineHeight: 1.7, color: "#666", margin: "0 0 32px" }}>
+                Most WHS platforms are designed for compliance managers behind a desk.
+                Briesa is built for the foreman on Level 3, the plant operator at 06:30,
+                and the safety advisor who needs to report an incident before the ambulance leaves site.
+              </p>
+              <Link
+                href="/login"
+                style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, color: "#fff", background: "#0a0a0a", textDecoration: "none", border: "1px solid #0a0a0a" }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#222"}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#0a0a0a"}
+              >
+                Start for free <ArrowRight size={15} />
+              </Link>
+            </div>
+            {/* Right grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "#f0f0f0", border: "1px solid #f0f0f0" }}>
+              {[
+                ["Full mobile access",   "Report incidents, run prestarts and sign SWMS from your phone on site."],
+                ["Offline capable",      "Core safety forms work without a network connection on site."],
+                ["Real-time sync",       "All records sync instantly the moment connectivity is restored."],
+                ["Role-based access",    "Workers see what they need. Managers and admins see everything."],
+              ].map(([title, desc]) => (
+                <div key={title} style={{ background: "#fff", padding: "24px 20px" }}>
+                  <div style={{ width: "6px", height: "6px", background: "#1a8a4a", marginBottom: "14px" }} />
+                  <div style={{ fontSize: "13.5px", fontWeight: 700, color: "#0a0a0a", marginBottom: "8px" }}>{title}</div>
+                  <div style={{ fontSize: "12.5px", color: "#888", lineHeight: 1.6 }}>{desc}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── CTA BANNER ── */}
-      <section style={{ background: "#e6f7ed", borderBottom: "1px solid #b3e6c9", padding: "72px 0" }}>
-        <div className="max-w-[1200px] mx-auto px-6 text-center">
-          <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d1f12", margin: 0 }}>
-            Start your free 14-day trial
+      <section style={{ background: "#0a0a0a", padding: "80px 0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+            <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#333" }}>[FREE TRIAL]</span>
+            <span style={{ fontSize: "11px", color: "#333" }}>//</span>
+            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#555" }}>No credit card required</span>
+          </div>
+          <h2 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#fff", margin: "0 0 16px", lineHeight: 1.05 }}>
+            Stop guessing.<br />Get certified.
           </h2>
-          <p style={{ fontSize: "15px", color: "#3a7a52", marginTop: "12px", maxWidth: "420px", marginInline: "auto" }}>
-            Full access to all modules. No credit card required.
+          <p style={{ fontSize: "16px", color: "#444", margin: "0 0 40px", maxWidth: "400px", marginInline: "auto", lineHeight: 1.6 }}>
+            14-day free trial. Full access to all modules.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
             <Link
               href="/login"
-              className="flex items-center gap-2"
-              style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", textDecoration: "none", padding: "13px 32px", background: "#1a8a4a", border: "1px solid #156a39" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 32px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: "#fff", textDecoration: "none", border: "1px solid #fff" }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#f0f0f0"}
+              onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#fff"}
             >
-              Get started free <ArrowRight className="w-4 h-4" />
+              Get started free <ArrowRight size={16} />
             </Link>
             <Link
               href="/login"
-              style={{ fontSize: "15px", fontWeight: 500, color: "#1a8a4a", textDecoration: "none", padding: "13px 28px", border: "1px solid #8ad4ab", background: "#ffffff" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 28px", fontSize: "15px", fontWeight: 500, color: "#666", background: "transparent", textDecoration: "none", border: "1px solid #2a2a2a" }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.borderColor = "#444"}
+              onMouseOut={e => (e.currentTarget as HTMLElement).style.borderColor = "#2a2a2a"}
             >
               View demo workspace
             </Link>
           </div>
-          <p style={{ fontSize: "12.5px", color: "#6aac82", marginTop: "16px" }}>
-            Construction · Industrial · Facilities &nbsp;·&nbsp; Australian WHS compliance
-          </p>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: "#0d0d0d", borderTop: "1px solid #1a1a1a", padding: "56px 0 32px" }}>
-        <div className="max-w-[1200px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-12 mb-12">
+      <footer style={{ background: "#060606", borderTop: "1px solid #111", padding: "56px 0 32px" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <div style={{ display: "flex", gap: "48px", marginBottom: "56px" }}>
             {/* Brand */}
-            <div className="flex-1 max-w-[260px]">
-              <div className="flex items-center gap-2.5 mb-4">
-                <BLogo size={20} color="#3ecf8e" />
-                <span style={{ fontSize: "16px", fontWeight: 700, color: "#ffffff" }}>Briesa</span>
+            <div style={{ flex: "0 0 220px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
+                <BLogo size={18} color="#1a8a4a" />
+                <span style={{ fontSize: "15px", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em" }}>Briesa</span>
+                <span style={{ fontFamily: "monospace", fontSize: "9px", fontWeight: 700, color: "#333" }}>V1.0</span>
               </div>
-              <p style={{ fontSize: "13px", color: "#555", lineHeight: 1.7 }}>
+              <p style={{ fontSize: "12.5px", color: "#444", lineHeight: 1.7, margin: "0 0 20px" }}>
                 WHS management software for Australian construction, industrial and facilities industries.
               </p>
+              {/* Social icons */}
+              <div style={{ display: "flex", gap: "10px" }}>
+                {["X", "IN", "IG"].map(s => (
+                  <div key={s} style={{ width: "28px", height: "28px", border: "1px solid #1e1e1e", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "9px", fontWeight: 700, fontFamily: "monospace", color: "#444" }}>{s}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             {/* Links */}
-            <div className="flex flex-wrap gap-12">
+            <div style={{ flex: 1, display: "flex", gap: "48px", flexWrap: "wrap" }}>
               {[
-                ["Product", ["Features","Industries","Pricing","AI","Changelog"]],
-                ["Industries", ["Construction","Industrial","Facilities"]],
-                ["Company", ["About","Contact","Privacy Policy","Terms of Service"]],
+                ["Product",    ["Platform", "Industries", "AI", "Pricing", "Changelog"]],
+                ["Industries", ["Construction", "Industrial", "Facilities"]],
+                ["Company",    ["About", "Contact", "Privacy", "Terms"]],
+                ["Legal",      ["Privacy Policy", "Terms of Service", "Cookie Policy"]],
               ].map(([section, links]) => (
                 <div key={section as string}>
-                  <div style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#444", marginBottom: "12px" }}>{section as string}</div>
-                  <ul className="space-y-2">
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#333", marginBottom: "14px" }}>{section as string}</div>
+                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                     {(links as string[]).map(link => (
                       <li key={link}>
-                        <a href="#" style={{ fontSize: "13px", color: "#666", textDecoration: "none" }}
-                          onMouseOver={e => (e.currentTarget.style.color = "#aaa")}
-                          onMouseOut={e => (e.currentTarget.style.color = "#666")}
+                        <a
+                          href={link === "Pricing" ? "/pricing" : "#"}
+                          style={{ fontSize: "13px", color: "#444", textDecoration: "none" }}
+                          onMouseOver={e => (e.currentTarget.style.color = "#777")}
+                          onMouseOut={e => (e.currentTarget.style.color = "#444")}
                         >{link}</a>
                       </li>
                     ))}
@@ -745,13 +602,13 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-between pt-6 border-t gap-4" style={{ borderColor: "#1e1e1e" }}>
-            <p style={{ fontSize: "12px", color: "#444" }}>
-              © {new Date().getFullYear()} Briesa. All rights reserved. Built for Australian industry.
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "24px", borderTop: "1px solid #111" }}>
+            <p style={{ fontSize: "11.5px", color: "#333", margin: 0 }}>
+              © {new Date().getFullYear()} Briesa. All rights reserved. ABN 00 000 000 000.
             </p>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-3 h-3" style={{ color: "#444" }} />
-              <span style={{ fontSize: "12px", color: "#444" }}>Australian Eastern Time &nbsp;·&nbsp; SafeWork NSW compliant</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <span style={{ fontFamily: "monospace", fontSize: "10px", color: "#2a2a2a", fontWeight: 700 }}>V1.0.0</span>
+              <span style={{ fontSize: "11.5px", color: "#2a2a2a" }}>SafeWork NSW · Australian Industry</span>
             </div>
           </div>
         </div>
