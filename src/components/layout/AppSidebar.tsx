@@ -18,8 +18,8 @@ const MODULE_ICONS: Record<string, LucideIcon> = {
   Building2, BarChart3, GraduationCap, Map,
 };
 
-const COMING_SOON: ModuleKey[] = ["training", "blueprints", "governance"];
-const MODULES_WITH_SUBMODULES: ModuleKey[] = ["safety", "people", "operations", "risk", "compliance", "insights"];
+const COMING_SOON: ModuleKey[] = ["blueprints", "governance"];
+const MODULES_WITH_SUBMODULES: ModuleKey[] = ["safety", "people", "operations", "risk", "compliance", "insights", "training"];
 
 const WORKSPACE_ITEMS = [
   { href: "/organisation", label: "Organisation", icon: Building },
