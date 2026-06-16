@@ -4,418 +4,431 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Check, CreditCard, Lock } from "lucide-react";
+import { Check, CreditCard, Lock, ArrowRight } from "lucide-react";
 import type { Industry } from "@/config/modules";
 
-const INDUSTRIES: { key: Industry; label: string; description: string; icon: string }[] = [
-  {
-    key: "construction",
-    label: "Construction",
-    description: "Commercial, residential and civil construction sites",
-    icon: "🏗️",
-  },
-  {
-    key: "industrial",
-    label: "Industrial",
-    description: "Manufacturing, mining, warehousing and processing plants",
-    icon: "🏭",
-  },
-  {
-    key: "facilities",
-    label: "Facilities",
-    description: "Building management, property and facilities services",
-    icon: "🏢",
-  },
+function BLogo({ size = 28, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg viewBox="0 0 400 425" width={size} height={size} fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M400 315.018C400 375.709 350.801 424.908 290.11 424.908H115.751H0V284.249V225.641H8.79121H63.0037C91.6211 225.641 115.751 257.875 115.751 284.249V405.861L276.923 203.663H290.11C350.801 203.663 400 254.328 400 315.018Z" fill={color} />
+      <path d="M334.066 102.564C334.066 159.209 288.146 205.128 231.502 205.128C181.099 205.128 165.568 168.498 165.568 143.59V16.1172L8.79121 227.106H0V0H231.502C288.146 0 334.066 45.9195 334.066 102.564Z" fill={color} />
+    </svg>
+  );
+}
+
+const INDUSTRIES: { key: Industry; label: string; description: string }[] = [
+  { key: "construction", label: "Construction",  description: "Commercial, residential and civil construction" },
+  { key: "industrial",   label: "Industrial",    description: "Manufacturing, mining and warehousing" },
+  { key: "facilities",   label: "Facilities",    description: "Building management and facilities services" },
 ];
 
-const PLANS = [
-  {
-    key: "small",
-    name: "Small",
-    price: "$249",
-    tagline: "Up to 15 workers",
-    capacity: "1–15 workers · 25 GB · ~150–300 AI calls/mo",
-  },
-  {
-    key: "medium",
-    name: "Medium",
-    price: "$449",
-    tagline: "15–50 workers",
-    capacity: "15–50 workers · 75 GB · ~600–1,200 AI calls/mo",
-    highlight: true,
-    badge: "Most Popular",
-  },
-  {
-    key: "large",
-    name: "Large",
-    price: "$649",
-    tagline: "50–200+ workers",
-    capacity: "50–200+ workers · 200 GB · ~2,000–4,000 AI calls/mo",
-  },
-] as const;
-
 type PlanKey = "small" | "medium" | "large";
-type Step = "account" | "industry" | "organisation" | "pricing" | "billing";
+
+const PLANS: { key: PlanKey; name: string; monthlyPrice: number; tagline: string; workers: string; storage: string; ai: string; popular?: boolean }[] = [
+  { key: "small",  name: "Small",  monthlyPrice: 249, tagline: "Up to 15 workers",    workers: "1–15",     storage: "25 GB",  ai: "~300 AI calls/mo" },
+  { key: "medium", name: "Medium", monthlyPrice: 449, tagline: "15–50 workers",       workers: "15–50",    storage: "75 GB",  ai: "~1,200 AI calls/mo", popular: true },
+  { key: "large",  name: "Large",  monthlyPrice: 649, tagline: "50–200+ workers",     workers: "50–200+",  storage: "200 GB", ai: "~4,000 AI calls/mo" },
+];
+
+type BillingCycle = "monthly" | "yearly";
+type Step = "account" | "industry" | "organisation";
 
 const STEPS: { key: Step; label: string }[] = [
   { key: "account",      label: "Account" },
   { key: "industry",     label: "Industry" },
   { key: "organisation", label: "Organisation" },
-  { key: "pricing",      label: "Plan" },
-  { key: "billing",      label: "Billing" },
 ];
 
-const inputStyle: React.CSSProperties = {
-  background: "var(--b-bg-hover)",
-  borderColor: "var(--b-border-strong)",
-  color: "var(--b-text)",
-};
+function yearlyPrice(monthly: number) {
+  return Math.round((monthly * 10) / 12);
+}
+
+function inputCls() {
+  return "w-full px-3 h-10 text-[13px] border outline-none transition-colors";
+}
 
 function formatCardNumber(v: string) {
   return v.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
 }
 function formatExpiry(v: string) {
-  const digits = v.replace(/\D/g, "").slice(0, 4);
-  return digits.length > 2 ? digits.slice(0, 2) + "/" + digits.slice(2) : digits;
+  const d = v.replace(/\D/g, "").slice(0, 4);
+  return d.length > 2 ? d.slice(0, 2) + "/" + d.slice(2) : d;
 }
 
 export default function SignupPage() {
   const router = useRouter();
 
-  const [step, setStep]         = useState<Step>("account");
-  const [email, setEmail]       = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [industry, setIndustry] = useState<Industry | null>(null);
-  const [orgName, setOrgName]   = useState("");
-  const [plan, setPlan]         = useState<PlanKey | null>(null);
-  const [cardName, setCardName] = useState("");
+  const [step, setStep]           = useState<Step>("account");
+  const [email, setEmail]         = useState("");
+  const [password, setPassword]   = useState("");
+  const [fullName, setFullName]   = useState("");
+  const [industry, setIndustry]   = useState<Industry | null>(null);
+  const [orgName, setOrgName]     = useState("");
+  const [plan, setPlan]           = useState<PlanKey | null>(null);
+  const [billing, setBilling]     = useState<BillingCycle>("monthly");
+  const [cardName, setCardName]   = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry]     = useState("");
-  const [cvv, setCvv]           = useState("");
-  const [error, setError]       = useState<string | null>(null);
-  const [loading, setLoading]   = useState(false);
+  const [expiry, setExpiry]       = useState("");
+  const [cvv, setCvv]             = useState("");
+  const [error, setError]         = useState<string | null>(null);
+  const [loading, setLoading]     = useState(false);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
     if (!industry || !plan) return;
     setLoading(true);
     setError(null);
-
     const supabase = createClient();
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName, industry, org_name: orgName, plan } },
+      options: { data: { full_name: fullName, industry, org_name: orgName, plan, billing } },
     });
-
     if (signUpError || !data.user) {
       setError(signUpError?.message ?? "Signup failed");
       setLoading(false);
       return;
     }
-
     router.push("/dashboard");
     router.refresh();
   }
 
   const stepIndex = STEPS.findIndex((s) => s.key === step);
+  const isWide    = step === "organisation";
 
-  const accentBtn: React.CSSProperties = {
-    background: "var(--b-accent-bg)",
-    borderColor: "var(--b-accent-border)",
+  const baseInput: React.CSSProperties = {
+    background: "var(--b-bg-hover)",
+    borderColor: "var(--b-border-strong)",
     color: "var(--b-text)",
   };
 
+  function PrimaryBtn({ children, onClick, disabled, type = "button" }: {
+    children: React.ReactNode; onClick?: () => void; disabled?: boolean; type?: "button" | "submit";
+  }) {
+    return (
+      <button type={type} onClick={onClick} disabled={disabled}
+        className="flex-1 h-[42px] text-[13px] font-semibold border transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+        style={{ background: "var(--b-accent-bg)", borderColor: "var(--b-accent-border)", color: "var(--b-text)" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; }}>
+        {children}
+      </button>
+    );
+  }
+
+  function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+    return (
+      <button type="button" onClick={onClick}
+        className="flex-1 h-[42px] border text-[13px] transition-all"
+        style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)", background: "transparent" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-muted)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-strong)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-tertiary)"; }}>
+        {children}
+      </button>
+    );
+  }
+
+  function Field({ label, children }: { label: string; children: React.ReactNode }) {
+    return (
+      <div className="space-y-1.5">
+        <label className="text-[11.5px] font-semibold tracking-wide uppercase" style={{ color: "var(--b-text-muted)" }}>{label}</label>
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4 py-12"
-      style={{ background: "var(--b-bg-canvas)" }}
-    >
-      <div className="w-full" style={{ maxWidth: step === "pricing" ? "680px" : "448px" }}>
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div
-            className="inline-flex items-center justify-center w-10 h-10 border font-bold text-lg mb-4"
-            style={{
-              background: "var(--b-bg-secondary)",
-              borderColor: "var(--b-border)",
-              color: "var(--b-text)",
-            }}
-          >
-            B
-          </div>
-          <h1 className="text-[22px] font-semibold" style={{ color: "var(--b-text)" }}>Briesa</h1>
-          <p className="text-[13px] mt-1" style={{ color: "var(--b-text-muted)" }}>WHS Management Platform</p>
-        </div>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16"
+      style={{ background: "var(--b-bg-canvas)" }}>
 
-        {/* Step indicators */}
-        <div className="flex items-center justify-center gap-0 mb-8 overflow-x-auto">
-          {STEPS.map((s, i) => {
-            const done   = stepIndex > i;
-            const active = stepIndex === i;
-            return (
-              <div key={s.key} className="flex items-center flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-6 h-6 flex items-center justify-center text-[11px] font-semibold transition-colors"
-                    style={{
-                      background: done ? "var(--b-badge-green-bg)" : active ? "var(--b-bg-active)" : "var(--b-bg-secondary)",
-                      color:      done ? "var(--b-badge-green-text)" : active ? "var(--b-text)" : "var(--b-text-muted)",
-                      border:     `1px solid ${done ? "var(--b-accent-border)" : "var(--b-border)"}`,
-                    }}
-                  >
-                    {done ? <Check className="w-3 h-3" /> : i + 1}
-                  </div>
-                  <span
-                    className="text-[12px] font-medium"
-                    style={{ color: active ? "var(--b-text)" : done ? "var(--b-accent-text)" : "var(--b-text-muted)" }}
-                  >
-                    {s.label}
-                  </span>
+      {/* ── Logo ── */}
+      <div className="flex flex-col items-center gap-3 mb-10">
+        <BLogo size={32} color="var(--b-text)" />
+        <div className="text-center">
+          <p className="text-[13px]" style={{ color: "var(--b-text-muted)" }}>WHS Management Platform</p>
+        </div>
+      </div>
+
+      {/* ── Step bar ── */}
+      <div className="flex items-center gap-0 mb-8">
+        {STEPS.map((s, i) => {
+          const done   = stepIndex > i;
+          const active = stepIndex === i;
+          return (
+            <div key={s.key} className="flex items-center">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 flex items-center justify-center text-[11px] font-bold transition-all"
+                  style={{
+                    background: done ? "var(--b-badge-green-bg)" : active ? "var(--b-bg-active)" : "transparent",
+                    color:      done ? "var(--b-badge-green-text)" : active ? "var(--b-text)" : "var(--b-text-muted)",
+                    border:     `1px solid ${done ? "var(--b-badge-green-text)" : active ? "var(--b-border-hover)" : "var(--b-border)"}`,
+                  }}>
+                  {done ? <Check className="w-3 h-3" /> : i + 1}
                 </div>
-                {i < STEPS.length - 1 && (
-                  <div className="w-8 h-px mx-2" style={{ background: done ? "var(--b-accent-border)" : "var(--b-border)" }} />
-                )}
+                <span className="text-[12.5px] font-medium"
+                  style={{ color: active ? "var(--b-text)" : done ? "var(--b-badge-green-text)" : "var(--b-text-muted)" }}>
+                  {s.label}
+                </span>
               </div>
-            );
-          })}
-        </div>
+              {i < STEPS.length - 1 && (
+                <div className="w-12 h-px mx-4" style={{ background: done ? "var(--b-badge-green-text)" : "var(--b-border)" }} />
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-        <div
-          className="border p-6"
-          style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
-        >
+      {/* ── Card ── */}
+      <div className="w-full transition-all duration-200" style={{ maxWidth: isWide ? "760px" : "420px" }}>
+        <div className="border" style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}>
+
           {/* ── Step 1: Account ── */}
           {step === "account" && (
-            <>
-              <h2 className="text-[15px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>Create your account</h2>
-              <p className="text-[12.5px] mb-6" style={{ color: "var(--b-text-muted)" }}>Free demo available. Full access to all modules.</p>
-              <form onSubmit={(e) => { e.preventDefault(); setStep("industry"); }} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Full name</label>
-                  <input type="text" placeholder="Jane Smith" value={fullName} onChange={(e) => setFullName(e.target.value)} required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors" style={inputStyle}
+            <div className="p-8">
+              <div className="mb-7">
+                <h2 className="text-[18px] font-bold mb-1" style={{ color: "var(--b-text)" }}>Create your account</h2>
+              </div>
+              <form onSubmit={(e) => { e.preventDefault(); setStep("industry"); }} className="space-y-5">
+                <Field label="Full name">
+                  <input type="text" placeholder="Jane Smith" value={fullName} onChange={(e) => setFullName(e.target.value)} required className={inputCls()} style={baseInput}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
                     onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Work email</label>
-                  <input type="email" placeholder="jane@company.com.au" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors" style={inputStyle}
+                </Field>
+                <Field label="Work email">
+                  <input type="email" placeholder="jane@company.com.au" value={email} onChange={(e) => setEmail(e.target.value)} required className={inputCls()} style={baseInput}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
                     onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Password</label>
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} minLength={8} required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors" style={inputStyle}
+                </Field>
+                <Field label="Password">
+                  <input type="password" placeholder="Min. 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} minLength={8} required className={inputCls()} style={baseInput}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
                     onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                </Field>
+                <div className="pt-1">
+                  <PrimaryBtn type="submit">Continue <ArrowRight className="w-3.5 h-3.5" /></PrimaryBtn>
                 </div>
-                <button type="submit" className="w-full h-[38px] text-[13px] font-semibold border transition-colors mt-2" style={accentBtn}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border-hover)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"; }}>
-                  Continue
-                </button>
               </form>
-              <p className="text-center text-[12px] mt-5" style={{ color: "var(--b-text-muted)" }}>
+              <p className="text-center text-[12px] mt-6" style={{ color: "var(--b-text-muted)" }}>
                 Already have an account?{" "}
-                <Link href="/login" className="transition-colors" style={{ color: "var(--b-accent-text)" }}>Sign in</Link>
+                <Link href="/login" style={{ color: "var(--b-accent-text)" }}>Sign in</Link>
               </p>
-            </>
+            </div>
           )}
 
           {/* ── Step 2: Industry ── */}
           {step === "industry" && (
-            <>
-              <h2 className="text-[15px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>Select your industry</h2>
-              <p className="text-[12.5px] mb-6" style={{ color: "var(--b-text-muted)" }}>Your dashboard and modules will be configured for your industry</p>
-              <div className="space-y-2">
+            <div className="p-8">
+              <div className="mb-7">
+                <h2 className="text-[18px] font-bold mb-1" style={{ color: "var(--b-text)" }}>Select your industry</h2>
+                <p className="text-[13px]" style={{ color: "var(--b-text-muted)" }}>Your modules and defaults will be configured accordingly.</p>
+              </div>
+              <div className="space-y-2 mb-7">
                 {INDUSTRIES.map((ind) => {
-                  const selected = industry === ind.key;
+                  const sel = industry === ind.key;
                   return (
-                    <button key={ind.key} type="button" onClick={() => setIndustry(ind.key)} className="w-full text-left p-4 border transition-all"
-                      style={{ background: selected ? "var(--b-accent-bg)" : "var(--b-bg-hover)", borderColor: selected ? "var(--b-accent-border)" : "var(--b-border)" }}>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xl">{ind.icon}</span>
-                        <div>
-                          <div className="text-[13px] font-semibold" style={{ color: "var(--b-text)" }}>{ind.label}</div>
-                          <div className="text-[12px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>{ind.description}</div>
-                        </div>
-                        {selected && (
-                          <div className="ml-auto w-4 h-4 flex items-center justify-center" style={{ background: "var(--b-badge-green-bg)" }}>
-                            <Check className="w-2.5 h-2.5" style={{ color: "var(--b-badge-green-text)" }} />
-                          </div>
-                        )}
+                    <button key={ind.key} type="button" onClick={() => setIndustry(ind.key)}
+                      className="w-full text-left px-4 py-3.5 border transition-all flex items-center justify-between"
+                      style={{ background: sel ? "var(--b-accent-bg)" : "var(--b-bg-hover)", borderColor: sel ? "var(--b-accent-border)" : "var(--b-border)" }}>
+                      <div>
+                        <div className="text-[13.5px] font-semibold" style={{ color: "var(--b-text)" }}>{ind.label}</div>
+                        <div className="text-[12px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>{ind.description}</div>
                       </div>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button type="button" onClick={() => setStep("account")} className="flex-1 h-[38px] border text-[13px] transition-colors"
-                  style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)" }}>Back</button>
-                <button type="button" disabled={!industry} onClick={() => setStep("organisation")} className="flex-1 h-[38px] text-[13px] font-semibold border transition-colors disabled:opacity-40" style={accentBtn}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border-hover)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"; }}>
-                  Continue
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* ── Step 3: Organisation ── */}
-          {step === "organisation" && (
-            <>
-              <h2 className="text-[15px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>Your organisation</h2>
-              <p className="text-[12.5px] mb-6" style={{ color: "var(--b-text-muted)" }}>This will appear on all reports and documents</p>
-              <div className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Organisation name</label>
-                  <input type="text" placeholder="Acme Construction Pty Ltd" value={orgName} onChange={(e) => setOrgName(e.target.value)} required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors" style={inputStyle}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
-                </div>
-                <div className="flex items-center gap-3 p-3 border" style={{ borderColor: "var(--b-border)", background: "var(--b-bg-hover)" }}>
-                  <span className="text-[12px]" style={{ color: "var(--b-text-muted)" }}>Industry</span>
-                  <span className="text-[12px] font-medium px-2 py-0.5 capitalize" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}>{industry}</span>
-                </div>
-                <div className="flex gap-3">
-                  <button type="button" onClick={() => setStep("industry")} className="flex-1 h-[38px] border text-[13px] transition-colors"
-                    style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)" }}>Back</button>
-                  <button type="button" disabled={!orgName} onClick={() => setStep("pricing")} className="flex-1 h-[38px] text-[13px] font-semibold border transition-colors disabled:opacity-40" style={accentBtn}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border-hover)"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"; }}>
-                    Continue
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ── Step 4: Pricing ── */}
-          {step === "pricing" && (
-            <>
-              <h2 className="text-[15px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>Choose your plan</h2>
-              <p className="text-[12.5px] mb-6" style={{ color: "var(--b-text-muted)" }}>Flat monthly pricing based on workforce size. All 9 WHS modules included.</p>
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {PLANS.map((p) => {
-                  const selected = plan === p.key;
-                  return (
-                    <button key={p.key} type="button" onClick={() => setPlan(p.key)}
-                      className="text-left border transition-all relative"
-                      style={{
-                        background: selected ? "var(--b-accent-bg)" : "var(--b-bg-hover)",
-                        borderColor: selected ? "var(--b-accent-border)" : "var(--b-border)",
-                      }}>
-                      {"highlight" in p && p.highlight && (
-                        <div className="h-[2px]" style={{ background: "var(--b-text)" }} />
-                      )}
-                      {"badge" in p && p.badge && (
-                        <div className="absolute top-0 right-0 text-[8px] font-bold px-2 py-1 font-mono"
-                          style={{ background: "var(--b-text)", color: "var(--b-bg-canvas)" }}>
-                          [{p.badge}]
+                      {sel && (
+                        <div className="w-5 h-5 flex items-center justify-center flex-shrink-0 ml-4" style={{ background: "var(--b-badge-green-bg)" }}>
+                          <Check className="w-3 h-3" style={{ color: "var(--b-badge-green-text)" }} />
                         </div>
                       )}
-                      <div className="p-4">
-                        <div className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "var(--b-text-muted)" }}>{p.name}</div>
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="text-[28px] font-bold leading-none" style={{ color: "var(--b-text)" }}>{p.price}</span>
-                          <span className="text-[11px]" style={{ color: "var(--b-text-muted)" }}>/mo</span>
-                        </div>
-                        <div className="text-[11px] font-medium mb-3" style={{ color: "var(--b-text-secondary)" }}>{p.tagline}</div>
-                        <div className="text-[10px] leading-relaxed" style={{ color: "var(--b-text-muted)" }}>{p.capacity}</div>
-                        {selected && (
-                          <div className="mt-3 flex items-center gap-1.5">
-                            <div className="w-3.5 h-3.5 flex items-center justify-center" style={{ background: "var(--b-badge-green-bg)" }}>
-                              <Check className="w-2.5 h-2.5" style={{ color: "var(--b-badge-green-text)" }} />
-                            </div>
-                            <span className="text-[10px] font-semibold" style={{ color: "var(--b-badge-green-text)" }}>Selected</span>
-                          </div>
-                        )}
-                      </div>
                     </button>
                   );
                 })}
               </div>
               <div className="flex gap-3">
-                <button type="button" onClick={() => setStep("organisation")} className="flex-1 h-[38px] border text-[13px] transition-colors"
-                  style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)" }}>Back</button>
-                <button type="button" disabled={!plan} onClick={() => setStep("billing")} className="flex-1 h-[38px] text-[13px] font-semibold border transition-colors disabled:opacity-40" style={accentBtn}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border-hover)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"; }}>
-                  Continue
-                </button>
+                <GhostBtn onClick={() => setStep("account")}>Back</GhostBtn>
+                <PrimaryBtn disabled={!industry} onClick={() => setStep("organisation")}>Continue <ArrowRight className="w-3.5 h-3.5" /></PrimaryBtn>
               </div>
-            </>
+            </div>
           )}
 
-          {/* ── Step 5: Billing ── */}
-          {step === "billing" && (
-            <>
-              <h2 className="text-[15px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>Payment details</h2>
-              <p className="text-[12.5px] mb-1" style={{ color: "var(--b-text-muted)" }}>
-                {PLANS.find((p) => p.key === plan)?.name} plan — {PLANS.find((p) => p.key === plan)?.price}/month
-              </p>
-              <div className="flex items-center gap-1.5 mb-6">
-                <Lock className="w-3 h-3" style={{ color: "var(--b-text-muted)" }} />
-                <span className="text-[11px]" style={{ color: "var(--b-text-muted)" }}>Secured with 256-bit SSL encryption</span>
+          {/* ── Step 3: Organisation + Plan + Billing ── */}
+          {step === "organisation" && (
+            <form onSubmit={handleSignup}>
+              {/* Header */}
+              <div className="px-8 pt-8 pb-6 border-b" style={{ borderColor: "var(--b-border)" }}>
+                <h2 className="text-[18px] font-bold mb-1" style={{ color: "var(--b-text)" }}>Set up your organisation</h2>
+                <p className="text-[13px]" style={{ color: "var(--b-text-muted)" }}>Name your organisation, choose a plan, and enter payment details.</p>
               </div>
 
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Cardholder name</label>
-                  <input type="text" placeholder="Jane Smith" value={cardName} onChange={(e) => setCardName(e.target.value)} required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors" style={inputStyle}
-                    onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
-                    onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Card number</label>
-                  <div className="relative">
-                    <input type="text" inputMode="numeric" placeholder="1234 5678 9012 3456" value={cardNumber}
-                      onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-                      required className="w-full pl-3 pr-10 h-10 text-[13px] border outline-none transition-colors font-mono" style={inputStyle}
+              <div className="p-8 space-y-8">
+
+                {/* Org name */}
+                <div>
+                  <Field label="Organisation name">
+                    <input type="text" placeholder="Acme Construction Pty Ltd" value={orgName} onChange={(e) => setOrgName(e.target.value)} required className={inputCls()} style={baseInput}
                       onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
                       onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
-                    <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--b-text-muted)" }} />
+                  </Field>
+                  {industry && (
+                    <div className="flex items-center gap-2 mt-3">
+                      <span className="text-[11px]" style={{ color: "var(--b-text-muted)" }}>Industry</span>
+                      <span className="text-[11px] font-semibold px-2 py-0.5 capitalize" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}>{industry}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Billing toggle */}
+                <div>
+                  <p className="text-[11.5px] font-semibold tracking-wide uppercase mb-3" style={{ color: "var(--b-text-muted)" }}>Billing cycle</p>
+                  <div className="inline-flex border" style={{ borderColor: "var(--b-border)" }}>
+                    {(["monthly", "yearly"] as BillingCycle[]).map((cycle) => (
+                      <button key={cycle} type="button" onClick={() => setBilling(cycle)}
+                        className="px-5 h-9 text-[12.5px] font-semibold transition-all flex items-center gap-2"
+                        style={{
+                          background: billing === cycle ? "var(--b-bg-active)" : "transparent",
+                          color:      billing === cycle ? "var(--b-text)" : "var(--b-text-muted)",
+                          borderRight: cycle === "monthly" ? "1px solid var(--b-border)" : undefined,
+                        }}>
+                        {cycle === "monthly" ? "Monthly" : "Yearly"}
+                        {cycle === "yearly" && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}>
+                            2 months free
+                          </span>
+                        )}
+                      </button>
+                    ))}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>Expiry</label>
-                    <input type="text" inputMode="numeric" placeholder="MM/YY" value={expiry}
-                      onChange={(e) => setExpiry(formatExpiry(e.target.value))}
-                      required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors font-mono" style={inputStyle}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+
+                {/* Plan cards */}
+                <div>
+                  <p className="text-[11.5px] font-semibold tracking-wide uppercase mb-3" style={{ color: "var(--b-text-muted)" }}>Choose a plan</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    {PLANS.map((p) => {
+                      const sel        = plan === p.key;
+                      const price      = billing === "yearly" ? yearlyPrice(p.monthlyPrice) : p.monthlyPrice;
+                      const fullPrice  = p.monthlyPrice;
+                      return (
+                        <button key={p.key} type="button" onClick={() => setPlan(p.key)}
+                          className="text-left border transition-all relative overflow-hidden"
+                          style={{ background: sel ? "var(--b-accent-bg)" : "var(--b-bg-hover)", borderColor: sel ? "var(--b-accent-border)" : "var(--b-border)" }}>
+                          {p.popular && <div className="h-[2px]" style={{ background: sel ? "var(--b-accent-text)" : "var(--b-text-muted)" }} />}
+                          <div className="p-4">
+                            <div className="flex items-start justify-between mb-3">
+                              <span className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--b-text-muted)" }}>{p.name}</span>
+                              {p.popular && (
+                                <span className="text-[9px] font-bold px-1.5 py-0.5" style={{ background: "var(--b-bg-active)", color: "var(--b-text-secondary)" }}>POPULAR</span>
+                              )}
+                            </div>
+                            <div className="flex items-baseline gap-1 mb-0.5">
+                              <span className="text-[26px] font-bold leading-none" style={{ color: "var(--b-text)" }}>${price}</span>
+                              <span className="text-[11px]" style={{ color: "var(--b-text-muted)" }}>/mo</span>
+                            </div>
+                            {billing === "yearly" && (
+                              <p className="text-[10px] mb-2" style={{ color: "var(--b-text-muted)" }}>
+                                <span style={{ textDecoration: "line-through" }}>${fullPrice}</span> billed annually
+                              </p>
+                            )}
+                            <p className="text-[11px] font-medium mt-1 mb-3" style={{ color: "var(--b-text-secondary)" }}>{p.tagline}</p>
+                            <div className="space-y-1 text-[10.5px]" style={{ color: "var(--b-text-muted)" }}>
+                              <div>{p.workers} workers</div>
+                              <div>{p.storage} storage</div>
+                              <div>{p.ai}</div>
+                            </div>
+                            {sel && (
+                              <div className="mt-3 flex items-center gap-1.5">
+                                <Check className="w-3 h-3" style={{ color: "var(--b-badge-green-text)" }} />
+                                <span className="text-[10px] font-bold" style={{ color: "var(--b-badge-green-text)" }}>Selected</span>
+                              </div>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[12px] font-medium" style={{ color: "var(--b-text-tertiary)" }}>CVV</label>
-                    <input type="text" inputMode="numeric" placeholder="•••" value={cvv}
-                      onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                      required className="w-full px-3 h-10 text-[13px] border outline-none transition-colors font-mono" style={inputStyle}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                </div>
+
+                {/* Card details */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-[11.5px] font-semibold tracking-wide uppercase" style={{ color: "var(--b-text-muted)" }}>Payment details</p>
+                    <div className="flex items-center gap-1.5">
+                      <Lock className="w-3 h-3" style={{ color: "var(--b-text-muted)" }} />
+                      <span className="text-[11px]" style={{ color: "var(--b-text-muted)" }}>256-bit SSL</span>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <Field label="Cardholder name">
+                      <input type="text" placeholder="Jane Smith" value={cardName} onChange={(e) => setCardName(e.target.value)} required className={inputCls()} style={baseInput}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                    </Field>
+                    <Field label="Card number">
+                      <div className="relative">
+                        <input type="text" inputMode="numeric" placeholder="1234 5678 9012 3456" value={cardNumber}
+                          onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+                          required className={inputCls() + " pr-10 font-mono"} style={baseInput}
+                          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
+                          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                        <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--b-text-muted)" }} />
+                      </div>
+                    </Field>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Field label="Expiry">
+                        <input type="text" inputMode="numeric" placeholder="MM / YY" value={expiry}
+                          onChange={(e) => setExpiry(formatExpiry(e.target.value))}
+                          required className={inputCls() + " font-mono"} style={baseInput}
+                          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
+                          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                      </Field>
+                      <Field label="CVV">
+                        <input type="text" inputMode="numeric" placeholder="•••" value={cvv}
+                          onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                          required className={inputCls() + " font-mono"} style={baseInput}
+                          onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
+                          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
+                      </Field>
+                    </div>
                   </div>
                 </div>
 
                 {error && <p className="text-[12px]" style={{ color: "var(--destructive)" }}>{error}</p>}
 
-                <div className="flex gap-3 mt-2">
-                  <button type="button" onClick={() => setStep("pricing")} className="flex-1 h-[38px] border text-[13px] transition-colors"
-                    style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)" }}>Back</button>
-                  <button type="submit" disabled={loading || !cardName || !cardNumber || !expiry || !cvv}
-                    className="flex-1 h-[38px] text-[13px] font-semibold border transition-colors disabled:opacity-40" style={accentBtn}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border-hover)"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"; }}>
-                    {loading ? "Creating account…" : "Start subscription"}
-                  </button>
-                </div>
-              </form>
-            </>
+                {/* Summary + submit */}
+                {plan && (
+                  <div className="border-t pt-6" style={{ borderColor: "var(--b-border)" }}>
+                    <div className="flex items-center justify-between mb-5 text-[13px]">
+                      <span style={{ color: "var(--b-text-muted)" }}>
+                        {PLANS.find(p => p.key === plan)?.name} plan · {billing === "monthly" ? "Monthly" : "Billed annually"}
+                      </span>
+                      <span className="font-bold" style={{ color: "var(--b-text)" }}>
+                        ${billing === "yearly"
+                          ? yearlyPrice(PLANS.find(p => p.key === plan)!.monthlyPrice)
+                          : PLANS.find(p => p.key === plan)!.monthlyPrice}/mo
+                      </span>
+                    </div>
+                    <div className="flex gap-3">
+                      <GhostBtn onClick={() => setStep("industry")}>Back</GhostBtn>
+                      <PrimaryBtn type="submit" disabled={loading || !orgName || !plan || !cardName || !cardNumber || !expiry || !cvv}>
+                        {loading ? "Creating account…" : "Start subscription"}
+                      </PrimaryBtn>
+                    </div>
+                  </div>
+                )}
+
+                {!plan && (
+                  <div className="flex gap-3 border-t pt-6" style={{ borderColor: "var(--b-border)" }}>
+                    <GhostBtn onClick={() => setStep("industry")}>Back</GhostBtn>
+                  </div>
+                )}
+
+              </div>
+            </form>
           )}
         </div>
 
         <p className="text-center text-[11px] mt-6" style={{ color: "var(--b-text-muted)" }}>
-          By creating an account you agree to our Terms of Service and Privacy Policy.
+          By creating an account you agree to our{" "}
+          <span style={{ color: "var(--b-text-tertiary)" }}>Terms of Service</span> and{" "}
+          <span style={{ color: "var(--b-text-tertiary)" }}>Privacy Policy</span>.
         </p>
       </div>
     </div>
