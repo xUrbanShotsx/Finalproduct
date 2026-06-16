@@ -212,7 +212,7 @@ export default function SignupPage() {
                     onFocus={(e) => (e.currentTarget.style.borderColor = "var(--b-border-hover)")}
                     onBlur={(e) => (e.currentTarget.style.borderColor = "var(--b-border-strong)")} />
                 </Field>
-                <div className="pt-1">
+                <div className="pt-1 flex">
                   <PrimaryBtn type="submit">Continue <ArrowRight className="w-3.5 h-3.5" /></PrimaryBtn>
                 </div>
               </form>
