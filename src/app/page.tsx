@@ -503,9 +503,9 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/login"
-              style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#ffffff", border: "1px solid #ffffff" }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0e0e0"; (e.currentTarget as HTMLElement).style.borderColor = "#e0e0e0"; }}
-              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#ffffff"; (e.currentTarget as HTMLElement).style.borderColor = "#ffffff"; }}
+              style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#f5c842", border: "1px solid #f5c842" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; (e.currentTarget as HTMLElement).style.borderColor = "#e0b830"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; (e.currentTarget as HTMLElement).style.borderColor = "#f5c842"; }}
             >
               Get started
             </Link>
@@ -546,11 +546,11 @@ export default function LandingPage() {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "72px" }}>
             <Link
               href="/login"
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#ffffff", textDecoration: "none", border: "1px solid #ffffff" }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0e0e0"; }}
-              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#ffffff"; }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; }}
             >
-              Get started free <ArrowRight size={15} />
+              Get started <ArrowRight size={15} />
             </Link>
             <Link
               href="/login"
@@ -682,11 +682,11 @@ export default function LandingPage() {
               </p>
               <Link
                 href="/login"
-                style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#ffffff", textDecoration: "none", border: "1px solid #ffffff" }}
-                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0e0e0"}
-                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#ffffff"}
+                style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
+                onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0b830"}
+                onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#f5c842"}
               >
-                Start for free <ArrowRight size={15} />
+                Get started <ArrowRight size={15} />
               </Link>
             </div>
             {/* Right — 3-col cards */}
@@ -724,11 +724,11 @@ export default function LandingPage() {
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
             <Link
               href="/login"
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 32px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: "#ffffff", textDecoration: "none", border: "1px solid #ffffff" }}
-              onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0e0e0"}
-              onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#ffffff"}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 32px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
+              onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0b830"}
+              onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#f5c842"}
             >
-              Get started free <ArrowRight size={16} />
+              Get started <ArrowRight size={16} />
             </Link>
             <Link
               href="/login"

@@ -114,9 +114,9 @@ export default function PricingPage() {
             </Link>
             <Link
               href="/login"
-              style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#ffffff", border: "1px solid #ffffff" }}
-              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0e0e0"; }}
-              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#ffffff"; }}
+              style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#f5c842", border: "1px solid #f5c842" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; }}
             >
               Get started
             </Link>
@@ -215,18 +215,12 @@ export default function PricingPage() {
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
                     height: "40px", fontSize: "13px", fontWeight: 700, textDecoration: "none",
-                    background: plan.highlight ? "#ffffff" : "transparent",
-                    color: plan.highlight ? "#0a0a0a" : "#444",
-                    border: `1px solid ${plan.highlight ? "#ffffff" : "#222"}`,
+                    background: "#f5c842",
+                    color: "#0a0a0a",
+                    border: "1px solid #f5c842",
                   }}
-                  onMouseOver={e => {
-                    if (plan.highlight) (e.currentTarget as HTMLElement).style.background = "#e0e0e0";
-                    else { (e.currentTarget as HTMLElement).style.color = "#aaa"; (e.currentTarget as HTMLElement).style.borderColor = "#333"; }
-                  }}
-                  onMouseOut={e => {
-                    if (plan.highlight) (e.currentTarget as HTMLElement).style.background = "#ffffff";
-                    else { (e.currentTarget as HTMLElement).style.color = "#444"; (e.currentTarget as HTMLElement).style.borderColor = "#222"; }
-                  }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; (e.currentTarget as HTMLElement).style.borderColor = "#e0b830"; }}
+                  onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; (e.currentTarget as HTMLElement).style.borderColor = "#f5c842"; }}
                 >
                   Get started <ArrowRight size={13} />
                 </Link>
