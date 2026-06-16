@@ -34,39 +34,7 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "incidents",
       name: "Incidents",
-      description: "Report, investigate and close out incidents",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "swms",
-      name: "SWMS",
-      description: "Safe Work Method Statements for high-risk construction work",
-      industries: ["construction"],
-      mobileAccess: "partial",
-      offlineCapable: true,
-    },
-    {
-      id: "permits",
-      name: "Permits",
-      description: "Work permits for excavation, heights and confined spaces",
-      industries: ["construction"],
-      mobileAccess: "full",
-      offlineCapable: false,
-    },
-    {
-      id: "prestart",
-      name: "Prestart",
-      description: "Daily prestart safety checklists",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "toolbox",
-      name: "Toolbox",
-      description: "Toolbox talks and briefing records",
+      description: "Report, investigate and close out injuries, near misses and property damage across facilities",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -74,8 +42,40 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "actions",
       name: "Actions",
-      description: "Corrective and preventive actions",
+      description: "Safety corrective and preventive actions with owner, priority and due date tracking",
       industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: false,
+    },
+    {
+      id: "toolbox",
+      name: "Toolbox",
+      description: "Safety briefings, shift communications and attendance sign-offs for facility teams",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "prestart",
+      name: "Prestart",
+      description: "Pre-shift safety checks for facility equipment, plant rooms and common areas",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "swms",
+      name: "SWMS",
+      description: "Safe Work Method Statements for high-risk construction work with sign-off and revision control",
+      industries: ["construction"],
+      mobileAccess: "partial",
+      offlineCapable: true,
+    },
+    {
+      id: "permits",
+      name: "Permits",
+      description: "Hot work, confined space, excavation and working at height permits raised before hazardous tasks",
+      industries: ["construction"],
       mobileAccess: "full",
       offlineCapable: false,
     },
@@ -84,7 +84,31 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "incidents",
       name: "Incidents",
-      description: "Report, investigate and close out incidents",
+      description: "Report, investigate and close out injuries, near misses and property damage across facilities",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "actions",
+      name: "Actions",
+      description: "Safety corrective and preventive actions with owner, priority and due date tracking",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: false,
+    },
+    {
+      id: "toolbox",
+      name: "Toolbox",
+      description: "Safety briefings, shift communications and attendance sign-offs for facility teams",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "prestart",
+      name: "Prestart",
+      description: "Pre-shift safety checks for facility equipment, plant rooms and common areas",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -92,7 +116,7 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "permits-to-work",
       name: "Permits to Work",
-      description: "Hot work, isolation, confined space and energy control permits",
+      description: "Hot work, confined space, isolation and energy control permits raised before hazardous tasks",
       industries: ["industrial"],
       mobileAccess: "full",
       offlineCapable: false,
@@ -100,65 +124,17 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "loto",
       name: "LOTO",
-      description: "Lockout/Tagout procedures for energy control",
+      description: "Lockout/tagout procedures applied at the point of work to isolate hazardous energy",
       industries: ["industrial"],
       mobileAccess: "full",
       offlineCapable: true,
-    },
-    {
-      id: "prestart",
-      name: "Prestart",
-      description: "Shift prestart safety checklists",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "toolbox",
-      name: "Toolbox",
-      description: "Toolbox talks and briefing records",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "actions",
-      name: "Actions",
-      description: "Corrective and preventive actions",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: false,
     },
   ],
   facilities: [
     {
       id: "incidents",
       name: "Incidents",
-      description: "Report, investigate and close out incidents",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "hazardous-materials",
-      name: "Hazardous Materials",
-      description: "SDS register and chemical handling compliance",
-      industries: ["facilities"],
-      mobileAccess: "partial",
-      offlineCapable: false,
-    },
-    {
-      id: "prestart",
-      name: "Prestart",
-      description: "Daily prestart safety checklists",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "toolbox",
-      name: "Toolbox",
-      description: "Toolbox talks and briefing records",
+      description: "Report, investigate and close out injuries, near misses and property damage across facilities",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -166,15 +142,39 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "actions",
       name: "Actions",
-      description: "Corrective and preventive actions",
+      description: "Safety corrective and preventive actions with owner, priority and due date tracking",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
     },
     {
-      id: "ppe-register",
-      name: "PPE Register",
-      description: "Issue, inspect and track PPE expiry",
+      id: "toolbox",
+      name: "Toolbox",
+      description: "Safety briefings, shift communications and attendance sign-offs for facility teams",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "prestart",
+      name: "Prestart",
+      description: "Pre-shift safety checks for facility equipment, plant rooms and common areas",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
+      id: "permits",
+      name: "Permits",
+      description: "Hot work, confined space and access permits for maintenance and facilities work",
+      industries: ["facilities"],
+      mobileAccess: "full",
+      offlineCapable: false,
+    },
+    {
+      id: "hazardous-materials",
+      name: "Hazardous Materials",
+      description: "SDS register, chemical storage, handling procedures and spill response for facility chemicals",
       industries: ["facilities"],
       mobileAccess: "partial",
       offlineCapable: false,
@@ -187,23 +187,15 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "inductions",
       name: "Inductions",
-      description: "Site induction records and access clearance",
+      description: "Site, building and role-specific induction records for staff, contractors and visitors",
       industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "white-card",
-      name: "White Card Register",
-      description: "Construction Induction Card verification and records",
-      industries: ["construction"],
       mobileAccess: "full",
       offlineCapable: true,
     },
     {
       id: "contractor-management",
       name: "Contractor Management",
-      description: "Contractor prequalification, licences and insurance",
+      description: "Contractor onboarding, insurance verification and site access approvals",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -211,7 +203,7 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "health-wellbeing",
       name: "Health & Wellbeing",
-      description: "Worker wellness checks and support programs",
+      description: "Wellness programs, mental health support and return-to-work coordination",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -219,15 +211,23 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "return-to-work",
       name: "Return to Work",
-      description: "RTW plans and milestone tracking",
+      description: "Injury-based RTW plans, suitable duties and rehabilitation milestone tracking",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
     },
     {
+      id: "white-card",
+      name: "White Card Register",
+      description: "Construction induction (White Card) records and verification for all workers on site",
+      industries: ["construction"],
+      mobileAccess: "full",
+      offlineCapable: true,
+    },
+    {
       id: "fatigue-management",
       name: "Fatigue Management",
-      description: "Hours logging and fatigue risk for shift workers",
+      description: "Hours of work monitoring and fatigue risk controls for long-shift and remote construction workers",
       industries: ["construction", "industrial"],
       mobileAccess: "partial",
       offlineCapable: false,
@@ -237,23 +237,15 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "inductions",
       name: "Inductions",
-      description: "Site induction records and access clearance",
+      description: "Site, building and role-specific induction records for staff, contractors and visitors",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
     },
     {
-      id: "health-monitoring",
-      name: "Health Monitoring",
-      description: "Occupational exposure surveillance for noise, dust and fumes",
-      industries: ["industrial"],
-      mobileAccess: "read-only",
-      offlineCapable: false,
-    },
-    {
       id: "contractor-management",
       name: "Contractor Management",
-      description: "Contractor prequalification, licences and insurance",
+      description: "Contractor onboarding, insurance verification and site access approvals",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -261,24 +253,32 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "health-wellbeing",
       name: "Health & Wellbeing",
-      description: "Worker wellness checks and support programs",
+      description: "Wellness programs, mental health support and return-to-work coordination",
       industries: "shared",
+      mobileAccess: "partial",
+      offlineCapable: false,
+    },
+    {
+      id: "health-monitoring",
+      name: "Health Monitoring",
+      description: "Occupational exposure surveillance for noise, dust, fumes and biological agents",
+      industries: ["industrial"],
+      mobileAccess: "read-only",
+      offlineCapable: false,
+    },
+    {
+      id: "fatigue-management",
+      name: "Fatigue Management",
+      description: "Shift hour limits, fatigue assessments and roster compliance for plant operators",
+      industries: ["construction", "industrial"],
       mobileAccess: "partial",
       offlineCapable: false,
     },
     {
       id: "return-to-work",
       name: "Return to Work",
-      description: "RTW plans and milestone tracking",
+      description: "Injury-based RTW plans, suitable duties and rehabilitation milestone tracking",
       industries: "shared",
-      mobileAccess: "partial",
-      offlineCapable: false,
-    },
-    {
-      id: "fatigue-management",
-      name: "Fatigue Management",
-      description: "Hours logging and fatigue risk for shift workers",
-      industries: ["construction", "industrial"],
       mobileAccess: "partial",
       offlineCapable: false,
     },
@@ -287,31 +287,15 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "inductions",
       name: "Inductions",
-      description: "Site induction records and access clearance",
+      description: "Site, building and role-specific induction records for staff, contractors and visitors",
       industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "warden-register",
-      name: "Warden Register",
-      description: "Building warden assignments and currency tracking",
-      industries: ["facilities"],
-      mobileAccess: "full",
-      offlineCapable: false,
-    },
-    {
-      id: "visitor-access",
-      name: "Visitor & Access Management",
-      description: "Visitor sign-in and site access control",
-      industries: ["facilities"],
       mobileAccess: "full",
       offlineCapable: true,
     },
     {
       id: "contractor-management",
       name: "Contractor Management",
-      description: "Contractor prequalification, licences and insurance",
+      description: "Contractor onboarding, insurance verification and site access approvals",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -319,18 +303,34 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "health-wellbeing",
       name: "Health & Wellbeing",
-      description: "Worker wellness checks and support programs",
+      description: "Wellness programs, mental health support and return-to-work coordination",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
     },
     {
+      id: "warden-register",
+      name: "Warden Register",
+      description: "Emergency warden assignments, floor coverage and warden currency tracking",
+      industries: ["facilities"],
+      mobileAccess: "full",
+      offlineCapable: false,
+    },
+    {
       id: "return-to-work",
       name: "Return to Work",
-      description: "RTW plans and milestone tracking",
+      description: "Injury-based RTW plans, suitable duties and rehabilitation milestone tracking",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
+    },
+    {
+      id: "visitor-access",
+      name: "Visitor & Access",
+      description: "Visitor sign-in, access permissions and occupancy records across buildings",
+      industries: ["facilities"],
+      mobileAccess: "full",
+      offlineCapable: true,
     },
   ],
 };
@@ -340,7 +340,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "safe-work-procedures",
       name: "Safe Work Procedures",
-      description: "Documented procedures for performing work safely",
+      description: "Documented step-by-step procedures for routine facility tasks and maintenance work",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -348,7 +348,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "site-access-control",
       name: "Site Access Control",
-      description: "Control who enters what areas on site",
+      description: "Managing who can enter work areas, restricted zones and after-hours access safely",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
@@ -356,7 +356,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "work-planning",
       name: "Work Planning",
-      description: "Coordinate tasks with safety controls before work starts",
+      description: "Scheduling and coordinating maintenance and facility tasks with safety controls in place",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -364,15 +364,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "defect-reporting",
       name: "Defect Reporting",
-      description: "Identify and ground unsafe equipment",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
-      id: "emergency-procedures",
-      name: "Emergency Procedures",
-      description: "Live site emergency response procedures",
+      description: "Log, track and resolve unsafe building defects and equipment faults before work resumes",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -380,17 +372,25 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "plant-equipment",
       name: "Plant & Equipment",
-      description: "Pre-op inspections and defect logging for mobile plant",
+      description: "Pre-op inspections, daily checks and defect logging for mobile plant and construction equipment",
       industries: ["construction"],
       mobileAccess: "full",
       offlineCapable: true,
+    },
+    {
+      id: "work-zone",
+      name: "Work Zone",
+      description: "Traffic management plans, exclusion zones and work area separation controls on site",
+      industries: ["construction"],
+      mobileAccess: "full",
+      offlineCapable: false,
     },
   ],
   industrial: [
     {
       id: "safe-work-procedures",
       name: "Safe Work Procedures",
-      description: "Documented procedures for performing work safely",
+      description: "Documented step-by-step procedures for routine facility tasks and maintenance work",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -398,7 +398,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "site-access-control",
       name: "Site Access Control",
-      description: "Control who enters what areas on site",
+      description: "Managing who can enter work areas, restricted zones and after-hours access safely",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
@@ -406,7 +406,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "work-planning",
       name: "Work Planning",
-      description: "Coordinate tasks with safety controls before work starts",
+      description: "Scheduling and coordinating maintenance and facility tasks with safety controls in place",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -414,7 +414,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "defect-reporting",
       name: "Defect Reporting",
-      description: "Identify and ground unsafe equipment",
+      description: "Log, track and resolve unsafe building defects and equipment faults before work resumes",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -422,7 +422,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "emergency-procedures",
       name: "Emergency Procedures",
-      description: "Live site emergency response procedures",
+      description: "Evacuation plans, emergency response procedures and muster point records for buildings",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -430,7 +430,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "operational-readiness",
       name: "Operational Readiness",
-      description: "Pre-production and pre-task safety readiness checks",
+      description: "Pre-task and pre-production safety readiness checks before commencing high-risk operations",
       industries: ["industrial"],
       mobileAccess: "full",
       offlineCapable: true,
@@ -440,7 +440,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "safe-work-procedures",
       name: "Safe Work Procedures",
-      description: "Documented procedures for performing work safely",
+      description: "Documented step-by-step procedures for routine facility tasks and maintenance work",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -448,7 +448,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "site-access-control",
       name: "Site Access Control",
-      description: "Control who enters what areas on site",
+      description: "Managing who can enter work areas, restricted zones and after-hours access safely",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
@@ -456,23 +456,15 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "work-planning",
       name: "Work Planning",
-      description: "Coordinate tasks with safety controls before work starts",
+      description: "Scheduling and coordinating maintenance and facility tasks with safety controls in place",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
     },
     {
-      id: "defect-reporting",
-      name: "Defect Reporting",
-      description: "Identify and ground unsafe equipment",
-      industries: "shared",
-      mobileAccess: "full",
-      offlineCapable: true,
-    },
-    {
       id: "emergency-procedures",
       name: "Emergency Procedures",
-      description: "Live site emergency response procedures",
+      description: "Evacuation plans, emergency response procedures and muster point records for buildings",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -480,10 +472,18 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "isolation-shutdown",
       name: "Isolation & Shutdown",
-      description: "Safe isolation of building systems during maintenance",
+      description: "Safe isolation procedures for building systems during maintenance and service work",
       industries: ["facilities"],
       mobileAccess: "partial",
       offlineCapable: false,
+    },
+    {
+      id: "defect-reporting",
+      name: "Defect Reporting",
+      description: "Log, track and resolve unsafe building defects and equipment faults before work resumes",
+      industries: "shared",
+      mobileAccess: "full",
+      offlineCapable: true,
     },
   ],
 };
@@ -493,7 +493,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "hazard-register",
       name: "Hazard Register",
-      description: "Identify, record and control workplace hazards",
+      description: "Identify, log and track ongoing hazards across building areas with control measures",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -501,7 +501,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "risk-assessments",
       name: "Risk Assessments",
-      description: "Formal likelihood/consequence assessments with hierarchy of controls",
+      description: "Formal risk assessments using likelihood and consequence ratings with control hierarchies",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -509,7 +509,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "emergency-response-plans",
       name: "Emergency Response Plans",
-      description: "Planning and documentation of emergency responses",
+      description: "Documented ERPs for fire, medical, bomb threat and building-specific emergency scenarios",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -517,15 +517,15 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "critical-risk-controls",
       name: "Critical Risk Controls",
-      description: "Verify life-critical controls are actively in place",
+      description: "Track verification of life-critical controls such as fire suppression, exits and fall prevention",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
     },
     {
       id: "hrcw",
-      name: "High Risk Construction Work",
-      description: "Manage the 19 HRCW categories under WHS Regulations",
+      name: "High Risk Work",
+      description: "Risk management specific to HRCW activities — heights, excavation, demolition and confined space",
       industries: ["construction"],
       mobileAccess: "partial",
       offlineCapable: false,
@@ -533,7 +533,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "psychosocial-risk",
       name: "Psychosocial Risk",
-      description: "Mental health and psychosocial hazard assessments",
+      description: "Identify and manage psychosocial hazards including workload, isolation and mental health risks on site",
       industries: ["construction"],
       mobileAccess: "none",
       offlineCapable: false,
@@ -543,7 +543,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "hazard-register",
       name: "Hazard Register",
-      description: "Identify, record and control workplace hazards",
+      description: "Identify, log and track ongoing hazards across building areas with control measures",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -551,7 +551,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "risk-assessments",
       name: "Risk Assessments",
-      description: "Formal likelihood/consequence assessments with hierarchy of controls",
+      description: "Formal risk assessments using likelihood and consequence ratings with control hierarchies",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -559,7 +559,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "emergency-response-plans",
       name: "Emergency Response Plans",
-      description: "Planning and documentation of emergency responses",
+      description: "Documented ERPs for fire, medical, bomb threat and building-specific emergency scenarios",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -567,7 +567,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "critical-risk-controls",
       name: "Critical Risk Controls",
-      description: "Verify life-critical controls are actively in place",
+      description: "Track verification of life-critical controls such as fire suppression, exits and fall prevention",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: false,
@@ -575,7 +575,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "jsa-jsea",
       name: "JSA / JSEA",
-      description: "Job Safety Analysis for non-routine high-risk tasks",
+      description: "Job Safety Analysis for non-routine and high-risk tasks with step-by-step hazard controls",
       industries: ["industrial"],
       mobileAccess: "partial",
       offlineCapable: true,
@@ -583,7 +583,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "chemical-process-risk",
       name: "Chemical & Process Risk",
-      description: "Risk assessments for hazardous substances and processes",
+      description: "Risk assessments for hazardous chemical handling, storage, reactions and process failure scenarios",
       industries: ["industrial"],
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -593,7 +593,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "hazard-register",
       name: "Hazard Register",
-      description: "Identify, record and control workplace hazards",
+      description: "Identify, log and track ongoing hazards across building areas with control measures",
       industries: "shared",
       mobileAccess: "full",
       offlineCapable: true,
@@ -601,7 +601,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "risk-assessments",
       name: "Risk Assessments",
-      description: "Formal likelihood/consequence assessments with hierarchy of controls",
+      description: "Formal risk assessments using likelihood and consequence ratings with control hierarchies",
       industries: "shared",
       mobileAccess: "partial",
       offlineCapable: false,
@@ -609,7 +609,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "emergency-response-plans",
       name: "Emergency Response Plans",
-      description: "Planning and documentation of emergency responses",
+      description: "Documented ERPs for fire, medical, bomb threat and building-specific emergency scenarios",
       industries: "shared",
       mobileAccess: "read-only",
       offlineCapable: false,
@@ -617,15 +617,15 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "critical-risk-controls",
       name: "Critical Risk Controls",
-      description: "Verify life-critical controls are actively in place",
-      industries: "shared",
+      description: "Track verification of life-critical controls such as fire suppression, exits and fall prevention",
+      industries: ["facilities"],
       mobileAccess: "full",
       offlineCapable: false,
     },
     {
       id: "slip-trip-fall",
       name: "Slip, Trip & Fall Risk",
-      description: "Identify and control the dominant risk category in facilities",
+      description: "Identify and control floor, stair, wet area and height-related fall risks across the facility",
       industries: ["facilities"],
       mobileAccess: "partial",
       offlineCapable: false,
@@ -633,7 +633,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
     {
       id: "psychosocial-risk",
       name: "Psychosocial Risk",
-      description: "Mental health and psychosocial hazard assessments",
+      description: "Identify and manage psychosocial hazards including workload, harassment and fatigue risks",
       industries: ["facilities"],
       mobileAccess: "none",
       offlineCapable: false,
@@ -846,32 +846,25 @@ export const INSIGHTS_SUBMODULES: SubModule[] = [
 ];
 
 export const CORE_MODULES: Omit<CoreModule, "subModules">[] = [
-  { key: "safety", name: "Safety", icon: "Shield" },
-  { key: "people", name: "People", icon: "Users" },
-  { key: "operations", name: "Operations", icon: "Settings" },
-  { key: "risk", name: "Risk Management", icon: "AlertTriangle" },
-  { key: "compliance", name: "Compliance", icon: "CheckSquare" },
-  { key: "governance", name: "Governance", icon: "Building2" },
-  { key: "insights", name: "Insights", icon: "BarChart3" },
-  { key: "training", name: "Training", icon: "GraduationCap" },
-  { key: "blueprints", name: "Blueprints", icon: "Map" },
+  { key: "safety",     name: "Safety",          icon: "Shield" },
+  { key: "people",     name: "People",           icon: "Users" },
+  { key: "operations", name: "Operations",       icon: "Settings" },
+  { key: "risk",       name: "Risk Management",  icon: "AlertTriangle" },
+  { key: "compliance", name: "Compliance",       icon: "CheckSquare" },
+  { key: "governance", name: "Governance",       icon: "Building2" },
+  { key: "insights",   name: "Insights",         icon: "BarChart3" },
+  { key: "training",   name: "Training",         icon: "GraduationCap" },
+  { key: "blueprints", name: "Blueprints",       icon: "Map" },
 ];
 
 export function getSubModules(module: ModuleKey, industry: Industry): SubModule[] {
   switch (module) {
-    case "safety":
-      return SAFETY_SUBMODULES[industry];
-    case "people":
-      return PEOPLE_SUBMODULES[industry];
-    case "operations":
-      return OPERATIONS_SUBMODULES[industry];
-    case "risk":
-      return RISK_SUBMODULES[industry];
-    case "compliance":
-      return COMPLIANCE_SUBMODULES[industry];
-    case "insights":
-      return INSIGHTS_SUBMODULES;
-    default:
-      return [];
+    case "safety":      return SAFETY_SUBMODULES[industry];
+    case "people":      return PEOPLE_SUBMODULES[industry];
+    case "operations":  return OPERATIONS_SUBMODULES[industry];
+    case "risk":        return RISK_SUBMODULES[industry];
+    case "compliance":  return COMPLIANCE_SUBMODULES[industry];
+    case "insights":    return INSIGHTS_SUBMODULES;
+    default:            return [];
   }
 }

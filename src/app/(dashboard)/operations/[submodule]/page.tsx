@@ -14,6 +14,7 @@ import { EmergencyProceduresPage } from "@/components/modules/operations/Emergen
 import { PlantEquipmentPage } from "@/components/modules/operations/PlantEquipmentPage";
 import { OperationalReadinessPage } from "@/components/modules/operations/OperationalReadinessPage";
 import { IsolationShutdownPage } from "@/components/modules/operations/IsolationShutdownPage";
+import { WorkZonePage } from "@/components/modules/operations/WorkZonePage";
 
 const MODULE_KEY = "operations" as ModuleKey;
 
@@ -26,6 +27,7 @@ const SPECIFIC: Record<string, React.FC> = {
   "plant-equipment":        PlantEquipmentPage,
   "operational-readiness":  OperationalReadinessPage,
   "isolation-shutdown":     IsolationShutdownPage,
+  "work-zone":              WorkZonePage,
 };
 
 const SUPABASE_CONFIGURED =
