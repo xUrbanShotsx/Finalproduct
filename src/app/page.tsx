@@ -521,7 +521,7 @@ export default function LandingPage() {
           <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "36px" }}>
             <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#333" }}>[WHS PLATFORM]</span>
             <span style={{ fontSize: "11px", color: "#222" }}>//</span>
-            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a" }}>Australian Industry</span>
+            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#f5c842" }}>Australian Focused</span>
           </div>
 
           {/* Headline */}
