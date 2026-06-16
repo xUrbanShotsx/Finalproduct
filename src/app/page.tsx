@@ -267,7 +267,7 @@ export default function LandingPage() {
             margin: "0 0 24px",
             maxWidth: "820px",
           }}>
-            Breeze Through<br />Compliance, With Confidence.
+            BREEZE THROUGH<br />COMPLIANCE,<br /><span style={{ color: "#f5c842" }}>WITH CONFIDENCE.</span>
           </h1>
 
           {/* Subheading */}
