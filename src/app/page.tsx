@@ -512,7 +512,7 @@ export default function LandingPage() {
             <Link
               href="/login"
               className="flex items-center gap-2"
-              style={{ fontSize: "15px", fontWeight: 700, color: "#0d1f12", textDecoration: "none", padding: "13px 32px", background: "#1a8a4a", border: "1px solid #156a39", color: "#ffffff" }}
+              style={{ fontSize: "15px", fontWeight: 700, color: "#ffffff", textDecoration: "none", padding: "13px 32px", background: "#1a8a4a", border: "1px solid #156a39" }}
             >
               Get started free <ArrowRight className="w-4 h-4" />
             </Link>
