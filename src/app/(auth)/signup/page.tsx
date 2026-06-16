@@ -143,10 +143,18 @@ export default function SignupPage() {
 
       {/* ── Logo ── */}
       <div className="flex flex-col items-center gap-3 mb-10">
-        <BLogo size={32} color="var(--b-text)" />
+        <Link href="/" className="transition-opacity hover:opacity-70">
+          <BLogo size={32} color="var(--b-text)" />
+        </Link>
         <div className="text-center">
           <p className="text-[13px]" style={{ color: "var(--b-text-muted)" }}>WHS Management Platform</p>
         </div>
+        <Link href="/" className="flex items-center gap-1.5 text-[12px] transition-colors"
+          style={{ color: "var(--b-text-muted)" }}
+          onMouseOver={(e) => (e.currentTarget.style.color = "var(--b-text)")}
+          onMouseOut={(e) => (e.currentTarget.style.color = "var(--b-text-muted)")}>
+          ← Back to home
+        </Link>
       </div>
 
       {/* ── Step bar ── */}
