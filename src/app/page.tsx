@@ -502,7 +502,7 @@ export default function LandingPage() {
               Log in
             </Link>
             <Link
-              href="/login"
+              href="/signup"
               style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#f5c842", border: "1px solid #f5c842" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; (e.currentTarget as HTMLElement).style.borderColor = "#e0b830"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; (e.currentTarget as HTMLElement).style.borderColor = "#f5c842"; }}
@@ -544,7 +544,7 @@ export default function LandingPage() {
           {/* CTAs */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
             <Link
-              href="/login"
+              href="/signup"
               style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 28px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; }}
@@ -680,7 +680,7 @@ export default function LandingPage() {
                 and the safety advisor who needs to report an incident before the ambulance leaves site.
               </p>
               <Link
-                href="/login"
+                href="/signup"
                 style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
                 onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0b830"}
                 onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#f5c842"}
@@ -722,7 +722,7 @@ export default function LandingPage() {
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
             <Link
-              href="/login"
+              href="/signup"
               style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 32px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
               onMouseOver={e => (e.currentTarget as HTMLElement).style.background = "#e0b830"}
               onMouseOut={e => (e.currentTarget as HTMLElement).style.background = "#f5c842"}

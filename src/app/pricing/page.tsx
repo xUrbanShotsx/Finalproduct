@@ -113,7 +113,7 @@ export default function PricingPage() {
               Log in
             </Link>
             <Link
-              href="/login"
+              href="/signup"
               style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: "#f5c842", border: "1px solid #f5c842" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; }}
@@ -211,7 +211,7 @@ export default function PricingPage() {
               {/* CTA */}
               <div style={{ padding: "16px 22px 20px", flexShrink: 0 }}>
                 <Link
-                  href="/login"
+                  href="/signup"
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
                     height: "40px", fontSize: "13px", fontWeight: 700, textDecoration: "none",
