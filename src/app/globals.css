@@ -1,26 +1,246 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Briesa design tokens ── */
+:root {
+  --b-bg:               #ffffff;
+  --b-bg-secondary:     #f5f5f5;
+  --b-bg-hover:         #ebebeb;
+  --b-bg-active:        #e0e0e0;
+  --b-bg-canvas:        #fafafa;
+  --b-border:           #e0e0e0;
+  --b-border-strong:    #d0d0d0;
+  --b-border-hover:     #c0c0c0;
+  --b-text:             #171717;
+  --b-text-secondary:   #555555;
+  --b-text-tertiary:    #777777;
+  --b-text-muted:       #999999;
+  --b-text-placeholder: #aaaaaa;
+  --b-accent-bg:        #e6f7ed;
+  --b-accent-border:    #b3e6c9;
+  --b-accent-bg-hover:  #d1f0de;
+  --b-accent-border-hover: #8ad4ab;
+  --b-accent-text:      #1a8a4a;
+  --b-badge-blue-bg:    #e8f0fe;
+  --b-badge-blue-text:  #1a6ddb;
+  --b-badge-yellow-bg:  #fef3d6;
+  --b-badge-yellow-text:#b58a1b;
+  --b-badge-green-bg:   #e6f7ed;
+  --b-badge-green-text: #1a8a4a;
+  --b-logo-fill:        #171717;
+  --b-logo-bolt:        #ffffff;
+  --b-status-bg:        #f5f5f5;
+  --b-status-border:    #e0e0e0;
+  --b-status-text:      #555555;
+
+  /* shadcn tokens */
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: #f5f5f5;
+  --card-foreground: #171717;
+  --popover: #f5f5f5;
+  --popover-foreground: #171717;
+  --primary: #1a8a4a;
+  --primary-foreground: #fafafa;
+  --secondary: #ebebeb;
+  --secondary-foreground: #171717;
+  --muted: #f5f5f5;
+  --muted-foreground: #777777;
+  --accent: #e6f7ed;
+  --accent-foreground: #171717;
+  --destructive: #dc2626;
+  --border: #e0e0e0;
+  --input: #f5f5f5;
+  --ring: #1a8a4a;
+  --radius: 0px;
+  --sidebar: #f5f5f5;
+  --sidebar-foreground: #171717;
+  --sidebar-border: #e0e0e0;
+}
+
+.dark {
+  --b-bg:               #121212;
+  --b-bg-secondary:     #171717;
+  --b-bg-hover:         #1a1a1a;
+  --b-bg-active:        #242424;
+  --b-bg-canvas:        #101010;
+  --b-border:           #2e2e2e;
+  --b-border-strong:    #363636;
+  --b-border-hover:     #444444;
+  --b-text:             #fafafa;
+  --b-text-secondary:   #b4b4b4;
+  --b-text-tertiary:    #898989;
+  --b-text-muted:       #555555;
+  --b-text-placeholder: #4d4d4d;
+  --b-accent-bg:        #1a3a2a;
+  --b-accent-border:    #2d5a3d;
+  --b-accent-bg-hover:  #224832;
+  --b-accent-border-hover: #3a7a52;
+  --b-accent-text:      #3ecf8e;
+  --b-badge-blue-bg:    #1a1f3a;
+  --b-badge-blue-text:  #6ea8ff;
+  --b-badge-yellow-bg:  #2e2a1a;
+  --b-badge-yellow-text:#e3c55e;
+  --b-badge-green-bg:   #1a3a2a;
+  --b-badge-green-text: #3ecf8e;
+  --b-logo-fill:        #fafafa;
+  --b-logo-bolt:        #171717;
+  --b-status-bg:        #171717;
+  --b-status-border:    #2d2d2d;
+  --b-status-text:      #898989;
+
+  /* shadcn tokens */
+  --background: #101010;
+  --foreground: #fafafa;
+  --card: #171717;
+  --card-foreground: #fafafa;
+  --popover: #171717;
+  --popover-foreground: #fafafa;
+  --primary: #3ecf8e;
+  --primary-foreground: #101010;
+  --secondary: #1a1a1a;
+  --secondary-foreground: #b4b4b4;
+  --muted: #171717;
+  --muted-foreground: #555555;
+  --accent: #1a3a2a;
+  --accent-foreground: #fafafa;
+  --destructive: #f06060;
+  --border: #2e2e2e;
+  --input: #171717;
+  --ring: #3ecf8e;
+  --radius: 0px;
+  --sidebar: #121212;
+  --sidebar-foreground: #fafafa;
+  --sidebar-border: #2e2e2e;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    border-radius: 0 !important;
+  }
+  body {
+    background: var(--b-bg-canvas);
+    color: var(--b-text);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--b-border); }
+::-webkit-scrollbar-thumb:hover { background: var(--b-border-hover); }
+
+/* ── Briesa button/card utilities (CSS-only hover for server components) ── */
+.b-btn-accent {
+  background: var(--b-accent-bg);
+  border: 1px solid var(--b-accent-border);
+  color: var(--b-text);
+  transition: background 150ms, border-color 150ms;
+}
+.b-btn-accent:hover:not(:disabled) {
+  background: var(--b-accent-bg-hover);
+  border-color: var(--b-accent-border-hover);
+}
+.b-btn-accent:disabled { opacity: 0.5; }
+
+.b-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--b-border-strong);
+  color: var(--b-text-tertiary);
+  transition: background 150ms;
+}
+.b-btn-ghost:hover:not(:disabled) { background: var(--b-bg-hover); }
+
+.b-card {
+  background: var(--b-bg-secondary);
+  border: 1px solid var(--b-border);
+  transition: background 150ms, border-color 150ms;
+}
+.b-card:hover {
+  background: var(--b-bg-hover);
+  border-color: var(--b-border-hover);
+}
+
+.b-task-btn {
+  background: transparent;
+  transition: background 150ms;
+}
+.b-task-btn:hover { background: var(--b-bg-hover); }
+
+.b-icon-btn {
+  color: var(--b-text-muted);
+  transition: color 150ms;
+}
+.b-icon-btn:hover { color: var(--b-text-tertiary); }
+
+.b-tr { transition: background 100ms; }
+.b-tr:hover { background: var(--b-bg-hover); }
+
+.b-tab {
+  padding: 0 12px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--b-text-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+  white-space: nowrap;
+}
+.b-tab:hover { color: var(--b-text-secondary); }
+.b-tab[data-active="true"] {
+  color: var(--b-text);
+  border-bottom-color: var(--b-accent-text);
 }
