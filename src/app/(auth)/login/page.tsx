@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
 
 function BLogo({ size = 28, color = "currentColor" }: { size?: number; color?: string }) {
   return (
@@ -87,6 +87,18 @@ export default function LoginPage() {
         </div>
 
         <div className="w-full max-w-[360px]">
+
+          {/* Back to landing */}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-[12.5px] mb-8"
+            style={{ color: "var(--b-text-muted)", textDecoration: "none" }}
+            onMouseOver={e => (e.currentTarget.style.color = "var(--b-text)")}
+            onMouseOut={e => (e.currentTarget.style.color = "var(--b-text-muted)")}
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to homepage
+          </Link>
 
           {/* Heading */}
           <div className="mb-8">
