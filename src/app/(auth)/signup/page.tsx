@@ -40,7 +40,7 @@ const STEPS: { key: Step; label: string }[] = [
 ];
 
 function yearlyPrice(monthly: number) {
-  return Math.round((monthly * 10) / 12);
+  return Math.round(monthly * 0.9);
 }
 
 function inputCls() {
@@ -298,7 +298,7 @@ export default function SignupPage() {
                         {cycle === "monthly" ? "Monthly" : "Yearly"}
                         {cycle === "yearly" && (
                           <span className="text-[10px] font-bold px-1.5 py-0.5" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}>
-                            2 months free
+                            10% off
                           </span>
                         )}
                       </button>
