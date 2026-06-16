@@ -267,7 +267,7 @@ export default function LandingPage() {
             margin: "0 0 24px",
             maxWidth: "820px",
           }}>
-            WHS your team<br />will actually use.
+            Breeze Through<br />Compliance, With Confidence.
           </h1>
 
           {/* Subheading */}
@@ -295,25 +295,6 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Dashboard mockup — full width */}
-          <DashboardMockup />
-        </div>
-      </section>
-
-      {/* ── STATS BAR ── */}
-      <section style={{ background: "#060606", borderBottom: "1px solid #1a1a1a", borderTop: "1px solid #1a1a1a" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
-          {[
-            ["9 modules",    "All core WHS disciplines covered"],
-            ["3 industries", "Construction · Industrial · Facilities"],
-            ["AI-powered",   "Claude AI woven into every module"],
-            ["Australian",   "SafeWork & state WHS compliant"],
-          ].map(([stat, label]) => (
-            <div key={stat} style={{ padding: "36px 0", borderRight: "1px solid #1a1a1a", textAlign: "center" }}>
-              <div style={{ fontSize: "20px", fontWeight: 800, color: "#1a8a4a", letterSpacing: "-0.02em" }}>{stat}</div>
-              <div style={{ fontSize: "12px", color: "#333", marginTop: "4px" }}>{label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
