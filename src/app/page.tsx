@@ -719,7 +719,7 @@ export default function LandingPage() {
             STOP GUESSING.<br />GET CERTIFIED.
           </h2>
           <p style={{ fontSize: "16px", color: "#444", margin: "0 0 40px", maxWidth: "400px", marginInline: "auto", lineHeight: 1.6 }}>
-            14-day free trial. Full access to all modules.
+            Free demo available. Full access to all modules.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
             <Link
