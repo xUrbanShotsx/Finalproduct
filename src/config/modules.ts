@@ -794,6 +794,57 @@ export const COMPLIANCE_SUBMODULES: Record<Industry, SubModule[]> = {
   ],
 };
 
+export const TRAINING_SUBMODULES: SubModule[] = [
+  {
+    id: "course-builder",
+    name: "Course Builder",
+    description: "Build and manage training courses, learning objectives and assessment criteria with AI-generated outlines.",
+    industries: "shared",
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "training-register",
+    name: "Training Register",
+    description: "Record and track completed training for all workers, contractors and visitors with expiry alerting.",
+    industries: "shared",
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "competency-licences",
+    name: "Competency & Licences",
+    description: "Track high risk work licences, White Cards, first aid certificates and competency currency for your workforce.",
+    industries: "shared",
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "induction-builder",
+    name: "Induction Builder",
+    description: "Build site and role-specific induction programs with AI-generated module content and digital sign-off.",
+    industries: "shared",
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "training-matrix",
+    name: "Training Matrix",
+    description: "At-a-glance compliance matrix showing each worker's current, expiring and missing competencies.",
+    industries: "shared",
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "certificates-records",
+    name: "Certificates & Records",
+    description: "Central register of all worker certificates and licences, banded by expiry status with renewal tracking.",
+    industries: "shared",
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+];
+
 export const INSIGHTS_SUBMODULES: SubModule[] = [
   {
     id: "whs-dashboard",
@@ -865,6 +916,7 @@ export function getSubModules(module: ModuleKey, industry: Industry): SubModule[
     case "risk":        return RISK_SUBMODULES[industry];
     case "compliance":  return COMPLIANCE_SUBMODULES[industry];
     case "insights":    return INSIGHTS_SUBMODULES;
+    case "training":    return TRAINING_SUBMODULES;
     default:            return [];
   }
 }
