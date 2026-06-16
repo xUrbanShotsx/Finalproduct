@@ -167,18 +167,21 @@ const INDUSTRIES = [
   {
     name: "Construction",
     tag: "OPEN",
+    color: "#00ff7f",
     desc: "From SWMS and HRCW permits to plant pre-ops and work zone management. Built to the requirements of SafeWork NSW and state equivalents.",
     items: ["Incidents · SWMS · Permits", "White Card Register", "Plant & Equipment", "High Risk Work Licensing", "Work Zone Controls"],
   },
   {
     name: "Industrial",
     tag: "OPEN",
+    color: "#3b82f6",
     desc: "Permits to Work, LOTO procedures, JSA/JSEA and chemical process risk built for manufacturing and industrial facilities.",
     items: ["Permits to Work · LOTO", "JSA / JSEA Management", "Chemical & Process Risk", "Health Monitoring", "Operational Readiness"],
   },
   {
     name: "Facilities",
     tag: "OPEN",
+    color: "#a855f7",
     desc: "Building warden registers, isolation and shutdown procedures and statutory compliance obligations for facility managers.",
     items: ["Warden Register", "Isolation & Shutdown", "Essential Safety Measures", "Statutory Obligations", "Visitor & Access Control"],
   },
@@ -346,13 +349,18 @@ export default function LandingPage() {
           <SectionLabel n="02" label="Industries" />
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
-            {INDUSTRIES.map(({ name, tag, desc, items }) => (
-              <div key={name} style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", display: "flex", flexDirection: "column" }}>
+            {INDUSTRIES.map(({ name, tag, color, desc, items }) => (
+              <div key={name} style={{ background: "#0f0f0f", border: `1px solid ${color}55`, display: "flex", flexDirection: "column" }}>
+                {/* Colour bar */}
+                <div style={{ height: "3px", background: color }} />
                 {/* Header */}
-                <div style={{ padding: "24px 24px 20px", borderBottom: "1px solid #1a1a1a" }}>
+                <div style={{ padding: "24px 24px 20px", borderBottom: `1px solid ${color}22` }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                     <span style={{ fontSize: "16px", fontWeight: 800, letterSpacing: "-0.02em", color: "#e0e0e0" }}>{name}</span>
-                    <Tag label={tag} />
+                    <span style={{
+                      fontFamily: "monospace", fontSize: "10px", fontWeight: 700, letterSpacing: "0.06em",
+                      padding: "2px 7px", border: `1px solid ${color}55`, color, background: `${color}12`,
+                    }}>[{tag}]</span>
                   </div>
                   <p style={{ fontSize: "13px", color: "#444", lineHeight: 1.65, margin: 0 }}>{desc}</p>
                 </div>
@@ -362,17 +370,17 @@ export default function LandingPage() {
                   <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                     {items.map(item => (
                       <li key={item} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <div style={{ width: "4px", height: "4px", background: "#1a8a4a", flexShrink: 0 }} />
+                        <div style={{ width: "4px", height: "4px", background: color, flexShrink: 0 }} />
                         <span style={{ fontSize: "12.5px", color: "#555" }}>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div style={{ padding: "16px 24px", borderTop: "1px solid #1a1a1a" }}>
+                <div style={{ padding: "16px 24px", borderTop: `1px solid ${color}22` }}>
                   <Link
                     href="/login"
                     style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px", fontWeight: 600, color: "#555", textDecoration: "none" }}
-                    onMouseOver={e => (e.currentTarget.style.color = "#1a8a4a")}
+                    onMouseOver={e => (e.currentTarget.style.color = color)}
                     onMouseOut={e => (e.currentTarget.style.color = "#555")}
                   >
                     Explore {name} <ArrowRight size={13} />
