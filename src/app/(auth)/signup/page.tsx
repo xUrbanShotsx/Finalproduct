@@ -47,6 +47,47 @@ function inputCls() {
   return "w-full px-3 h-10 text-[13px] border outline-none transition-colors";
 }
 
+const baseInput: React.CSSProperties = {
+  background: "var(--b-bg-hover)",
+  borderColor: "var(--b-border-strong)",
+  color: "var(--b-text)",
+};
+
+function PrimaryBtn({ children, onClick, disabled, type = "button" }: {
+  children: React.ReactNode; onClick?: () => void; disabled?: boolean; type?: "button" | "submit";
+}) {
+  return (
+    <button type={type} onClick={onClick} disabled={disabled}
+      className="flex-1 h-[42px] text-[13px] font-semibold border transition-all disabled:opacity-30 flex items-center justify-center gap-2"
+      style={{ background: "var(--b-accent-bg)", borderColor: "var(--b-accent-border)", color: "var(--b-text)" }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; }}>
+      {children}
+    </button>
+  );
+}
+
+function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick}
+      className="flex-1 h-[42px] border text-[13px] transition-all"
+      style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)", background: "transparent" }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-muted)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-strong)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-tertiary)"; }}>
+      {children}
+    </button>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-[11.5px] font-semibold tracking-wide uppercase" style={{ color: "var(--b-text-muted)" }}>{label}</label>
+      {children}
+    </div>
+  );
+}
+
 function formatCardNumber(v: string) {
   return v.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
 }
@@ -95,47 +136,6 @@ export default function SignupPage() {
 
   const stepIndex = STEPS.findIndex((s) => s.key === step);
   const isWide    = step === "organisation";
-
-  const baseInput: React.CSSProperties = {
-    background: "var(--b-bg-hover)",
-    borderColor: "var(--b-border-strong)",
-    color: "var(--b-text)",
-  };
-
-  function PrimaryBtn({ children, onClick, disabled, type = "button" }: {
-    children: React.ReactNode; onClick?: () => void; disabled?: boolean; type?: "button" | "submit";
-  }) {
-    return (
-      <button type={type} onClick={onClick} disabled={disabled}
-        className="flex-1 h-[42px] text-[13px] font-semibold border transition-all disabled:opacity-30 flex items-center justify-center gap-2"
-        style={{ background: "var(--b-accent-bg)", borderColor: "var(--b-accent-border)", color: "var(--b-text)" }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)"; }}>
-        {children}
-      </button>
-    );
-  }
-
-  function GhostBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
-    return (
-      <button type="button" onClick={onClick}
-        className="flex-1 h-[42px] border text-[13px] transition-all"
-        style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-tertiary)", background: "transparent" }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-muted)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border-strong)"; (e.currentTarget as HTMLElement).style.color = "var(--b-text-tertiary)"; }}>
-        {children}
-      </button>
-    );
-  }
-
-  function Field({ label, children }: { label: string; children: React.ReactNode }) {
-    return (
-      <div className="space-y-1.5">
-        <label className="text-[11.5px] font-semibold tracking-wide uppercase" style={{ color: "var(--b-text-muted)" }}>{label}</label>
-        {children}
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16"
