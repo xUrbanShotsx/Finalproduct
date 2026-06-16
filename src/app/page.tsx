@@ -514,11 +514,11 @@ export default function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <section style={{ background: "#0a0a0a", paddingTop: "88px", borderBottom: "1px solid #1a1a1a" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+      <section style={{ background: "#0a0a0a", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid #1a1a1a" }}>
+        <div style={{ textAlign: "center", padding: "0 24px", maxWidth: "900px", width: "100%" }}>
 
           {/* Platform label */}
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "36px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "36px" }}>
             <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#333" }}>[WHS PLATFORM]</span>
             <span style={{ fontSize: "11px", color: "#222" }}>//</span>
             <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#f5c842" }}>Australian Focused</span>
@@ -526,27 +526,26 @@ export default function LandingPage() {
 
           {/* Headline */}
           <h1 style={{
-            fontSize: "clamp(48px, 6.5vw, 80px)",
+            fontSize: "clamp(48px, 7vw, 88px)",
             fontWeight: 800,
             lineHeight: 1.03,
             letterSpacing: "-0.04em",
             color: "#ffffff",
-            margin: "0 0 24px",
-            maxWidth: "820px",
+            margin: "0 0 28px",
           }}>
             BREEZE THROUGH<br />COMPLIANCE,<br /><span style={{ color: "#f5c842" }}>WITH CONFIDENCE.</span>
           </h1>
 
           {/* Subheading */}
-          <p style={{ fontSize: "18px", lineHeight: 1.65, color: "#555", maxWidth: "520px", margin: "0 0 44px" }}>
+          <p style={{ fontSize: "18px", lineHeight: 1.65, color: "#555", margin: "0 auto 44px", maxWidth: "540px" }}>
             Incidents, SWMS, permits and critical risk controls — all in one place. Built for Australian construction, industrial and facilities teams.
           </p>
 
           {/* CTAs */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "72px" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" }}>
             <Link
               href="/login"
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 28px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", background: "#f5c842", textDecoration: "none", border: "1px solid #f5c842" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e0b830"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#f5c842"; }}
             >
@@ -554,7 +553,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/login"
-              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 26px", fontSize: "14px", fontWeight: 500, color: "#555", background: "transparent", textDecoration: "none", border: "1px solid #222" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 28px", fontSize: "14px", fontWeight: 500, color: "#555", background: "transparent", textDecoration: "none", border: "1px solid #222" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = "#aaa"; (e.currentTarget as HTMLElement).style.borderColor = "#333"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = "#555"; (e.currentTarget as HTMLElement).style.borderColor = "#222"; }}
             >
