@@ -711,7 +711,7 @@ export default function LandingPage() {
       <section style={{ background: "#060606", padding: "88px 0", borderTop: "1px solid #1a1a1a" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-            <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#222" }}>[FREE TRIAL]</span>
+            <span style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#222" }}>[FREE DEMO]</span>
             <span style={{ fontSize: "11px", color: "#1e1e1e" }}>//</span>
             <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#333" }}>No credit card required</span>
           </div>
