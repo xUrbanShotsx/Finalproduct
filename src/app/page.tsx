@@ -715,8 +715,8 @@ export default function LandingPage() {
             <span style={{ fontSize: "11px", color: "#1e1e1e" }}>//</span>
             <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#333" }}>No credit card required</span>
           </div>
-          <h2 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 16px", lineHeight: 1.05 }}>
-            Stop guessing.<br />Get certified.
+          <h2 style={{ fontSize: "clamp(48px, 7vw, 88px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 16px", lineHeight: 1.0 }}>
+            STOP GUESSING.<br />GET CERTIFIED.
           </h2>
           <p style={{ fontSize: "16px", color: "#444", margin: "0 0 40px", maxWidth: "400px", marginInline: "auto", lineHeight: 1.6 }}>
             14-day free trial. Full access to all modules.
