@@ -4,45 +4,48 @@ import { useState } from "react";
 import { CreditCard, Download, CheckCircle2, ArrowRight, Zap, Shield, Users, BarChart3, ChevronRight } from "lucide-react";
 
 const INVOICES = [
-  { id: "INV-2024-06", date: "1 Jun 2024",  period: "Jun 2024",  amount: "$149.00", status: "Paid" },
-  { id: "INV-2024-05", date: "1 May 2024",  period: "May 2024",  amount: "$149.00", status: "Paid" },
-  { id: "INV-2024-04", date: "1 Apr 2024",  period: "Apr 2024",  amount: "$149.00", status: "Paid" },
-  { id: "INV-2024-03", date: "1 Mar 2024",  period: "Mar 2024",  amount: "$99.00",  status: "Paid" },
-  { id: "INV-2024-02", date: "1 Feb 2024",  period: "Feb 2024",  amount: "$99.00",  status: "Paid" },
-  { id: "INV-2024-01", date: "1 Jan 2024",  period: "Jan 2024",  amount: "$99.00",  status: "Paid" },
+  { id: "INV-2024-06", date: "1 Jun 2024",  period: "Jun 2024",  amount: "$449.00", status: "Paid" },
+  { id: "INV-2024-05", date: "1 May 2024",  period: "May 2024",  amount: "$449.00", status: "Paid" },
+  { id: "INV-2024-04", date: "1 Apr 2024",  period: "Apr 2024",  amount: "$449.00", status: "Paid" },
+  { id: "INV-2024-03", date: "1 Mar 2024",  period: "Mar 2024",  amount: "$249.00", status: "Paid" },
+  { id: "INV-2024-02", date: "1 Feb 2024",  period: "Feb 2024",  amount: "$249.00", status: "Paid" },
+  { id: "INV-2024-01", date: "1 Jan 2024",  period: "Jan 2024",  amount: "$249.00", status: "Paid" },
 ];
 
 const PLANS = [
   {
-    key: "starter",
-    name: "Starter",
-    price: "$49",
-    period: "per month",
-    desc: "For small teams getting started with digital WHS.",
-    features: ["Up to 5 team members", "3 modules (Safety, People, Risk)", "500 records/month", "Email support"],
+    key: "small",
+    name: "Small",
+    price: "$249",
+    period: "/ month",
+    desc: "For small crews with 1–15 workers on site.",
+    specs: ["25 GB storage", "100–300 docs/month", "500K AI tokens/month"],
+    features: ["All 9 WHS modules", "Unlimited team members", "~150–300 AI calls/month", "Email support"],
     cta: "Downgrade",
     current: false,
     accent: false,
   },
   {
-    key: "pro",
-    name: "Pro",
-    price: "$149",
-    period: "per month",
-    desc: "The full platform for growing construction teams.",
-    features: ["Up to 25 team members", "All 9 modules including Training", "5,000 records/month", "500 AI generations/month", "Priority support"],
+    key: "medium",
+    name: "Medium",
+    price: "$449",
+    period: "/ month",
+    desc: "For growing teams with 15–50 workers across sites.",
+    specs: ["75 GB storage", "300–800 docs/month", "2M AI tokens/month"],
+    features: ["All 9 WHS modules", "Unlimited team members", "~600–1,200 AI calls/month", "Priority support", "API access"],
     cta: "Current plan",
     current: true,
     accent: true,
   },
   {
-    key: "enterprise",
-    name: "Enterprise",
-    price: "Custom",
-    period: "contact us",
-    desc: "Unlimited scale for large organisations and multi-site.",
-    features: ["Unlimited members & sites", "Unlimited records", "Unlimited AI generations", "SSO & custom integrations", "Dedicated account manager"],
-    cta: "Contact sales",
+    key: "large",
+    name: "Large",
+    price: "$649",
+    period: "/ month",
+    desc: "For large organisations with 50–200+ workers.",
+    specs: ["200 GB storage", "800–2,500 docs/month", "6M AI tokens/month"],
+    features: ["Everything in Medium", "~2,000–4,000 AI calls/month", "Dedicated account manager", "SSO & custom integrations", "On-site onboarding"],
+    cta: "Upgrade",
     current: false,
     accent: false,
   },
@@ -67,11 +70,11 @@ export default function BillingPage() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[15px] font-bold" style={{ color: "var(--b-text)" }}>Pro Plan</span>
+              <span className="text-[15px] font-bold" style={{ color: "var(--b-text)" }}>Medium Plan</span>
               <span className="text-[10px] font-bold px-1.5 py-0.5" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}>ACTIVE</span>
             </div>
             <div className="text-[12.5px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>
-              $149.00/month · Next billing date: <strong style={{ color: "var(--b-text)" }}>1 Jul 2024</strong>
+              $449.00/month · 15–50 workers · 75 GB · 2M AI tokens · Next billing: <strong style={{ color: "var(--b-text)" }}>1 Jul 2024</strong>
             </div>
           </div>
         </div>
@@ -80,7 +83,7 @@ export default function BillingPage() {
             Manage plan
           </button>
           <button className="flex items-center gap-1.5 px-4 h-[34px] text-[12.5px] font-semibold border" style={{ background: "#1a8a4a", borderColor: "#156a39", color: "#ffffff" }}>
-            Upgrade to Enterprise <ChevronRight className="w-3.5 h-3.5" />
+            Upgrade to Large <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -203,6 +206,14 @@ export default function BillingPage() {
                 <span className="text-[11.5px] ml-1" style={{ color: "var(--b-text-muted)" }}>{plan.period}</span>
               </div>
               <p className="text-[12px] mb-3" style={{ color: "var(--b-text-muted)" }}>{plan.desc}</p>
+              {/* Specs */}
+              <div className="mb-3 space-y-1">
+                {plan.specs.map(s => (
+                  <div key={s} className="text-[11px] px-2 py-1" style={{ background: "var(--b-bg-active)", color: "var(--b-text-muted)" }}>
+                    {s}
+                  </div>
+                ))}
+              </div>
               <ul className="space-y-1.5 mb-4">
                 {plan.features.map(f => (
                   <li key={f} className="flex items-start gap-1.5">

@@ -59,10 +59,10 @@ export default function UsagePage() {
       {/* Summary stats */}
       <div className="grid grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Records",   value: "901",    sub: "+88 vs last month",  icon: FileText, color: "var(--b-badge-green-text)",   bg: "var(--b-badge-green-bg)" },
-          { label: "Active Users",    value: "7",      sub: "9 seats total",      icon: Users,    color: "var(--b-badge-blue-text)",    bg: "var(--b-badge-blue-bg)" },
-          { label: "Storage Used",    value: "2.4 GB", sub: "of 10 GB",           icon: Database, color: "var(--b-badge-yellow-text)",  bg: "var(--b-badge-yellow-bg)" },
-          { label: "API Calls",       value: "1,847",  sub: "this month",         icon: Zap,      color: "var(--b-accent-text)",        bg: "var(--b-accent-bg)" },
+          { label: "Total Records",   value: "901",    sub: "+88 vs last month",   icon: FileText, color: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)" },
+          { label: "Active Users",    value: "7",      sub: "unlimited on Medium", icon: Users,    color: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)" },
+          { label: "Storage Used",    value: "28.6 GB",sub: "of 75 GB (38%)",     icon: Database, color: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)" },
+          { label: "AI Tokens",       value: "812K",   sub: "of 2M cap (41%)",    icon: Zap,      color: "var(--b-accent-text)",       bg: "var(--b-accent-bg)" },
         ].map(s => (
           <div key={s.label} className="border p-5" style={{ borderColor: "var(--b-border)", background: "var(--b-bg-secondary)" }}>
             <div className="flex items-start justify-between mb-3">
@@ -85,14 +85,14 @@ export default function UsagePage() {
           <div className="border" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
             <div className="px-5 py-4 border-b flex items-center gap-2" style={{ borderColor: "var(--b-border)" }}>
               <BarChart3 className="w-4 h-4" style={{ color: "var(--b-text-muted)" }} />
-              <span className="text-[13px] font-semibold" style={{ color: "var(--b-text)" }}>Plan Limits — Pro</span>
+              <span className="text-[13px] font-semibold" style={{ color: "var(--b-text)" }}>Plan Limits — Medium</span>
+              <span className="text-[11px] ml-auto px-2 py-0.5" style={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)", fontWeight: 600 }}>15–50 WORKERS</span>
             </div>
             <div className="px-5 py-5 space-y-5">
-              <UsageBar label="Records"        used={901}    max={5000}  color="var(--b-badge-green-text)" />
-              <UsageBar label="Team Members"   used={9}      max={25}    color="var(--b-badge-blue-text)" />
-              <UsageBar label="Storage"        used={2.4}    max={10}    color="var(--b-badge-yellow-text)" unit=" GB" />
-              <UsageBar label="API Calls"      used={1847}   max={10000} color="var(--b-accent-text)" />
-              <UsageBar label="AI Generations" used={284}    max={500}   color="#b450c8" />
+              <UsageBar label="Documents stored" used={28.6}  max={75}    color="var(--b-badge-yellow-text)" unit=" GB" />
+              <UsageBar label="Docs this month"  used={412}   max={800}   color="var(--b-badge-blue-text)" />
+              <UsageBar label="AI tokens used"   used={812}   max={2000}  color="var(--b-accent-text)" unit="K" />
+              <UsageBar label="Est. monthly data" used={387}  max={400}   color="#b450c8" unit=" MB" />
             </div>
           </div>
 
@@ -153,11 +153,11 @@ export default function UsagePage() {
             </div>
             <div className="divide-y" style={{ borderColor: "var(--b-border)" }}>
               {[
-                { label: "Toolbox talks",     count: 98 },
-                { label: "Course outlines",   count: 64 },
-                { label: "Induction modules", count: 52 },
-                { label: "SWMS descriptions", count: 38 },
-                { label: "Licence suggestions",count: 32 },
+                { label: "Toolbox talks",      count: 218 },
+                { label: "Course outlines",    count: 184 },
+                { label: "Induction modules",  count: 146 },
+                { label: "SWMS descriptions",  count: 138 },
+                { label: "Licence suggestions",count: 126 },
               ].map(a => (
                 <div key={a.label} className="px-4 py-2.5 flex items-center justify-between">
                   <span className="text-[12px]" style={{ color: "var(--b-text-secondary)" }}>{a.label}</span>

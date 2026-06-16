@@ -501,14 +501,190 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── PRICING ── */}
+      <section id="pricing" style={{ background: "#ffffff", borderBottom: "1px solid #e8e8e8", padding: "96px 0" }}>
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="text-center mb-14">
+            <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#1a8a4a", marginBottom: "12px" }}>Pricing</div>
+            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d", margin: 0 }}>
+              Simple, honest pricing
+            </h2>
+            <p style={{ fontSize: "16px", color: "#888", marginTop: "14px", maxWidth: "480px", marginInline: "auto" }}>
+              Flat monthly pricing based on your workforce size. No per-user fees, no per-module charges. Everything included.
+            </p>
+          </div>
+
+          {/* Plan cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
+            {([
+              {
+                name: "Small",
+                price: "$249",
+                period: "/ month",
+                tagline: "For small crews up to 15 workers on site.",
+                highlight: false,
+                badge: null,
+                specs: [
+                  { label: "Workers on site",     value: "1 – 15" },
+                  { label: "Storage",             value: "25 GB" },
+                  { label: "Docs per month",      value: "100 – 300" },
+                  { label: "AI generations",      value: "~150–300 calls" },
+                  { label: "Token cap",           value: "500K / month" },
+                  { label: "Est. monthly usage",  value: "~150 MB" },
+                ],
+                features: [
+                  "All 9 WHS modules",
+                  "Unlimited team members",
+                  "Full mobile access",
+                  "Australian compliance templates",
+                  "Email support",
+                ],
+                cta: "Get started",
+              },
+              {
+                name: "Medium",
+                price: "$449",
+                period: "/ month",
+                tagline: "For growing teams with 15–50 workers across sites.",
+                highlight: true,
+                badge: "Most Popular",
+                specs: [
+                  { label: "Workers on site",     value: "15 – 50" },
+                  { label: "Storage",             value: "75 GB" },
+                  { label: "Docs per month",      value: "300 – 800" },
+                  { label: "AI generations",      value: "~600–1,200 calls" },
+                  { label: "Token cap",           value: "2M / month" },
+                  { label: "Est. monthly usage",  value: "~400 MB" },
+                ],
+                features: [
+                  "Everything in Small",
+                  "Priority support",
+                  "Advanced analytics & reporting",
+                  "API access",
+                  "Custom induction builder",
+                ],
+                cta: "Get started",
+              },
+              {
+                name: "Large",
+                price: "$649",
+                period: "/ month",
+                tagline: "For large organisations with 50–200+ workers.",
+                highlight: false,
+                badge: null,
+                specs: [
+                  { label: "Workers on site",     value: "50 – 200+" },
+                  { label: "Storage",             value: "200 GB" },
+                  { label: "Docs per month",      value: "800 – 2,500" },
+                  { label: "AI generations",      value: "~2,000–4,000 calls" },
+                  { label: "Token cap",           value: "6M / month" },
+                  { label: "Est. monthly usage",  value: "~1.2 GB" },
+                ],
+                features: [
+                  "Everything in Medium",
+                  "Dedicated account manager",
+                  "SSO & custom integrations",
+                  "Webhook & API advanced",
+                  "On-site onboarding",
+                ],
+                cta: "Get started",
+              },
+            ] as const).map(plan => (
+              <div
+                key={plan.name}
+                style={{
+                  border: `1px solid ${plan.highlight ? "#1a8a4a" : "#e0e0e0"}`,
+                  background: plan.highlight ? "#f0faf4" : "#fafafa",
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                }}
+              >
+                {plan.badge && (
+                  <div style={{
+                    position: "absolute", top: "-1px", left: "50%", transform: "translateX(-50%)",
+                    background: "#1a8a4a", color: "#ffffff", fontSize: "10px", fontWeight: 700,
+                    letterSpacing: "0.08em", padding: "4px 14px", textTransform: "uppercase",
+                  }}>
+                    {plan.badge}
+                  </div>
+                )}
+
+                {/* Plan header */}
+                <div style={{ padding: "28px 24px 20px", borderBottom: `1px solid ${plan.highlight ? "#b3e6c9" : "#e8e8e8"}` }}>
+                  <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: plan.highlight ? "#1a8a4a" : "#999", marginBottom: "8px" }}>
+                    {plan.name}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "8px" }}>
+                    <span style={{ fontSize: "42px", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d0d0d" }}>{plan.price}</span>
+                    <span style={{ fontSize: "14px", color: "#999" }}>{plan.period}</span>
+                  </div>
+                  <p style={{ fontSize: "13px", color: "#777", margin: 0, lineHeight: 1.5 }}>{plan.tagline}</p>
+                </div>
+
+                {/* Specs */}
+                <div style={{ padding: "16px 24px", borderBottom: `1px solid ${plan.highlight ? "#b3e6c9" : "#e8e8e8"}` }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#bbb", marginBottom: "10px" }}>Capacity</div>
+                  {plan.specs.map(s => (
+                    <div key={s.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0", borderBottom: "1px solid #f0f0f0" }}>
+                      <span style={{ fontSize: "12px", color: "#888" }}>{s.label}</span>
+                      <span style={{ fontSize: "12px", fontWeight: 600, color: "#333" }}>{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Features */}
+                <div style={{ padding: "16px 24px", flex: 1 }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#bbb", marginBottom: "10px" }}>Includes</div>
+                  <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {plan.features.map(f => (
+                      <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                        <CheckCircle2 style={{ width: "14px", height: "14px", flexShrink: 0, marginTop: "1px", color: "#1a8a4a" }} />
+                        <span style={{ fontSize: "13px", color: "#555" }}>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* CTA */}
+                <div style={{ padding: "20px 24px" }}>
+                  <Link
+                    href="/login"
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+                      height: "44px", fontSize: "14px", fontWeight: 700, textDecoration: "none",
+                      background: plan.highlight ? "#1a8a4a" : "#f0f0f0",
+                      color: plan.highlight ? "#ffffff" : "#333",
+                      border: `1px solid ${plan.highlight ? "#156a39" : "#e0e0e0"}`,
+                    }}
+                  >
+                    {plan.cta} <ArrowRight style={{ width: "14px", height: "14px" }} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom note */}
+          <div style={{ textAlign: "center", paddingTop: "8px" }}>
+            <p style={{ fontSize: "13px", color: "#aaa" }}>
+              All plans include a 14-day free trial · No credit card required · Cancel anytime
+            </p>
+            <p style={{ fontSize: "13px", color: "#aaa", marginTop: "6px" }}>
+              Need more than 200 workers or custom storage? <a href="#" style={{ color: "#1a8a4a", textDecoration: "none" }}>Contact us for Enterprise pricing →</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA BANNER ── */}
-      <section id="pricing" style={{ background: "#e6f7ed", borderBottom: "1px solid #b3e6c9", padding: "80px 0" }}>
+      <section style={{ background: "#e6f7ed", borderBottom: "1px solid #b3e6c9", padding: "72px 0" }}>
         <div className="max-w-[1200px] mx-auto px-6 text-center">
-          <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d1f12", margin: 0 }}>
-            Start managing WHS<br />the right way
+          <h2 style={{ fontSize: "clamp(26px,3.5vw,38px)", fontWeight: 800, letterSpacing: "-0.03em", color: "#0d1f12", margin: 0 }}>
+            Start your free 14-day trial
           </h2>
-          <p style={{ fontSize: "16px", color: "#3a7a52", marginTop: "14px", maxWidth: "460px", marginInline: "auto" }}>
-            Get full access to all modules. No credit card required for the demo.
+          <p style={{ fontSize: "15px", color: "#3a7a52", marginTop: "12px", maxWidth: "420px", marginInline: "auto" }}>
+            Full access to all modules. No credit card required.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
             <Link
