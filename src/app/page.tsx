@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   Shield, Users, Settings, AlertTriangle, CheckSquare, BarChart3,
@@ -186,6 +187,269 @@ const INDUSTRIES = [
     items: ["Warden Register", "Isolation & Shutdown", "Essential Safety Measures", "Statutory Obligations", "Visitor & Access Control"],
   },
 ];
+
+/* ─── AI Toolbox ─────────────────────────────────────────────────── */
+type Line =
+  | { k: "cmd";   v: string }
+  | { k: "in";    v: string }
+  | { k: "blank" }
+  | { k: "status"; v: string }
+  | { k: "head";  v: string }
+  | { k: "meta";  v: string }
+  | { k: "body";  v: string }
+  | { k: "check"; v: string }
+  | { k: "warn";  v: string }
+  | { k: "note";  v: string };
+
+const AI_FEATURES: {
+  tag: string; name: string; desc: string; label: string; lines: Line[];
+}[] = [
+  {
+    tag: "01", name: "Toolbox Talks", label: "briesa — ai — toolbox talk",
+    desc: "Generate numbered speaker talking points from any WHS topic in seconds.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai toolbox --topic "Working at Heights — EWP"' },
+      { k: "in",     v: "→ Topic: Working at Heights — EWP Operations" },
+      { k: "in",     v: "→ Site: Level 3, Site 01  |  Presenter: J. Smith" },
+      { k: "blank" },
+      { k: "status", v: "Generating talk points..." },
+      { k: "blank" },
+      { k: "head",   v: "TOOLBOX TALK — Working at Heights" },
+      { k: "meta",   v: "16 Jun 2026 · Level 3, Site 01 · Safety Manager" },
+      { k: "blank" },
+      { k: "body",   v: "1. Pre-use EWP inspection — check tyres, controls, safety cage and harness anchor points before commencing work." },
+      { k: "body",   v: "2. Exclusion zones — establish a 2m perimeter around EWP base. Spotter required at all times." },
+      { k: "body",   v: "3. Weather limits — cease operations if wind exceeds 45 km/h or lightning within 10 km." },
+      { k: "body",   v: "4. Emergency descent — demonstrate manual lowering procedure before elevated work begins." },
+      { k: "body",   v: "5. Rescue plan — confirm rescue procedures are briefed and equipment is on standby." },
+      { k: "blank" },
+      { k: "note",   v: "→ 5 talk points generated · Ready to attach to toolbox record" },
+    ],
+  },
+  {
+    tag: "02", name: "SWMS Drafting", label: "briesa — ai — swms draft",
+    desc: "Draft task descriptions and key hazards from the HRCW category automatically.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai swms --task "EWP façade works" --hrcw "Work at heights"' },
+      { k: "in",     v: "→ HRCW: Work at heights (fall > 2 metres)" },
+      { k: "in",     v: "→ Location: Level 3 Façade, Site 01" },
+      { k: "blank" },
+      { k: "status", v: "Drafting SWMS content..." },
+      { k: "blank" },
+      { k: "head",   v: "TASK: Elevated Work Platform — Level 3 Façade" },
+      { k: "meta",   v: "HRCW: Work in area with potential fall of more than 2 metres" },
+      { k: "blank" },
+      { k: "head",   v: "HIGH RISK ACTIVITIES" },
+      { k: "body",   v: "• Operating EWP in live traffic area near exclusion zones" },
+      { k: "body",   v: "• Working over energised underground services" },
+      { k: "blank" },
+      { k: "head",   v: "KEY HAZARDS" },
+      { k: "body",   v: "• Fall from height — EWP tip-over or outrigger failure" },
+      { k: "body",   v: "• Struck by falling objects — unsecured tools or materials" },
+      { k: "body",   v: "• Electrocution — overhead power lines within 3m" },
+      { k: "blank" },
+      { k: "note",   v: "→ Draft complete · Review and customise before worker sign-off" },
+    ],
+  },
+  {
+    tag: "03", name: "Permit Controls", label: "briesa — ai — permit controls",
+    desc: "Suggest safety controls based on permit type and work location.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai permit --type "Hot Work" --location "Basement B1"' },
+      { k: "in",     v: "→ Permit type: Hot Work (welding & grinding)" },
+      { k: "in",     v: "→ Location: Basement B1 — enclosed welding bay" },
+      { k: "blank" },
+      { k: "status", v: "Suggesting controls..." },
+      { k: "blank" },
+      { k: "head",   v: "PERMIT: Hot Work — Basement B1" },
+      { k: "blank" },
+      { k: "head",   v: "MANDATORY CONTROLS" },
+      { k: "check",  v: "Fire warden assigned, briefed and positioned" },
+      { k: "check",  v: "Fire extinguisher within 10m of work area" },
+      { k: "check",  v: "Combustibles cleared within 3m radius" },
+      { k: "check",  v: "Adjacent areas inspected and signed off" },
+      { k: "check",  v: "30-minute fire watch after work completion" },
+      { k: "blank" },
+      { k: "head",   v: "ADDITIONAL RECOMMENDED" },
+      { k: "check",  v: "Notify building manager — enable suppression bypass" },
+      { k: "check",  v: "Isolate smoke detectors in affected zone" },
+      { k: "blank" },
+      { k: "note",   v: "→ 7 controls added to permit · Ready for sign-off" },
+    ],
+  },
+  {
+    tag: "04", name: "Incident Actions", label: "briesa — ai — incident actions",
+    desc: "Recommend corrective actions from incident type and severity automatically.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai actions --incident "INC-044" --severity "High"' },
+      { k: "in",     v: "→ Type: Near Miss — EWP near-tip-over" },
+      { k: "in",     v: "→ Severity: High · Location: Level 3, Site 01" },
+      { k: "blank" },
+      { k: "status", v: "Generating recommended actions..." },
+      { k: "blank" },
+      { k: "head",   v: "INC-044 — Near Miss (HIGH SEVERITY)" },
+      { k: "blank" },
+      { k: "head",   v: "IMMEDIATE (within 24 hrs)" },
+      { k: "body",   v: "1. Isolate EWP from service — do not operate until inspection complete." },
+      { k: "body",   v: "2. Notify SafeWork NSW under WHS Act s.35 (dangerous incident)." },
+      { k: "body",   v: "3. Preserve scene — no clean-up until investigation is authorised." },
+      { k: "body",   v: "4. Brief all EWP operators — documented sign-off required." },
+      { k: "blank" },
+      { k: "head",   v: "INVESTIGATION (within 72 hrs)" },
+      { k: "body",   v: "5. Root cause analysis — ground conditions, training, pre-op check." },
+      { k: "body",   v: "6. Review all pre-op records for last 30 days." },
+      { k: "body",   v: "7. Engage third-party inspector for structural assessment." },
+      { k: "blank" },
+      { k: "note",   v: "→ 7 actions generated · Assign owners and due dates in Briesa" },
+    ],
+  },
+  {
+    tag: "05", name: "Course Outlines", label: "briesa — ai — course outline",
+    desc: "Build structured training content and learning objectives for any WHS topic.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai course --title "Working Safely at Heights"' },
+      { k: "in",     v: "→ Audience: Construction workers (general site)" },
+      { k: "in",     v: "→ Duration: 3 hours · Delivery: Classroom + Practical" },
+      { k: "blank" },
+      { k: "status", v: "Building course outline..." },
+      { k: "blank" },
+      { k: "head",   v: "COURSE: Working Safely at Heights" },
+      { k: "meta",   v: "3 hrs · 4 modules · 12 learning objectives" },
+      { k: "blank" },
+      { k: "head",   v: "MODULE 1 — Legislation & Duty of Care  (30 min)" },
+      { k: "body",   v: "• WHS Act 2011 obligations for work at height" },
+      { k: "body",   v: "• HRCW definition and licence requirements" },
+      { k: "blank" },
+      { k: "head",   v: "MODULE 2 — Risk Management  (45 min)" },
+      { k: "body",   v: "• Hierarchy of controls applied to fall risk" },
+      { k: "body",   v: "• SWMS requirements and completion process" },
+      { k: "blank" },
+      { k: "head",   v: "MODULE 3 — Equipment & Inspection  (60 min)" },
+      { k: "body",   v: "• EWP, scaffold and harness systems" },
+      { k: "body",   v: "• Pre-use inspection and defect reporting" },
+      { k: "blank" },
+      { k: "head",   v: "MODULE 4 — Practical Assessment  (45 min)" },
+      { k: "body",   v: "• Supervised EWP operation and competency sign-off" },
+      { k: "blank" },
+      { k: "note",   v: "→ Outline generated · Add to Course Builder in Briesa Training" },
+    ],
+  },
+  {
+    tag: "06", name: "Licence Mapping", label: "briesa — ai — licence map",
+    desc: "Map required tickets and licences to a worker's role and site type instantly.",
+    lines: [
+      { k: "cmd",    v: '$ briesa ai licences --role "Rigger" --site "High-rise construction"' },
+      { k: "in",     v: "→ Role: Rigger · Site type: High-rise construction" },
+      { k: "in",     v: "→ State: NSW · Checking WHS regulations..." },
+      { k: "blank" },
+      { k: "status", v: "Mapping required tickets..." },
+      { k: "blank" },
+      { k: "head",   v: "ROLE: Rigger — High-rise Construction (NSW)" },
+      { k: "blank" },
+      { k: "head",   v: "MANDATORY (no work without these)" },
+      { k: "check",  v: "Rigging Licence — Basic or Intermediate (HRCW)" },
+      { k: "check",  v: "Construction Induction — White Card CPCCWHS1001" },
+      { k: "check",  v: "Working at Heights training — site-specific" },
+      { k: "blank" },
+      { k: "head",   v: "RECOMMENDED TICKETS" },
+      { k: "body",   v: "+ Elevated Work Platform (EWP) — 11m boom or scissors" },
+      { k: "body",   v: "+ Dogging Licence — required if directing crane lifts" },
+      { k: "body",   v: "+ First Aid Certificate — HLTAID011" },
+      { k: "blank" },
+      { k: "warn",   v: "⚠ First Aid — check renewal date (3-year cycle)" },
+      { k: "warn",   v: "⚠ EWP ticket — verify currency with issuing RTO" },
+      { k: "blank" },
+      { k: "note",   v: "→ 6 requirements mapped · Add to competency register" },
+    ],
+  },
+];
+
+function renderLine(line: Line, i: number) {
+  if (line.k === "blank") return <div key={i} style={{ height: "10px" }} />;
+  const styles: Record<string, React.CSSProperties> = {
+    cmd:    { color: "#666", fontStyle: "normal" },
+    in:     { color: "#383838" },
+    status: { color: "#1a8a4a" },
+    head:   { color: "#c0c0c0", fontWeight: 700, letterSpacing: "0.04em" },
+    meta:   { color: "#2e2e2e" },
+    body:   { color: "#484848" },
+    check:  { color: "#1a8a4a" },
+    warn:   { color: "#8a6a1a" },
+    note:   { color: "#1a8a4a" },
+  };
+  const prefixes: Partial<Record<Line["k"], string>> = { check: "✓ ", warn: "" };
+  const style = styles[line.k] ?? {};
+  const prefix = line.k in prefixes ? prefixes[line.k as keyof typeof prefixes] : "";
+  const text = (line as { v: string }).v;
+
+  if (line.k === "cmd") {
+    return (
+      <div key={i} style={style}>
+        <span style={{ color: "#1a8a4a" }}>$</span>{" "}
+        <span style={{ color: "#777" }}>{text.slice(2)}</span>
+      </div>
+    );
+  }
+  return <div key={i} style={style}>{prefix}{text}</div>;
+}
+
+function AIToolbox() {
+  const [active, setActive] = useState(0);
+  const feature = AI_FEATURES[active];
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "6px", alignItems: "start" }}>
+      {/* Left — feature list */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+        {AI_FEATURES.map((f, i) => (
+          <button
+            key={f.tag}
+            onClick={() => setActive(i)}
+            style={{
+              display: "block",
+              width: "100%",
+              textAlign: "left",
+              padding: "14px 16px",
+              background: active === i ? "#111" : "transparent",
+              border: `1px solid ${active === i ? "#2a2a2a" : "transparent"}`,
+              cursor: "pointer",
+              transition: "background 100ms",
+            }}
+            onMouseOver={e => { if (active !== i) (e.currentTarget as HTMLElement).style.background = "#0d0d0d"; }}
+            onMouseOut={e => { if (active !== i) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
+              <span style={{ fontFamily: "monospace", fontSize: "10px", fontWeight: 700, color: active === i ? "#444" : "#2a2a2a" }}>[{f.tag}]</span>
+              <span style={{ fontSize: "13px", fontWeight: 700, color: active === i ? "#e0e0e0" : "#444" }}>{f.name}</span>
+            </div>
+            <p style={{ fontSize: "11.5px", color: active === i ? "#555" : "#2a2a2a", lineHeight: 1.5, margin: 0 }}>{f.desc}</p>
+            {active === i && (
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "10px" }}>
+                <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#1a8a4a" }} />
+                <span style={{ fontFamily: "monospace", fontSize: "9px", color: "#1a8a4a" }}>ACTIVE</span>
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Right — terminal output */}
+      <div style={{ border: "1px solid #1a1a1a", background: "#080808", minHeight: "520px" }}>
+        {/* Chrome */}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "10px 16px", borderBottom: "1px solid #1a1a1a" }}>
+          <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff6058" }} />
+          <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
+          <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#28c840" }} />
+          <span style={{ marginLeft: "8px", fontSize: "10px", fontFamily: "monospace", color: "#2a2a2a" }}>{feature.label}</span>
+        </div>
+        {/* Output */}
+        <div style={{ padding: "22px 24px", fontFamily: "monospace", fontSize: "12px", lineHeight: 1.85 }}>
+          {feature.lines.map((line, i) => renderLine(line, i))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Page ───────────────────────────────────────────────────────── */
 export default function LandingPage() {
@@ -392,81 +656,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── [03] AI ── */}
+      {/* ── [03] AI TOOLBOX ── */}
       <section id="resources" style={{ background: "#0a0a0a", padding: "96px 0", borderBottom: "1px solid #1a1a1a" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
-          <SectionLabel n="03" label="AI" />
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
-            {/* Left */}
-            <div>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "24px" }}>
-                <div style={{ width: "32px", height: "32px", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(26,138,74,0.25)", background: "rgba(26,138,74,0.06)" }}>
-                  <Zap style={{ width: "14px", height: "14px", color: "#1a8a4a" }} />
-                </div>
-                <Tag label="AI" accent />
-              </div>
-
-              <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 20px", lineHeight: 1.1 }}>
-                Documentation<br />that writes itself.
-              </h2>
-
-              <p style={{ fontSize: "16px", lineHeight: 1.7, color: "#444", margin: "0 0 36px" }}>
-                Briesa uses Claude (Anthropic) to generate contextual WHS content as you work — from toolbox talking points to SWMS descriptions, permit controls and training outlines.
-              </p>
-
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
-                {[
-                  ["Toolbox talks",        "Generate numbered speaker talking points from a topic in seconds"],
-                  ["SWMS drafting",        "Draft task descriptions and key hazards from the HRCW category"],
-                  ["Permit controls",      "Suggest safety controls based on permit type and location"],
-                  ["Incident actions",     "Recommend corrective actions from incident type and severity"],
-                  ["Course outlines",      "Build structured training content and learning objectives"],
-                  ["Licence suggestions",  "Map required tickets and licences to a worker's role"],
-                ].map(([title, desc]) => (
-                  <li key={title} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                    <CheckCircle2 style={{ width: "16px", height: "16px", color: "#1a8a4a", flexShrink: 0, marginTop: "2px" }} />
-                    <div>
-                      <span style={{ fontSize: "14px", fontWeight: 600, color: "#e0e0e0" }}>{title}</span>
-                      <span style={{ fontSize: "13.5px", color: "#444" }}> — {desc}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Right — terminal */}
-            <div style={{ border: "1px solid #1a1a1a", background: "#080808" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "12px 16px", borderBottom: "1px solid #1a1a1a" }}>
-                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff6058" }} />
-                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
-                <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#28c840" }} />
-                <span style={{ marginLeft: "8px", fontSize: "10px", fontFamily: "monospace", color: "#333" }}>briesa — ai generate — toolbox talk</span>
-              </div>
-              <div style={{ padding: "20px", fontFamily: "monospace", fontSize: "12px", lineHeight: 1.8, color: "#444" }}>
-                <div><span style={{ color: "#1a8a4a" }}>$</span> <span style={{ color: "#555" }}>briesa generate toolbox</span></div>
-                <div>→ Topic: Working at Heights — EWP Operations</div>
-                <div>→ Site: Level 3, Site 01</div>
-                <br />
-                <div style={{ color: "#1a8a4a" }}>Generating talk points...</div>
-                <br />
-                {[
-                  "1. Pre-use inspection of the EWP — check tyres, controls, safety cage and harness anchor points before commencing work.",
-                  "2. Exclusion zones — establish and mark a 2m exclusion zone around the EWP base. Spotter required at all times.",
-                  "3. Weather limits — cease EWP operations if wind exceeds 45 km/h or lightning is within 10 km.",
-                  "4. Emergency descent — demonstrate manual lowering procedure before commencing elevated work.",
-                ].map((line, i) => (
-                  <div key={i} style={{ color: "#555", marginBottom: "4px" }}>{line}</div>
-                ))}
-                <br />
-                <div>→ <span style={{ color: "#1a8a4a" }}>4 talk points generated</span> · 12s · Claude via Anthropic</div>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "16px" }}>
-                  <div style={{ width: "8px", height: "8px", background: "#1a8a4a", borderRadius: "50%" }} />
-                  <span style={{ color: "#333" }}>Ready to copy or attach to toolbox record</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SectionLabel n="03" label="AI Toolbox" />
+          <AIToolbox />
         </div>
       </section>
 
