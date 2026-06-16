@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgContext } from "@/lib/getOrgContext";
 import type { Industry } from "@/config/modules";
@@ -55,48 +56,136 @@ function StatCard({
   );
 }
 
-const AI_INSIGHTS = [
-  {
-    type: "RISK",
-    typeBg: "rgba(240,96,96,0.1)",
-    typeColor: "#f06060",
-    confidence: "94% confidence",
-    title: "Licence expiry cluster detected",
-    body: "3 workers on Site 03 have licences expiring within 14 days. Historical patterns suggest this commonly precedes non-compliance flags during audits.",
-    action: "View workers",
-    href: "/people/inductions",
-  },
-  {
-    type: "OPPORTUNITY",
-    typeBg: "var(--b-badge-yellow-bg)",
-    typeColor: "var(--b-badge-yellow-text)",
-    confidence: "91% confidence",
-    title: "Quick win: +6 compliance points",
-    body: "Uploading 2 missing documents and closing 1 corrective action would push the score from 82 → 88, crossing the next audit threshold.",
-    action: "View actions",
-    href: "/safety/actions",
-  },
-  {
-    type: "TREND",
-    typeBg: "var(--b-badge-green-bg)",
-    typeColor: "var(--b-badge-green-text)",
-    confidence: "87% confidence",
-    title: "Training completion trending up",
-    body: "Completion rate has risen 8% over 6 weeks. At this pace you'll reach 90% by end of month — ahead of the quarterly target.",
-    action: "View training",
-    href: "/training",
-  },
-];
+type InsightItem = { type: string; typeBg: string; typeColor: string; confidence: string; title: string; body: string; action: string; href: string };
+const AI_INSIGHTS: Record<Industry, InsightItem[]> = {
+  construction: [
+    {
+      type: "RISK",
+      typeBg: "rgba(240,96,96,0.1)",
+      typeColor: "#f06060",
+      confidence: "94% confidence",
+      title: "Licence expiry cluster detected",
+      body: "3 workers on Site 03 have licences expiring within 14 days. Historical patterns suggest this commonly precedes non-compliance flags during audits.",
+      action: "View workers",
+      href: "/people/inductions",
+    },
+    {
+      type: "OPPORTUNITY",
+      typeBg: "var(--b-badge-yellow-bg)",
+      typeColor: "var(--b-badge-yellow-text)",
+      confidence: "91% confidence",
+      title: "Quick win: +6 compliance points",
+      body: "Uploading 2 missing documents and closing 1 corrective action would push the score from 82 → 88, crossing the next audit threshold.",
+      action: "View actions",
+      href: "/safety/actions",
+    },
+    {
+      type: "TREND",
+      typeBg: "var(--b-badge-green-bg)",
+      typeColor: "var(--b-badge-green-text)",
+      confidence: "87% confidence",
+      title: "Training completion trending up",
+      body: "Completion rate has risen 8% over 6 weeks. At this pace you'll reach 90% by end of month — ahead of the quarterly target.",
+      action: "View training",
+      href: "/training",
+    },
+  ],
+  industrial: [
+    {
+      type: "RISK",
+      typeBg: "rgba(240,96,96,0.1)",
+      typeColor: "#f06060",
+      confidence: "96% confidence",
+      title: "Benzene exposure limit breach risk",
+      body: "2 workers in the chemical processing area are approaching the 0.5 ppm TWA limit. Shift patterns indicate an overexposure event within 3 days if controls aren't adjusted.",
+      action: "View exposure records",
+      href: "/compliance/exposure-monitoring",
+    },
+    {
+      type: "OPPORTUNITY",
+      typeBg: "var(--b-badge-yellow-bg)",
+      typeColor: "var(--b-badge-yellow-text)",
+      confidence: "89% confidence",
+      title: "4 LOTO procedures need updating",
+      body: "Recent plant modifications to Pump 3 and Conveyor B are not reflected in current LOTO procedures. Updating now avoids a non-conformance at the scheduled audit.",
+      action: "Review LOTO",
+      href: "/safety/loto",
+    },
+    {
+      type: "TREND",
+      typeBg: "var(--b-badge-green-bg)",
+      typeColor: "var(--b-badge-green-text)",
+      confidence: "88% confidence",
+      title: "Permit-to-work compliance up 12%",
+      body: "PTW completion rates have improved significantly since the new digital workflow rolled out. Zero overdue permits recorded in the last 10 working days.",
+      action: "View permits",
+      href: "/safety/permits-to-work",
+    },
+  ],
+  facilities: [
+    {
+      type: "RISK",
+      typeBg: "rgba(240,96,96,0.1)",
+      typeColor: "#f06060",
+      confidence: "93% confidence",
+      title: "Essential safety measures due",
+      body: "3 fire suppression systems and 2 emergency exit lights are overdue for their annual compliance inspection under the Building Act.",
+      action: "View ESM register",
+      href: "/compliance/essential-safety-measures",
+    },
+    {
+      type: "OPPORTUNITY",
+      typeBg: "var(--b-badge-yellow-bg)",
+      typeColor: "var(--b-badge-yellow-text)",
+      confidence: "90% confidence",
+      title: "Quick win: +5 compliance points",
+      body: "Closing 2 outstanding corrective actions from last month's audit would push your score from 79 → 84, clearing the next review threshold.",
+      action: "View actions",
+      href: "/safety/actions",
+    },
+    {
+      type: "TREND",
+      typeBg: "var(--b-badge-green-bg)",
+      typeColor: "var(--b-badge-green-text)",
+      confidence: "85% confidence",
+      title: "Contractor induction rate improving",
+      body: "Contractor induction completion is up 15% this quarter. All active contractors now have current site inductions on file.",
+      action: "View inductions",
+      href: "/people/inductions",
+    },
+  ],
+};
 
-const TASKS = [
-  { id: "POL-017", label: "Approve POL-017 silica redline", sub: "Draft · 2 reviewers waiting" },
-  { id: "SWMS-103", label: "Sign off SWMS-103 revision", sub: "Awaiting your signature" },
-  { id: "INC-044", label: "Close out INC-044 investigation", sub: "Due today · 3 actions open" },
-  { id: "AUD-12", label: "Complete AUD-12 site audit", sub: "Scheduled · Site 01" },
-];
+
+const TASKS: Record<Industry, { id: string; label: string; sub: string }[]> = {
+  construction: [
+    { id: "POL-017",  label: "Approve POL-017 silica redline",       sub: "Draft · 2 reviewers waiting" },
+    { id: "SWMS-103", label: "Sign off SWMS-103 revision",           sub: "Awaiting your signature" },
+    { id: "INC-044",  label: "Close out INC-044 investigation",      sub: "Due today · 3 actions open" },
+    { id: "AUD-12",   label: "Complete AUD-12 site audit",           sub: "Scheduled · Site 01" },
+  ],
+  industrial: [
+    { id: "JSA-088",  label: "Review JSA for boiler maintenance",    sub: "Draft · approval required" },
+    { id: "PTW-034",  label: "Issue PTW — confined space entry",     sub: "Awaiting your sign-off" },
+    { id: "INC-044",  label: "Close out INC-044 investigation",      sub: "Due today · 3 actions open" },
+    { id: "LOTO-019", label: "Verify LOTO procedure for Pump 3",     sub: "Post-modification review" },
+  ],
+  facilities: [
+    { id: "ESM-007",  label: "Schedule ESM inspection — Level 3",    sub: "Overdue · compliance risk" },
+    { id: "INC-031",  label: "Close out INC-031 slip/trip report",   sub: "Due today · 2 actions open" },
+    { id: "AUD-08",   label: "Complete AUD-08 building audit",       sub: "Scheduled · Tower B" },
+    { id: "ISO-012",  label: "Approve isolation plan — HVAC Unit 4", sub: "Maintenance scheduled tomorrow" },
+  ],
+};
 
 export default async function DashboardPage() {
-  let industry: Industry = "construction";
+  const cookieStore = await cookies();
+  const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
+
+  let industry: Industry =
+    demoCookie === "industrial" ? "industrial"
+    : demoCookie === "facilities" ? "facilities"
+    : "construction";
 
   if (SUPABASE_CONFIGURED) {
     const supabase = await createClient();
@@ -106,6 +195,9 @@ export default async function DashboardPage() {
       industry = ctx.industry;
     }
   }
+
+  const insights = AI_INSIGHTS[industry];
+  const tasks    = TASKS[industry];
 
   const today = new Date().toLocaleDateString("en-AU", {
     weekday: "long",
@@ -134,34 +226,17 @@ export default async function DashboardPage() {
 
       {/* Stat cards */}
       <div className="flex gap-4 mb-6">
-        <StatCard
-          label="Audit Readiness"
-          value="82%"
-          sub="+4 pts · 70 of 85"
-          icon={FileText}
-          iconStyle={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }}
-        />
-        <StatCard
-          label="Open Incidents"
-          value="2"
-          sub="1 high · 1 low"
-          icon={AlertTriangle}
-          iconStyle={{ background: "rgba(240,96,96,0.1)", color: "#f06060" }}
-        />
-        <StatCard
-          label={industry === "construction" ? "SWMS Due" : "Permits Due"}
-          value="6"
-          sub="next: SWMS-103"
-          icon={FileText}
-          iconStyle={{ background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" }}
-        />
-        <StatCard
-          label="Induction"
-          value="94%"
-          sub="12 workers outstanding"
-          icon={Users}
-          iconStyle={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }}
-        />
+        {industry === "construction" ? <>
+          <StatCard label="Audit Readiness" value="82%" sub="+4 pts · 70 of 85" icon={FileText} iconStyle={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }} />
+          <StatCard label="Open Incidents"  value="2"   sub="1 high · 1 low"    icon={AlertTriangle} iconStyle={{ background: "rgba(240,96,96,0.1)", color: "#f06060" }} />
+          <StatCard label="SWMS Due"        value="6"   sub="next: SWMS-103"    icon={FileText} iconStyle={{ background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" }} />
+          <StatCard label="Induction"       value="94%" sub="12 workers outstanding" icon={Users} iconStyle={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }} />
+        </> : <>
+          <StatCard label="Audit Readiness"   value="78%" sub="+2 pts · 66 of 85"    icon={FileText} iconStyle={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }} />
+          <StatCard label="Open Incidents"    value="3"   sub="2 high · 1 medium"    icon={AlertTriangle} iconStyle={{ background: "rgba(240,96,96,0.1)", color: "#f06060" }} />
+          <StatCard label="Permits to Work"   value="4"   sub="next: PTW-034"        icon={FileText} iconStyle={{ background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" }} />
+          <StatCard label="Induction"         value="91%" sub="8 workers outstanding" icon={Users} iconStyle={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }} />
+        </>}
       </div>
 
       {/* AI banner */}
@@ -181,8 +256,9 @@ export default async function DashboardPage() {
               </span>
             </div>
             <p className="text-[14px] leading-relaxed" style={{ color: "var(--b-text-secondary)" }}>
-              Silica exposure standard halved to 0.025 mg/m³. I&apos;ve drafted updates to 2 policies and
-              6 SWMS — review and approve in ~4 min.
+              {industry === "construction"
+                ? <>Silica exposure standard halved to 0.025 mg/m³. I&apos;ve drafted updates to 2 policies and 6 SWMS — review and approve in ~4 min.</>
+                : <>Benzene TWA limit updated to 0.5 ppm under the model WHS Regulations. I&apos;ve flagged 4 JSAs and 2 SDS entries that reference benzene handling — review and approve in ~3 min.</>}
             </p>
             <div className="flex items-center gap-3 mt-4">
               <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[38px] text-[13px] font-semibold">
@@ -235,7 +311,7 @@ export default async function DashboardPage() {
           </span>
         </div>
         <div className="grid grid-cols-3 gap-4">
-          {AI_INSIGHTS.map((insight) => (
+          {insights.map((insight) => (
             <div
               key={insight.type}
               className="border p-5 flex flex-col"
@@ -306,7 +382,9 @@ export default async function DashboardPage() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-[13px] font-medium" style={{ color: "var(--b-text)" }}>
-                    Silica dust — exposure standard halved to 0.025 mg/m³
+                    {industry === "construction"
+                      ? "Silica dust — exposure standard halved to 0.025 mg/m³"
+                      : "Benzene TWA limit updated to 0.5 ppm — model WHS Regulations"}
                   </span>
                   <span
                     className="text-[10px] font-semibold px-1.5 py-0.5"
@@ -316,10 +394,12 @@ export default async function DashboardPage() {
                   </span>
                 </div>
                 <div className="text-[12px]" style={{ color: "var(--b-text-muted)" }}>
-                  Safe Work Australia · Effective 20 Jun 2024
+                  {industry === "construction" ? "Safe Work Australia · Effective 20 Jun 2024" : "Safe Work Australia · Effective 1 Jul 2024"}
                 </div>
                 <div className="text-[12px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>
-                  Tracking matrix impact — 6 SWMS, 2 policies
+                  {industry === "construction"
+                    ? "Tracking matrix impact — 6 SWMS, 2 policies"
+                    : "Tracking matrix impact — 4 JSAs, 2 SDS entries"}
                 </div>
               </div>
             </div>
@@ -344,7 +424,7 @@ export default async function DashboardPage() {
             <span className="text-[12px]" style={{ color: "var(--b-text-muted)" }}>4 of 24</span>
           </div>
           <div className="space-y-1">
-            {TASKS.map((task) => (
+            {tasks.map((task) => (
               <button
                 key={task.id}
                 className="b-task-btn w-full flex items-center gap-3 px-3 py-2.5 text-left"

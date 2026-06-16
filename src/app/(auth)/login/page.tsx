@@ -29,7 +29,17 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    if (isDemo) { router.push("/dashboard"); return; }
+
+    if (isDemo) {
+      const industry =
+        email === "industrial@com" && password === "industrial" ? "industrial"
+        : email === "construction@com" && password === "construction" ? "construction"
+        : "construction";
+      document.cookie = `b-demo-industry=${industry}; path=/; max-age=86400`;
+      router.push("/dashboard");
+      return;
+    }
+
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setError(error.message); setLoading(false); return; }

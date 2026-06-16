@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgContext } from "@/lib/getOrgContext";
 import { AppSidebar } from "@/components/layout/AppSidebar";
@@ -11,9 +12,15 @@ const SUPABASE_CONFIGURED =
   process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith("http");
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  let industry: "construction" | "industrial" | "facilities" = "construction";
-  let orgName = "Demo Organisation";
-  let userName = "Demo User";
+  const cookieStore = await cookies();
+  const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
+
+  let industry: "construction" | "industrial" | "facilities" =
+    demoCookie === "industrial" ? "industrial"
+    : demoCookie === "facilities" ? "facilities"
+    : "construction";
+  let orgName  = industry === "industrial" ? "Pacific Industrial Pty Ltd" : "Apex Construction Pty Ltd";
+  let userName = industry === "industrial" ? "Demo Industrial" : "Demo User";
 
   if (SUPABASE_CONFIGURED) {
     const supabase = await createClient();
