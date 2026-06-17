@@ -552,7 +552,7 @@ export default function LandingPage() {
               Get started <ArrowRight size={15} />
             </Link>
             <Link
-              href="/login"
+              href="/demo"
               style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "13px 28px", fontSize: "14px", fontWeight: 500, color: "#555", background: "transparent", textDecoration: "none", border: "1px solid #222" }}
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = "#aaa"; (e.currentTarget as HTMLElement).style.borderColor = "#333"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = "#555"; (e.currentTarget as HTMLElement).style.borderColor = "#222"; }}
@@ -728,7 +728,7 @@ export default function LandingPage() {
               Get started <ArrowRight size={16} />
             </Link>
             <Link
-              href="/login"
+              href="/demo"
               style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 28px", fontSize: "15px", fontWeight: 500, color: "#555", background: "transparent", textDecoration: "none", border: "1px solid #222" }}
               onMouseOver={e => (e.currentTarget as HTMLElement).style.borderColor = "#333"}
               onMouseOut={e => (e.currentTarget as HTMLElement).style.borderColor = "#222"}
