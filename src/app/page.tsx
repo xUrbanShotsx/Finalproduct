@@ -672,12 +672,10 @@ export default function LandingPage() {
             {/* Left */}
             <div>
               <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 20px", lineHeight: 1.1 }}>
-                Built for the workers,<br />not just the office.
+                An Engine<br />Of Control.
               </h2>
               <p style={{ fontSize: "16px", lineHeight: 1.7, color: "#444", margin: "0 0 32px" }}>
-                Most WHS platforms are designed for compliance managers behind a desk.
-                Briesa is built for the foreman on Level 3, the plant operator at 06:30,
-                and the safety advisor who needs to report an incident before the ambulance leaves site.
+                Centralising policies, registers, audits, and reporting into one intelligent operating system.
               </p>
               <Link
                 href="/signup"
@@ -691,12 +689,12 @@ export default function LandingPage() {
             {/* Right — 3-col cards */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px" }}>
               {[
-                ["Full mobile access",  "Report incidents, run prestarts and sign SWMS from your phone on site."],
-                ["Real-time sync",      "All records sync instantly the moment connectivity is restored."],
-                ["Role-based access",   "Workers see what they need. Managers and admins see everything."],
-              ].map(([title, desc]) => (
-                <div key={title} style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", padding: "20px 16px" }}>
-                  <div style={{ width: "6px", height: "6px", background: "#1a8a4a", marginBottom: "14px" }} />
+                ["01", "Regulation", "Structured, real-time oversight of compliance obligations, risk frameworks, and operational workflows."],
+                ["02", "Automation", "Transforming fragmented, manual processes into streamlined ecosystems that deliver clarity, control, and measurable growth."],
+                ["03", "AI",         "Reliable datasets combined with advanced AI to systematically manage governance that was previously reactive."],
+              ].map(([num, title, desc]) => (
+                <div key={num} style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", padding: "20px 16px" }}>
+                  <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#1a8a4a", marginBottom: "14px" }}>{num}</div>
                   <div style={{ fontSize: "13px", fontWeight: 700, color: "#e0e0e0", marginBottom: "8px" }}>{title}</div>
                   <div style={{ fontSize: "12px", color: "#444", lineHeight: 1.6 }}>{desc}</div>
                 </div>
