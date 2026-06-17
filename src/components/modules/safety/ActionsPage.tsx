@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { ActionDrawer } from "./ActionDrawer";
 import { PageShell, Stat, SeverityBadge, Badge, matchesTab } from "../shared";
+import { getExtraActions } from "@/lib/safetyActions";
 
 const SOURCE_COLORS: Record<string, { bg: string; color: string }> = {
   "Incident":    { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -62,6 +63,20 @@ export function ActionsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+
+  // Merge actions pushed from other modules (e.g. Blueprints gap analysis).
+  useEffect(() => {
+    const extra = getExtraActions();
+    if (!extra.length) return;
+    setRows((prev) => {
+      const existing = new Set(prev.map((r) => r.ref));
+      const add = extra
+        .filter((e) => !existing.has(e.ref))
+        .map((e) => ({ ...e })) as unknown as typeof RECORDS;
+      return [...add, ...prev];
+    });
+  }, []);
+
   return (
     <>
     <PageShell

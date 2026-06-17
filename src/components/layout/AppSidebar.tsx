@@ -18,8 +18,15 @@ const MODULE_ICONS: Record<string, LucideIcon> = {
   Building2, BarChart3, GraduationCap, Map,
 };
 
-const COMING_SOON: ModuleKey[] = ["blueprints", "governance"];
 const MODULES_WITH_SUBMODULES: ModuleKey[] = ["safety", "people", "operations", "risk", "compliance", "insights", "training"];
+
+const BLUEPRINT_SUBS = [
+  { id: "store",        name: "Blueprint Store" },
+  { id: "builder",      name: "Blueprint Builder" },
+  { id: "library",      name: "Document Library" },
+  { id: "gap-analysis", name: "Gap Analysis" },
+  { id: "renewals",     name: "Renewal & Updates" },
+];
 
 const WORKSPACE_ITEMS = [
   { href: "/organisation", label: "Organisation", icon: Building },
@@ -33,9 +40,12 @@ interface AppSidebarProps {
   industry: Industry;
   orgName: string;
   userName: string;
+  isDemo?: boolean;
 }
 
-export function AppSidebar({ industry, userName }: AppSidebarProps) {
+export function AppSidebar({ industry, userName, isDemo = false }: AppSidebarProps) {
+  // Blueprints is a paid add-on: locked in the prospect demo, unlocked for customers.
+  const COMING_SOON: ModuleKey[] = isDemo ? ["blueprints", "governance"] : ["governance"];
   const pathname = usePathname();
   const activeModule = pathname.split("/")[1] as ModuleKey | "dashboard" | "";
 
@@ -89,7 +99,12 @@ export function AppSidebar({ industry, userName }: AppSidebarProps) {
         {CORE_MODULES.map((mod) => {
           const Icon = MODULE_ICONS[mod.icon] ?? Shield;
           const comingSoon = COMING_SOON.includes(mod.key);
-          const subModules = MODULES_WITH_SUBMODULES.includes(mod.key) ? getSubModules(mod.key, industry) : [];
+          const subModules: { id: string; name: string }[] =
+            mod.key === "blueprints"
+              ? (comingSoon ? [] : BLUEPRINT_SUBS)
+              : MODULES_WITH_SUBMODULES.includes(mod.key)
+                ? getSubModules(mod.key, industry).map((s) => ({ id: s.id, name: s.name }))
+                : [];
           const isActive = pathname.startsWith(`/${mod.key}`);
           const isOpen = openModules.has(mod.key);
 

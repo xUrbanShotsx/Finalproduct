@@ -14,6 +14,7 @@ const SUPABASE_CONFIGURED =
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
+  const isProspectDemo = cookieStore.get("b-demo-prospect")?.value === "1";
 
   let industry: "construction" | "industrial" | "facilities" =
     demoCookie === "industrial" ? "industrial"
@@ -42,7 +43,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="flex flex-col h-screen overflow-hidden" style={{ background: "var(--b-bg-canvas)" }}>
       <TopBar industry={industry} orgName={orgName} userName={userName} />
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        <AppSidebar industry={industry} orgName={orgName} userName={userName} />
+        <AppSidebar industry={industry} orgName={orgName} userName={userName} isDemo={isProspectDemo} />
         <main className="flex-1 overflow-auto" style={{ background: "var(--b-bg-canvas)" }}>{children}</main>
       </div>
     </div>

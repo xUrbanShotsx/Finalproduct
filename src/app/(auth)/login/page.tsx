@@ -36,6 +36,8 @@ export default function LoginPage() {
         : email === "facilities@com" && password === "facilities"   ? "facilities"
         : "construction";
       document.cookie = `b-demo-industry=${industry}; path=/; max-age=86400`;
+      // Logged-in customer dashboards are not the prospect demo — unlock add-ons.
+      document.cookie = "b-demo-prospect=; path=/; max-age=0";
       router.push("/dashboard");
       return;
     }

@@ -35,8 +35,10 @@ export default function DemoPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    // Demo workspace is the Construction dashboard
+    // Demo workspace is the Construction dashboard; flag as a prospect demo
+    // so paid add-ons (e.g. Blueprints) stay locked in this view.
     document.cookie = "b-demo-industry=construction; path=/; max-age=86400";
+    document.cookie = "b-demo-prospect=1; path=/; max-age=86400";
     router.push("/dashboard");
   }
 
