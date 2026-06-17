@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 function BLogo({ size = 28, color = "currentColor" }: { size?: number; color?: string }) {
   return (
@@ -120,22 +120,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Demo notice */}
-          {isDemo && (
-            <div
-              className="flex items-start gap-3 p-3 mb-6 border"
-              style={{ background: "var(--b-badge-green-bg)", borderColor: "var(--b-accent-border)" }}
-            >
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "var(--b-accent-text)" }} />
-              <div>
-                <p className="text-[12px] font-[600]" style={{ color: "var(--b-accent-text)" }}>Demo mode active</p>
-                <p className="text-[11.5px]" style={{ color: "var(--b-text-muted)" }}>
-                  No credentials needed — enter the workspace below.
-                </p>
-              </div>
-            </div>
-          )}
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
@@ -196,10 +180,8 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full h-[42px] flex items-center justify-center gap-2 text-[13.5px] font-[600] mt-2 b-btn-accent disabled:opacity-50"
             >
-              {loading ? "Signing in…" : isDemo ? (
-                <>Enter Demo Workspace <ArrowRight className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} /></>
-              ) : (
-                <>Sign in <ArrowRight className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} /></>
+              {loading ? "Signing in…" : (
+                <>Login <ArrowRight className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} /></>
               )}
             </button>
           </form>
