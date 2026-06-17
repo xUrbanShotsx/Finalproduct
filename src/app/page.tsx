@@ -686,17 +686,17 @@ export default function LandingPage() {
                 Get started <ArrowRight size={15} />
               </Link>
             </div>
-            {/* Right — 3-col cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px" }}>
+            {/* Right — stacked cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
               {[
                 ["01", "Regulation", "Structured, real-time oversight of compliance obligations, risk frameworks, and operational workflows."],
                 ["02", "Automation", "Transforming fragmented, manual processes into streamlined ecosystems that deliver clarity, control, and measurable growth."],
                 ["03", "AI",         "Reliable datasets combined with advanced AI to systematically manage governance that was previously reactive."],
               ].map(([num, title, desc]) => (
-                <div key={num} style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", padding: "20px 16px" }}>
-                  <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#1a8a4a", marginBottom: "14px" }}>{num}</div>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#e0e0e0", marginBottom: "8px" }}>{title}</div>
-                  <div style={{ fontSize: "12px", color: "#444", lineHeight: 1.6 }}>{desc}</div>
+                <div key={num} style={{ background: "#0f0f0f", border: "1px solid #1a1a1a", padding: "32px 28px" }}>
+                  <div style={{ fontFamily: "monospace", fontSize: "13px", fontWeight: 700, color: "#1a8a4a", marginBottom: "18px" }}>{num}</div>
+                  <div style={{ fontSize: "18px", fontWeight: 700, color: "#e0e0e0", marginBottom: "12px" }}>{title}</div>
+                  <div style={{ fontSize: "14px", color: "#555", lineHeight: 1.65 }}>{desc}</div>
                 </div>
               ))}
             </div>
