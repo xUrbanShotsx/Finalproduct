@@ -54,7 +54,7 @@ export default function BlueprintsIsoPage() {
           </Link>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <Link href="/login" style={{ fontSize: "13px", fontWeight: 500, color: "#666", textDecoration: "none", padding: "7px 16px", border: "1px solid #222" }}>Log in</Link>
-            <Link href="/signup" style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: YELLOW, border: `1px solid ${YELLOW}` }}>Get started</Link>
+            <Link href="/blueprints-iso/checkout" style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "7px 18px", background: YELLOW, border: `1px solid ${YELLOW}` }}>Get started</Link>
           </div>
         </div>
       </header>
@@ -77,7 +77,7 @@ export default function BlueprintsIsoPage() {
             A one-off purchase delivers a complete, audit-ready document pack for ISO 9001, 14001 or 45001 — tailored to your organisation and built straight from the data you already keep in Briesa.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
-            <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 30px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: YELLOW, textDecoration: "none", border: `1px solid ${YELLOW}` }}>
+            <Link href="/blueprints-iso/checkout" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 30px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: YELLOW, textDecoration: "none", border: `1px solid ${YELLOW}` }}>
               Get your blueprint <ArrowRight size={16} />
             </Link>
             <a href="#pricing" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "14px 28px", fontSize: "15px", fontWeight: 500, color: "#888", background: "transparent", textDecoration: "none", border: "1px solid #222" }}>
@@ -210,7 +210,7 @@ export default function BlueprintsIsoPage() {
                       </div>
                     ))}
                   </div>
-                  <Link href="/signup" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", height: "44px", fontSize: "14px", fontWeight: 700, textDecoration: "none", background: popular ? YELLOW : "transparent", color: popular ? "#0a0a0a" : "#e0e0e0", border: popular ? `1px solid ${YELLOW}` : "1px solid #222" }}>
+                  <Link href={`/blueprints-iso/checkout?plan=${n}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", height: "44px", fontSize: "14px", fontWeight: 700, textDecoration: "none", background: popular ? YELLOW : "transparent", color: popular ? "#0a0a0a" : "#e0e0e0", border: popular ? `1px solid ${YELLOW}` : "1px solid #222" }}>
                     Get started <ArrowRight size={15} />
                   </Link>
                 </div>
@@ -237,7 +237,7 @@ export default function BlueprintsIsoPage() {
           <p style={{ fontSize: "16px", color: "#555", margin: "0 auto 36px", maxWidth: "440px", lineHeight: 1.6 }}>
             Generate your ISO blueprint today and walk into your audit prepared.
           </p>
-          <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "15px 34px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: YELLOW, textDecoration: "none", border: `1px solid ${YELLOW}` }}>
+          <Link href="/blueprints-iso/checkout" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "15px 34px", fontSize: "15px", fontWeight: 700, color: "#0a0a0a", background: YELLOW, textDecoration: "none", border: `1px solid ${YELLOW}` }}>
             Get your blueprint <ArrowRight size={16} />
           </Link>
         </div>
