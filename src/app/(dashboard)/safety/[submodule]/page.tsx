@@ -12,6 +12,8 @@ import { PrestartPage } from "@/components/modules/safety/PrestartPage";
 import { ToolboxPage } from "@/components/modules/safety/ToolboxPage";
 import { ActionsPage } from "@/components/modules/safety/ActionsPage";
 import { HazardousMaterialsPage } from "@/components/modules/safety/HazardousMaterialsPage";
+import { PermitsToWorkPage } from "@/components/modules/safety/PermitsToWorkPage";
+import { LotoPage } from "@/components/modules/safety/LotoPage";
 
 const MODULE_KEY = "safety" as ModuleKey;
 
@@ -23,6 +25,8 @@ const SPECIFIC: Record<string, React.FC> = {
   toolbox:   ToolboxPage,
   actions:   ActionsPage,
   "hazardous-materials": HazardousMaterialsPage,
+  "permits-to-work":     PermitsToWorkPage,
+  loto:                  LotoPage,
 };
 
 export default async function SubModuleRoute({
