@@ -178,6 +178,77 @@ const TASKS: Record<Industry, { id: string; label: string; sub: string }[]> = {
   ],
 };
 
+type StatItem = { label: string; value: string; sub: string; icon: "file" | "alert" | "users"; tone: "green" | "red" | "yellow" | "blue" };
+
+const STATS: Record<Industry, StatItem[]> = {
+  construction: [
+    { label: "Audit Readiness", value: "82%", sub: "+4 pts · 70 of 85",      icon: "file",  tone: "green" },
+    { label: "Open Incidents",  value: "2",   sub: "1 high · 1 low",         icon: "alert", tone: "red" },
+    { label: "SWMS Due",        value: "6",   sub: "next: SWMS-103",         icon: "file",  tone: "yellow" },
+    { label: "Induction",       value: "94%", sub: "12 workers outstanding", icon: "users", tone: "blue" },
+  ],
+  industrial: [
+    { label: "Audit Readiness",  value: "78%", sub: "+2 pts · 66 of 85",     icon: "file",  tone: "green" },
+    { label: "Open Incidents",   value: "3",   sub: "2 high · 1 medium",     icon: "alert", tone: "red" },
+    { label: "Permits to Work",  value: "4",   sub: "next: PTW-034",         icon: "file",  tone: "yellow" },
+    { label: "Induction",        value: "91%", sub: "8 workers outstanding", icon: "users", tone: "blue" },
+  ],
+  facilities: [
+    { label: "Audit Readiness", value: "79%", sub: "+3 pts · 67 of 85",     icon: "file",  tone: "green" },
+    { label: "Open Incidents",  value: "2",   sub: "1 medium · 1 low",      icon: "alert", tone: "red" },
+    { label: "ESM Due",         value: "5",   sub: "next: ESM-007",         icon: "file",  tone: "yellow" },
+    { label: "Induction",       value: "96%", sub: "4 contractors outstanding", icon: "users", tone: "blue" },
+  ],
+};
+
+type BannerData = { lead: React.ReactNode; workersInScope: string; artifacts: string };
+
+const BANNER: Record<Industry, BannerData> = {
+  construction: {
+    lead: <>Silica exposure standard halved to 0.025 mg/m³. I&apos;ve drafted updates to 2 policies and 6 SWMS — review and approve in ~4 min.</>,
+    workersInScope: "47",
+    artifacts: "8",
+  },
+  industrial: {
+    lead: <>Benzene TWA limit updated to 0.5 ppm under the model WHS Regulations. I&apos;ve flagged 4 JSAs and 2 SDS entries that reference benzene handling — review and approve in ~3 min.</>,
+    workersInScope: "63",
+    artifacts: "6",
+  },
+  facilities: {
+    lead: <>Essential Safety Measures annual schedule is due. I&apos;ve compiled inspection records for 5 fire and emergency systems across 3 buildings — review and approve in ~3 min.</>,
+    workersInScope: "38",
+    artifacts: "5",
+  },
+};
+
+type RegItem = { title: string; source: string; impact: string };
+
+const REGULATION: Record<Industry, RegItem> = {
+  construction: {
+    title: "Silica dust — exposure standard halved to 0.025 mg/m³",
+    source: "Safe Work Australia · Effective 20 Jun 2024",
+    impact: "Tracking matrix impact — 6 SWMS, 2 policies",
+  },
+  industrial: {
+    title: "Benzene TWA limit updated to 0.5 ppm — model WHS Regulations",
+    source: "Safe Work Australia · Effective 1 Jul 2024",
+    impact: "Tracking matrix impact — 4 JSAs, 2 SDS entries",
+  },
+  facilities: {
+    title: "AS 1851 — essential safety measures servicing updated",
+    source: "Standards Australia · Effective 1 Jul 2024",
+    impact: "Tracking matrix impact — 5 ESM schedules, 1 policy",
+  },
+};
+
+const STAT_ICON = { file: FileText, alert: AlertTriangle, users: Users } as const;
+const STAT_TONE: Record<StatItem["tone"], React.CSSProperties> = {
+  green:  { background: "var(--b-badge-green-bg)",  color: "var(--b-badge-green-text)" },
+  red:    { background: "rgba(240,96,96,0.1)",      color: "#f06060" },
+  yellow: { background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" },
+  blue:   { background: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
+};
+
 export default async function DashboardPage() {
   const cookieStore = await cookies();
   const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
@@ -198,6 +269,9 @@ export default async function DashboardPage() {
 
   const insights = AI_INSIGHTS[industry];
   const tasks    = TASKS[industry];
+  const stats    = STATS[industry];
+  const banner   = BANNER[industry];
+  const reg      = REGULATION[industry];
 
   const today = new Date().toLocaleDateString("en-AU", {
     weekday: "long",
@@ -226,17 +300,9 @@ export default async function DashboardPage() {
 
       {/* Stat cards */}
       <div className="flex gap-4 mb-6">
-        {industry === "construction" ? <>
-          <StatCard label="Audit Readiness" value="82%" sub="+4 pts · 70 of 85" icon={FileText} iconStyle={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }} />
-          <StatCard label="Open Incidents"  value="2"   sub="1 high · 1 low"    icon={AlertTriangle} iconStyle={{ background: "rgba(240,96,96,0.1)", color: "#f06060" }} />
-          <StatCard label="SWMS Due"        value="6"   sub="next: SWMS-103"    icon={FileText} iconStyle={{ background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" }} />
-          <StatCard label="Induction"       value="94%" sub="12 workers outstanding" icon={Users} iconStyle={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }} />
-        </> : <>
-          <StatCard label="Audit Readiness"   value="78%" sub="+2 pts · 66 of 85"    icon={FileText} iconStyle={{ background: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" }} />
-          <StatCard label="Open Incidents"    value="3"   sub="2 high · 1 medium"    icon={AlertTriangle} iconStyle={{ background: "rgba(240,96,96,0.1)", color: "#f06060" }} />
-          <StatCard label="Permits to Work"   value="4"   sub="next: PTW-034"        icon={FileText} iconStyle={{ background: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" }} />
-          <StatCard label="Induction"         value="91%" sub="8 workers outstanding" icon={Users} iconStyle={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }} />
-        </>}
+        {stats.map((s) => (
+          <StatCard key={s.label} label={s.label} value={s.value} sub={s.sub} icon={STAT_ICON[s.icon]} iconStyle={STAT_TONE[s.tone]} />
+        ))}
       </div>
 
       {/* AI banner */}
@@ -256,9 +322,7 @@ export default async function DashboardPage() {
               </span>
             </div>
             <p className="text-[14px] leading-relaxed" style={{ color: "var(--b-text-secondary)" }}>
-              {industry === "construction"
-                ? <>Silica exposure standard halved to 0.025 mg/m³. I&apos;ve drafted updates to 2 policies and 6 SWMS — review and approve in ~4 min.</>
-                : <>Benzene TWA limit updated to 0.5 ppm under the model WHS Regulations. I&apos;ve flagged 4 JSAs and 2 SDS entries that reference benzene handling — review and approve in ~3 min.</>}
+              {banner.lead}
             </p>
             <div className="flex items-center gap-3 mt-4">
               <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[38px] text-[13px] font-semibold">
@@ -272,7 +336,7 @@ export default async function DashboardPage() {
           </div>
           <div className="flex gap-8 flex-shrink-0">
             <div className="text-right">
-              <div className="text-[2rem] font-bold leading-none" style={{ color: "var(--b-text)" }}>47</div>
+              <div className="text-[2rem] font-bold leading-none" style={{ color: "var(--b-text)" }}>{banner.workersInScope}</div>
               <div
                 className="text-[10px] mt-1 uppercase tracking-wide"
                 style={{ color: "var(--b-text-muted)" }}
@@ -281,7 +345,7 @@ export default async function DashboardPage() {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[2rem] font-bold leading-none" style={{ color: "var(--b-text)" }}>8</div>
+              <div className="text-[2rem] font-bold leading-none" style={{ color: "var(--b-text)" }}>{banner.artifacts}</div>
               <div
                 className="text-[10px] mt-1 uppercase tracking-wide"
                 style={{ color: "var(--b-text-muted)" }}
@@ -382,9 +446,7 @@ export default async function DashboardPage() {
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="text-[13px] font-medium" style={{ color: "var(--b-text)" }}>
-                    {industry === "construction"
-                      ? "Silica dust — exposure standard halved to 0.025 mg/m³"
-                      : "Benzene TWA limit updated to 0.5 ppm — model WHS Regulations"}
+                    {reg.title}
                   </span>
                   <span
                     className="text-[10px] font-semibold px-1.5 py-0.5"
@@ -394,12 +456,10 @@ export default async function DashboardPage() {
                   </span>
                 </div>
                 <div className="text-[12px]" style={{ color: "var(--b-text-muted)" }}>
-                  {industry === "construction" ? "Safe Work Australia · Effective 20 Jun 2024" : "Safe Work Australia · Effective 1 Jul 2024"}
+                  {reg.source}
                 </div>
                 <div className="text-[12px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>
-                  {industry === "construction"
-                    ? "Tracking matrix impact — 6 SWMS, 2 policies"
-                    : "Tracking matrix impact — 4 JSAs, 2 SDS entries"}
+                  {reg.impact}
                 </div>
               </div>
             </div>

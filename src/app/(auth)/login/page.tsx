@@ -32,8 +32,8 @@ export default function LoginPage() {
 
     if (isDemo) {
       const industry =
-        email === "industrial@com" && password === "industrial" ? "industrial"
-        : email === "construction@com" && password === "construction" ? "construction"
+        email === "industrial@com"   && password === "industrial"   ? "industrial"
+        : email === "facilities@com" && password === "facilities"   ? "facilities"
         : "construction";
       document.cookie = `b-demo-industry=${industry}; path=/; max-age=86400`;
       router.push("/dashboard");

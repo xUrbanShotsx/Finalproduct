@@ -19,8 +19,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
     demoCookie === "industrial" ? "industrial"
     : demoCookie === "facilities" ? "facilities"
     : "construction";
-  let orgName  = industry === "industrial" ? "Pacific Industrial Pty Ltd" : "Apex Construction Pty Ltd";
-  let userName = industry === "industrial" ? "Demo Industrial" : "Demo User";
+  let orgName  =
+    industry === "industrial" ? "Pacific Industrial Pty Ltd"
+    : industry === "facilities" ? "Meridian Facilities Group"
+    : "Apex Construction Pty Ltd";
+  let userName =
+    industry === "industrial" ? "Demo Industrial"
+    : industry === "facilities" ? "Demo Facilities"
+    : "Demo User";
 
   if (SUPABASE_CONFIGURED) {
     const supabase = await createClient();
