@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { createClient } from "@/lib/supabase/server";
-import { getOrgContext } from "@/lib/getOrgContext";
+import { getIndustry } from "@/lib/getIndustry";
 import { getSubModules } from "@/config/modules";
 import type { ModuleKey } from "@/config/modules";
 import { SubModuleGrid } from "@/components/modules/SubModuleGrid";
@@ -20,20 +19,8 @@ const META: Record<string, { title: string; description: string }> = {
   blueprints: { title: "Blueprints",      description: "Document templates and site configuration." },
 };
 
-const SUPABASE_CONFIGURED =
-  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith("http");
-
 export default async function ModulePage() {
-  const industry = SUPABASE_CONFIGURED
-    ? await (async () => {
-        const supabase = await createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return "construction" as const;
-        const ctx = await getOrgContext(supabase, user.id, user.user_metadata as Record<string, string>);
-        return ctx.industry;
-      })()
-    : ("construction" as const);
+  const industry = await getIndustry();
 
   const subModules = getSubModules(MODULE_KEY, industry);
   const meta = META[MODULE_KEY] ?? { title: MODULE_KEY, description: "" };

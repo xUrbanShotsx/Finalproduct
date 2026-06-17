@@ -1,10 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { getOrgContext } from "@/lib/getOrgContext";
+import { getIndustry } from "@/lib/getIndustry";
 import { getSubModules } from "@/config/modules";
-import type { ModuleKey, Industry } from "@/config/modules";
+import type { ModuleKey } from "@/config/modules";
 import { SubModulePage } from "@/components/modules/SubModulePage";
 import { IncidentsPage } from "@/components/modules/safety/IncidentsPage";
 import { SwmsPage } from "@/components/modules/safety/SwmsPage";
@@ -12,12 +11,9 @@ import { PermitsPage } from "@/components/modules/safety/PermitsPage";
 import { PrestartPage } from "@/components/modules/safety/PrestartPage";
 import { ToolboxPage } from "@/components/modules/safety/ToolboxPage";
 import { ActionsPage } from "@/components/modules/safety/ActionsPage";
+import { HazardousMaterialsPage } from "@/components/modules/safety/HazardousMaterialsPage";
 
 const MODULE_KEY = "safety" as ModuleKey;
-
-const SUPABASE_CONFIGURED =
-  !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith("http");
 
 const SPECIFIC: Record<string, React.FC> = {
   incidents: IncidentsPage,
@@ -26,6 +22,7 @@ const SPECIFIC: Record<string, React.FC> = {
   prestart:  PrestartPage,
   toolbox:   ToolboxPage,
   actions:   ActionsPage,
+  "hazardous-materials": HazardousMaterialsPage,
 };
 
 export default async function SubModuleRoute({
@@ -38,16 +35,7 @@ export default async function SubModuleRoute({
   const SpecificPage = SPECIFIC[submodule];
   if (SpecificPage) return <SpecificPage />;
 
-  const industry: Industry = SUPABASE_CONFIGURED
-    ? await (async () => {
-        const supabase = await createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return "construction" as const;
-        const ctx = await getOrgContext(supabase, user.id, user.user_metadata as Record<string, string>);
-        return ctx.industry;
-      })()
-    : "construction";
-
+  const industry = await getIndustry();
   const subModules = getSubModules(MODULE_KEY, industry);
   const found = subModules.find((sm) => sm.id === submodule);
   if (!found) notFound();
