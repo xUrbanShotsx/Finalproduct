@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, CheckCircle2, Clock, XCircle, User, CalendarDays } from "lucide-react";
-import { PageShell, Stat, Badge, StatusBadge } from "../shared";
+import { PageShell, Stat, Badge, StatusBadge, matchesTab } from "../shared";
 import { TrainingRegisterDrawer } from "./TrainingRegisterDrawer";
 
 type Result = "Pass" | "Fail" | "In Progress" | "Withdrawn";
@@ -35,6 +35,7 @@ const RESULT_BADGE: Record<Result, React.ReactNode> = {
 export function TrainingRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
 
   return (
     <>
@@ -58,9 +59,10 @@ export function TrainingRegisterPage() {
           </>
         }
         tabs={["All", "Pass", "In Progress", "Fail", "Expired"]}
+      onTabChange={setTab}
       >
         <div className="space-y-0">
-          {rows.map(r => {
+          {rows.filter(r => matchesTab(tab, r)).map(r => {
             const expired = r.daysToExpiry !== null && r.daysToExpiry < 0;
             const expiring = r.daysToExpiry !== null && r.daysToExpiry >= 0 && r.daysToExpiry <= 30;
             return (

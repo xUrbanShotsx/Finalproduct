@@ -123,6 +123,7 @@ Highlight what's missing or expiring and any recommended actions. Plain text, no
     }
   }
 
+  const [tab, setTab] = useState("");
   const fullCount    = WORKERS.filter((_, i) => complianceScore(i).label === "Compliant").length;
   const partialCount = WORKERS.filter((_, i) => complianceScore(i).label === "Partial").length;
   const nonCount     = WORKERS.filter((_, i) => complianceScore(i).label === "Non-Compliant").length;
@@ -142,6 +143,7 @@ Highlight what's missing or expiring and any recommended actions. Plain text, no
         </>
       }
       tabs={["All Workers", "Compliant", "Partial", "Non-Compliant"]}
+      onTabChange={setTab}
     >
       <div className="p-6 overflow-x-auto">
 
@@ -185,6 +187,7 @@ Highlight what's missing or expiring and any recommended actions. Plain text, no
           {/* Worker rows */}
           {WORKERS.map((w, wi) => {
             const { score, label } = complianceScore(wi);
+            if (tab && tab !== "All Workers" && label !== tab) return null;
             const scoreColor = label === "Compliant" ? "var(--b-badge-green-text)" : label === "Partial" ? "var(--b-badge-yellow-text)" : "#f06060";
             return (
               <div key={w.name}>

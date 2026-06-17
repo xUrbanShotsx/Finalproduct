@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { InspectionsAuditsDrawer } from "./InspectionsAuditsDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const AUDIT_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Internal":       { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -34,6 +34,7 @@ const RECORDS: Array<{
 export function InspectionsAuditsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -56,6 +57,7 @@ export function InspectionsAuditsPage() {
         </>
       }
       tabs={["All", "Active", "Pending", "Overdue", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -71,7 +73,7 @@ export function InspectionsAuditsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = AUDIT_TYPE_COLORS[r.auditType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

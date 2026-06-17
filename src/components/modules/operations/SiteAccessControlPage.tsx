@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SiteAccessControlDrawer } from "./SiteAccessControlDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 type ZoneRisk   = "Exclusion" | "High Risk" | "Controlled" | "General";
 type EntryResult = "Granted" | "Denied" | "Escorted";
@@ -44,6 +44,7 @@ const ACCESS_LOG = [
 export function SiteAccessControlPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [accessLog, setAccessLog] = useState(ACCESS_LOG);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -66,6 +67,7 @@ export function SiteAccessControlPage() {
         </>
       }
       tabs={["Access Log", "Zones", "Denied", "Escorted"]}
+      onTabChange={setTab}
     >
       {/* Zone summary strip */}
       <div className="px-4 pt-4 pb-2 border-b" style={{ borderColor: "var(--b-border)" }}>
@@ -96,7 +98,7 @@ export function SiteAccessControlPage() {
           <Th>Note</Th>
         </TableHead>
         <tbody>
-          {accessLog.map((r, i) => {
+          {accessLog.filter(r => (tab === "Denied" || tab === "Escorted") ? matchesTab(tab, r) : true).map((r, i) => {
             const entryStyle = ENTRY_COLORS[r.result];
             return (
               <Tr key={i}>

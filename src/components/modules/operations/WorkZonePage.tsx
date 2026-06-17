@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, MapPin, Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { WorkZoneDrawer } from "./WorkZoneDrawer";
-import { PageShell, Stat, Badge, StatusBadge } from "../shared";
+import { PageShell, Stat, Badge, StatusBadge, matchesTab } from "../shared";
 
 type ZoneStatus = "Active" | "Pending" | "Closed";
 
@@ -87,6 +87,7 @@ function ZoneCard({ r }: { r: typeof RECORDS[number] }) {
 export function WorkZonePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const active  = rows.filter(r => r.status === "Active").length;
   const highRisk = rows.filter(r => r.status === "Active" && (r.zoneType === "Exclusion Zone" || r.zoneType === "Crane Swing Zone" || r.zoneType === "No-Go Zone")).length;
 
@@ -112,9 +113,10 @@ export function WorkZonePage() {
         </>
       }
       tabs={["All", "Active", "Pending", "Closed", "Traffic Management"]}
+      onTabChange={setTab}
     >
       <div className="grid grid-cols-2 gap-3">
-        {rows.map(r => <ZoneCard key={r.ref} r={r} />)}
+        {rows.filter(r => matchesTab(tab, r)).map(r => <ZoneCard key={r.ref} r={r} />)}
       </div>
     </PageShell>
     <WorkZoneDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {

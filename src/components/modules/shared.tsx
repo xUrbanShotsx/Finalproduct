@@ -1,5 +1,54 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Plus, Search, Download } from "lucide-react";
+
+/* ── Generic tab/filter predicate ──
+   Returns true when a row belongs under the given tab label.
+   Non-filtering tabs (All, date ranges, etc.) pass everything through. */
+export function matchesTab(tab: string, row: Record<string, unknown>): boolean {
+  if (!tab) return true;
+  const t = tab.toLowerCase().trim();
+
+  // Pass-through tabs — show everything
+  const passthrough = ["all", "all sites", "my actions", "mine", "everyone", "all certificates", "all licences", "all records", "all workers", "history"];
+  if (passthrough.includes(t)) return true;
+  // Date-range style tabs can't be filtered on demo data — pass through
+  if (/\b(today|week|month|quarter|year|recent)\b/.test(t)) return true;
+
+  const status = String(row.status ?? "").toLowerCase();
+  const result = String(row.result ?? "").toLowerCase();
+
+  // Boolean-flag driven tabs
+  if (t === "overdue") return row.overdue === true || status === "overdue";
+  if (t.includes("expiring") || t.includes("due for review") || t.includes("due soon")) {
+    return row.expiringSoon === true || row.dueSoon === true || row.serviceDue === true || status === "expiring";
+  }
+  if (t.includes("expired")) return status === "expired" || row.sdsExpired === true || row.testOverdue === true;
+  if (t === "signed off") return row.signedOff === true;
+  if (t.includes("pending sign")) return row.signedOff === false;
+  if (t === "defects" || t === "with defects") return Number(row.defects ?? 0) > 0 || row.defect === true;
+  if (t === "verified") return row.verified === true || result === "verified";
+  if (t === "unverified") return row.verified === false;
+  if (t === "active" || t === "current") return status === "active" || status === "current";
+  if (t === "notifiable") return row.notifiable === true || row.notifiableIncident === "Yes";
+  if (t === "danger class" || t === "danger") return String(row.signalWord ?? "").toLowerCase() === "danger";
+  if (t.includes("above wes") || t === "exceedances" || t === "exceedance") return row.aboveWes === true || row.exceedance === true || row.aboveLimit === true;
+  if (t === "critical" || t === "high" || t === "medium" || t === "low") {
+    return String(row.riskLevel ?? row.severity ?? row.priority ?? "").toLowerCase() === t;
+  }
+
+  // Direct status / result match (covers Active, Draft, Open, Closed, Pending, Pass, Fail, Granted, Denied, etc.)
+  if (status === t || result === t) return true;
+
+  // Category-style matches against common typed columns
+  for (const key of ["ghsClass", "type", "category", "agentType", "chemType", "esmType", "zoneType", "psType", "checkType"]) {
+    if (String(row[key] ?? "").toLowerCase() === t) return true;
+  }
+
+  // Unknown filter → don't hide everything
+  return false;
+}
 
 /* ── Primitive badge ── */
 interface BadgeProps {
@@ -102,10 +151,12 @@ interface ShellProps {
   ctaSlot?: React.ReactNode;
   stats: React.ReactNode;
   tabs: string[];
+  onTabChange?: (tab: string) => void;
   children: React.ReactNode;
 }
 
-export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs, children }: ShellProps) {
+export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs, onTabChange, children }: ShellProps) {
+  const [active, setActive] = useState(0);
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -144,7 +195,13 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
         style={{ borderColor: "var(--b-border)" }}
       >
         {tabs.map((t, i) => (
-          <span key={t} className="b-tab" data-active={i === 0 ? "true" : "false"}>
+          <span
+            key={t}
+            className="b-tab"
+            data-active={i === active ? "true" : "false"}
+            style={{ cursor: "pointer" }}
+            onClick={() => { setActive(i); onTabChange?.(t); }}
+          >
             {t}
           </span>
         ))}

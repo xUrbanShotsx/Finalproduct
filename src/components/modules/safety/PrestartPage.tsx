@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { PrestartDrawer } from "./PrestartDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const RECORDS = [
   {
@@ -80,6 +80,7 @@ const RECORDS = [
 export function PrestartPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -102,6 +103,7 @@ export function PrestartPage() {
         </>
       }
       tabs={["Today", "This Week", "Pass", "Fail", "Defects"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -115,7 +117,7 @@ export function PrestartPage() {
           <Th right>Actions</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => (
+          {rows.filter(r => matchesTab(tab, r)).map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[11px]" style={{ color: "var(--b-text)" }}>

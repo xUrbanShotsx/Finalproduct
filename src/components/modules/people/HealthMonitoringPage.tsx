@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HealthMonitoringDrawer } from "./HealthMonitoringDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 type HazardType = "Noise" | "Dust" | "Fumes" | "Vibration" | "Chemicals";
 type MonitorResult = "Below WES" | "Above WES" | "At Limit" | "Pending";
@@ -41,6 +41,7 @@ const RECORDS: Array<{
 export function HealthMonitoringPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -63,6 +64,7 @@ export function HealthMonitoringPage() {
         </>
       }
       tabs={["All", "Above WES", "At Limit", "Below WES", "Pending"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -78,7 +80,7 @@ export function HealthMonitoringPage() {
           <Th>Action</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const hazardStyle = HAZARD_COLORS[r.hazard];
             const resultStyle = RESULT_COLORS[r.result];
             return (

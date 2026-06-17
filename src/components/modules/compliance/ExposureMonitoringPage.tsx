@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ExposureMonitoringDrawer } from "./ExposureMonitoringDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const AGENT_COLORS: Record<string, { bg: string; color: string }> = {
   "Noise":          { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -35,6 +35,7 @@ const RECORDS: Array<{
 export function ExposureMonitoringPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const exceedances = rows.filter(r => r.exceedance).length;
   return (
     <>
@@ -58,6 +59,7 @@ export function ExposureMonitoringPage() {
         </>
       }
       tabs={["All", "Above WES", "Approaching Limit", "Noise", "Dust & Chemicals"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -73,7 +75,7 @@ export function ExposureMonitoringPage() {
           <Th>Next Monitor</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const agentStyle = AGENT_COLORS[r.agentType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const pctColor = r.percentWes > 100 ? "#f06060" : r.percentWes >= 50 ? "var(--b-badge-yellow-text)" : "var(--b-badge-green-text)";
             return (

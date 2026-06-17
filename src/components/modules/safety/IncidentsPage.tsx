@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, AlertTriangle, Clock, CheckCircle2, MapPin } from "lucide-react";
-import { PageShell, Stat, SeverityBadge, StatusBadge } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, matchesTab } from "../shared";
 import { ReportIncidentDrawer } from "./ReportIncidentDrawer";
 
 const RECORDS = [
@@ -30,6 +30,7 @@ function StatusIcon({ status }: { status: string }) {
 export function IncidentsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
 
   return (
     <>
@@ -53,9 +54,10 @@ export function IncidentsPage() {
           </>
         }
         tabs={["All", "Open", "Under Investigation", "Closed", "Notifiable"]}
+      onTabChange={setTab}
       >
         <div className="space-y-2 p-1">
-          {rows.map((r) => (
+          {rows.filter(r => matchesTab(tab, r)).map((r) => (
             <div
               key={r.ref}
               className="flex items-stretch border cursor-pointer transition-colors"

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HazardousMaterialsDrawer } from "./HazardousMaterialsDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const GHS_COLORS: Record<string, { bg: string; color: string }> = {
   "Flammable":      { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -37,6 +37,7 @@ const RECORDS: Array<{
 export function HazardousMaterialsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const expiredSds = rows.filter(r => r.sdsExpired).length;
   return (
     <>
@@ -60,6 +61,7 @@ export function HazardousMaterialsPage() {
         </>
       }
       tabs={["All", "SDS Expired", "DANGER Class", "Flammable", "Corrosive"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -75,7 +77,7 @@ export function HazardousMaterialsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const ghsStyle = GHS_COLORS[r.ghsClass] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, ChevronDown, ChevronRight, CheckCircle2, AlertTriangle, Clock, Shield } from "lucide-react";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 import { CompetencyLicencesDrawer } from "./CompetencyLicencesDrawer";
 
 type LicStatus = "Current" | "Expiring" | "Expired";
@@ -67,6 +67,7 @@ export function CompetencyLicencesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState<Record<string, boolean>>({});
   const [groups,     setGroups]     = useState(GROUPS);
+  const [tab,        setTab]        = useState("");
 
   function toggle(type: string) {
     setCollapsed(prev => ({ ...prev, [type]: !prev[type] }));
@@ -94,6 +95,7 @@ export function CompetencyLicencesPage() {
           </>
         }
         tabs={["All", "Current", "Expiring (30d)", "Expired", "Unverified"]}
+        onTabChange={setTab}
       >
         <div className="p-6 space-y-3">
           {groups.map(g => {
@@ -122,7 +124,7 @@ export function CompetencyLicencesPage() {
                 </button>
 
                 {/* Records */}
-                {open && g.records.map((r, i) => {
+                {open && g.records.filter(r => matchesTab(tab, r as unknown as Record<string, unknown>)).map((r, i) => {
                   const sc = STATUS_COLOR[r.status];
                   return (
                     <div

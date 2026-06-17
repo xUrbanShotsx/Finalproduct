@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { RiskAssessmentsDrawer } from "./RiskAssessmentsDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const HOC_COLORS: Record<string, { bg: string; color: string }> = {
   "Elimination":    { bg: "var(--b-badge-green-bg)",  color: "var(--b-badge-green-text)" },
@@ -38,6 +38,7 @@ const RECORDS: Array<{
 export function RiskAssessmentsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -60,6 +61,7 @@ export function RiskAssessmentsPage() {
         </>
       }
       tabs={["All", "Critical", "High", "Draft", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -76,7 +78,7 @@ export function RiskAssessmentsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const hocStyle = HOC_COLORS[r.highestControl] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

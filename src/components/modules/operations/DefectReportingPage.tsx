@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { DefectReportingDrawer } from "./DefectReportingDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const DEFECT_CATEGORY: Record<string, { bg: string; color: string }> = {
   "Structural":   { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -36,6 +36,7 @@ const RECORDS: Array<{
 export function DefectReportingPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const grounded = rows.filter(r => r.grounded && r.status === "Open").length;
 
   return (
@@ -60,6 +61,7 @@ export function DefectReportingPage() {
         </>
       }
       tabs={["All", "Open", "Grounded", "High / Critical", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -75,7 +77,7 @@ export function DefectReportingPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const catStyle = DEFECT_CATEGORY[r.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

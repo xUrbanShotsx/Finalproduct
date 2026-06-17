@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SlipTripFallDrawer } from "./SlipTripFallDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const SURFACE_COLORS: Record<string, { bg: string; color: string }> = {
   "Wet Floor":          { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -37,6 +37,7 @@ const RECORDS: Array<{
 export function SlipTripFallPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -59,6 +60,7 @@ export function SlipTripFallPage() {
         </>
       }
       tabs={["All", "Open", "High Risk", "Overdue Inspection", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -74,7 +76,7 @@ export function SlipTripFallPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const surfStyle = SURFACE_COLORS[r.surface] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

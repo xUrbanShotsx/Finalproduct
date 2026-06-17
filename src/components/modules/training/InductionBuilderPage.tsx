@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, ClipboardList, Clock, Users, CheckCircle2 } from "lucide-react";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 import { InductionBuilderDrawer } from "./InductionBuilderDrawer";
 
 type IStatus = "Active" | "Draft" | "Archived";
@@ -26,6 +26,7 @@ const IND_COLOR: Record<string, { bg: string; color: string }> = {
 export function InductionBuilderPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(INDUCTIONS);
+  const [tab, setTab] = useState("");
 
   return (
     <>
@@ -49,9 +50,10 @@ export function InductionBuilderPage() {
           </>
         }
         tabs={["All", "Active", "Draft", "Archived"]}
+      onTabChange={setTab}
       >
         <div className="p-6 space-y-3">
-          {rows.map(ind => {
+          {rows.filter(r => matchesTab(tab, r)).map(ind => {
             const ic = IND_COLOR[ind.industry] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-muted)" };
             return (
               <div

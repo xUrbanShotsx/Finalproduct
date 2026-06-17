@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SwmsDrawer } from "./SwmsDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const RECORDS = [
   {
@@ -87,6 +87,7 @@ const RECORDS = [
 export function SwmsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -109,6 +110,7 @@ export function SwmsPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Due for Review", "Overdue"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -121,7 +123,7 @@ export function SwmsPage() {
           <Th>Author</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => (
+          {rows.filter(r => matchesTab(tab, r)).map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>

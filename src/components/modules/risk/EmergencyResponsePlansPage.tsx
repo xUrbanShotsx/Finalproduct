@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { EmergencyResponsePlansDrawer } from "./EmergencyResponsePlansDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const SCENARIO_COLORS: Record<string, { bg: string; color: string }> = {
   "Fire":             { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -30,6 +30,7 @@ const RECORDS = [
 export function EmergencyResponsePlansPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -52,6 +53,7 @@ export function EmergencyResponsePlansPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Test Overdue", "Test Due Soon"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -67,7 +69,7 @@ export function EmergencyResponsePlansPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const scStyle = SCENARIO_COLORS[r.scenario] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

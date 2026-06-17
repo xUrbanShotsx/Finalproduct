@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, AlertTriangle, CheckCircle2, Clock, Wrench } from "lucide-react";
 import { PlantEquipmentDrawer } from "./PlantEquipmentDrawer";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 
 const PLANT_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Tower Crane":     { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -116,8 +116,9 @@ function AssetCard({ r }: { r: typeof RECORDS[number] }) {
 export function PlantEquipmentPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const ORDER: Array<typeof RECORDS[number]["status"]> = ["Grounded","Active","In Service","Inactive"];
-  const sorted = [...RECORDS].sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
+  const sorted = [...rows].filter(r => matchesTab(tab, r)).sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
 
   return (
     <>
@@ -141,6 +142,7 @@ export function PlantEquipmentPage() {
         </>
       }
       tabs={["All", "Active", "Grounded", "Service Due", "Pre-op Fail"]}
+      onTabChange={setTab}
     >
       <div className="grid grid-cols-3 gap-3">
         {sorted.map(r => <AssetCard key={r.assetId} r={r} />)}

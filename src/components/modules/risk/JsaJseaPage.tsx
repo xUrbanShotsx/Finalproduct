@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { JsaJseaDrawer } from "./JsaJseaDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const TASK_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Non-routine":  { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -32,6 +32,7 @@ const RECORDS: Array<{
 export function JsaJseaPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -54,6 +55,7 @@ export function JsaJseaPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -69,7 +71,7 @@ export function JsaJseaPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = TASK_TYPE_COLORS[r.taskType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

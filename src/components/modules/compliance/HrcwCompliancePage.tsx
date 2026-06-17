@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HrcwComplianceDrawer } from "./HrcwComplianceDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const EVIDENCE_COLORS: Record<string, { bg: string; color: string }> = {
   "SWMS in place":           { bg: "var(--b-badge-green-bg)",  color: "var(--b-badge-green-text)" },
@@ -37,6 +37,7 @@ const RECORDS: Array<{
 export function HrcwCompliancePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const nonCompliant = rows.filter(r => !r.compliant).length;
   return (
     <>
@@ -60,6 +61,7 @@ export function HrcwCompliancePage() {
         </>
       }
       tabs={["All", "Non-Compliant", "Active", "Pending", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -74,7 +76,7 @@ export function HrcwCompliancePage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const swmsStyle = EVIDENCE_COLORS[r.swmsStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const permitStyle = EVIDENCE_COLORS[r.permitStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const notifStyle = EVIDENCE_COLORS[r.notificationStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };

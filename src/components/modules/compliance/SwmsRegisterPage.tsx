@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SwmsRegisterDrawer } from "./SwmsRegisterDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const HRCW_COLORS: Record<string, { bg: string; color: string }> = {
   "Cat 1 — Heights":    { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -41,6 +41,7 @@ const RECORDS: Array<{
 export function SwmsRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const unsignedGap = rows.filter(r => r.signedCount < r.requiredCount && r.status === "Active").length;
   return (
     <>
@@ -64,6 +65,7 @@ export function SwmsRegisterPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Sign-off Gap", "Overdue Review"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -79,7 +81,7 @@ export function SwmsRegisterPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const catStyle = HRCW_COLORS[r.hrcwCategory] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const signedComplete = r.signedCount >= r.requiredCount;
             return (

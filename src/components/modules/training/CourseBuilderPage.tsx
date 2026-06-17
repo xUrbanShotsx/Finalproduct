@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Clock, Users, BookOpen, Monitor, LayoutList, Blend } from "lucide-react";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 import { CourseBuilderDrawer } from "./CourseBuilderDrawer";
 
 type Delivery = "Online" | "Face-to-Face" | "Blended";
@@ -37,6 +37,7 @@ const DELIVERY_ICON: Record<Delivery, React.FC<{ className?: string }>> = {
 export function CourseBuilderPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(COURSES);
+  const [tab, setTab] = useState("");
 
   return (
     <>
@@ -60,9 +61,10 @@ export function CourseBuilderPage() {
           </>
         }
         tabs={["All", "Active", "Draft", "Archived"]}
+      onTabChange={setTab}
       >
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {rows.map(c => {
+          {rows.filter(r => matchesTab(tab, r)).map(c => {
             const catStyle = CAT_COLOR[c.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-muted)" };
             const DeliveryIcon = DELIVERY_ICON[c.delivery];
             return (

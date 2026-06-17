@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { OperationalReadinessDrawer } from "./OperationalReadinessDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 type ReadinessResult = "Pass" | "Fail" | "Hold" | "Conditional" | "Pending";
 type CheckType = "Pre-Production" | "Pre-Task" | "Shift Start" | "Handover" | "Post-Maintenance";
@@ -41,6 +41,7 @@ const RECORDS: Array<{
 export function OperationalReadinessPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -63,6 +64,7 @@ export function OperationalReadinessPage() {
         </>
       }
       tabs={["Today", "Pre-Production", "Pre-Task", "Shift Start", "Holds"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -77,7 +79,7 @@ export function OperationalReadinessPage() {
           <Th>Notes</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const resultStyle = RESULT_COLORS[r.result];
             const checkStyle  = CHECK_COLORS[r.checkType];
             return (

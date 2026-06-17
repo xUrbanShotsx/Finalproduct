@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, CalendarDays, User } from "lucide-react";
 import { WorkPlanningDrawer } from "./WorkPlanningDrawer";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 
 type WorkStatus = "Active" | "Pending" | "Closed" | "Overdue";
 type WorkType = "Structural" | "Electrical" | "Civil" | "Mechanical" | "Finish" | "Demolition" | "Inspection";
@@ -86,6 +86,7 @@ function WorkCard({ r }: { r: typeof RECORDS[number] }) {
 export function WorkPlanningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -108,10 +109,11 @@ export function WorkPlanningPage() {
         </>
       }
       tabs={["All","Active","Starting Today","Pending","Overdue","Closed"]}
+      onTabChange={setTab}
     >
       <div className="space-y-4">
         {LANE_ORDER.map(status => {
-          const items = rows.filter(r => r.status === status);
+          const items = rows.filter(r => r.status === status).filter(r => matchesTab(tab, r));
           if (items.length === 0) return null;
           const st = STATUS_CONFIG[status];
           return (

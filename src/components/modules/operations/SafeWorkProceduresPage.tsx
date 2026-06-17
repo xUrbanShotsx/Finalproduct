@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { SafeWorkProceduresDrawer } from "./SafeWorkProceduresDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   "Working at Heights":  { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -34,6 +34,7 @@ const RECORDS = [
 export function SafeWorkProceduresPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -56,6 +57,7 @@ export function SafeWorkProceduresPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Under Review", "Overdue"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -69,7 +71,7 @@ export function SafeWorkProceduresPage() {
           <Th>Next Review</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const catStyle = CATEGORY_COLORS[r.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

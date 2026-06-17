@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ReturnToWorkDrawer } from "./ReturnToWorkDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 type RTWStatus   = "On Track" | "Behind Schedule" | "Completed" | "Suspended";
 type Capacity    = "Full Duties" | "50% Capacity" | "25% Capacity" | "Office Duties Only";
@@ -51,6 +51,7 @@ const RECORDS: Array<{
 export function ReturnToWorkPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -73,6 +74,7 @@ export function ReturnToWorkPage() {
         </>
       }
       tabs={["All", "Active", "On Track", "Behind Schedule", "Completed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -87,7 +89,7 @@ export function ReturnToWorkPage() {
           <Th>Coordinator</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const statusStyle   = STATUS_COLORS[r.status];
             const capacityStyle = CAPACITY_COLORS[r.capacity];
             return (

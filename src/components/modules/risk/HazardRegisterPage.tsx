@@ -100,6 +100,7 @@ function RiskBand({ level, items }: { level: RiskLevel; items: typeof RECORDS })
 export function HazardRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -122,13 +123,16 @@ export function HazardRegisterPage() {
         </>
       }
       tabs={["All", "Critical", "High", "Overdue Review", "By Type"]}
+      onTabChange={setTab}
     >
       <div className="space-y-2">
-        {(["Critical","High","Medium","Low"] as RiskLevel[]).map(level => (
+        {(["Critical","High","Medium","Low"] as RiskLevel[])
+          .filter(level => !tab || tab === "All" || tab === "By Type" || tab === "Overdue Review" || level.toLowerCase() === tab.toLowerCase())
+          .map(level => (
           <RiskBand
             key={level}
             level={level}
-            items={rows.filter(r => r.residualRisk === level)}
+            items={rows.filter(r => r.residualRisk === level).filter(r => tab === "Overdue Review" ? r.overdue : true)}
           />
         ))}
       </div>

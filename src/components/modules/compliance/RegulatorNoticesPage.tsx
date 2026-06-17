@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { RegulatorNoticesDrawer } from "./RegulatorNoticesDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const NOTICE_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Improvement Notice": { bg: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" },
@@ -29,6 +29,7 @@ const RECORDS: Array<{
 export function RegulatorNoticesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const open = rows.filter(r => r.status === "Open" || r.status === "Active" || r.status === "Overdue").length;
   return (
     <>
@@ -52,6 +53,7 @@ export function RegulatorNoticesPage() {
         </>
       }
       tabs={["All", "Open", "Prohibition", "Overdue", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -67,7 +69,7 @@ export function RegulatorNoticesPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = NOTICE_TYPE_COLORS[r.noticeType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

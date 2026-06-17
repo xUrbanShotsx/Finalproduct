@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { PpeRegisterDrawer } from "./PpeRegisterDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const PPE_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Head":        { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -39,6 +39,7 @@ const RECORDS: Array<{
 export function PpeRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const expired = rows.filter(r => r.expired).length;
   return (
     <>
@@ -62,6 +63,7 @@ export function PpeRegisterPage() {
         </>
       }
       tabs={["All", "Expired", "Expiring Soon", "Fall Arrest", "Respiratory"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -76,7 +78,7 @@ export function PpeRegisterPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = PPE_TYPE_COLORS[r.ppeType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Award, CalendarDays, Building2, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesTab } from "../shared";
 import { CertificatesRecordsDrawer } from "./CertificatesRecordsDrawer";
 
 type CertStatus = "Expired" | "Expiring" | "Current" | "Future";
@@ -45,6 +45,7 @@ function StatusIcon({ status }: { status: CertStatus }) {
 export function CertificatesRecordsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [certRows, setCertRows] = useState(ALL_CERTS);
+  const [tab, setTab] = useState("");
 
   const expired  = certRows.filter(c => c.status === "Expired").length;
   const expiring = certRows.filter(c => c.status === "Expiring").length;
@@ -72,10 +73,11 @@ export function CertificatesRecordsPage() {
           </>
         }
         tabs={["All", "Active", "Expiring", "Expired"]}
+        onTabChange={setTab}
       >
         <div className="p-6 space-y-5">
           {BANDS.map(band => {
-            const certs = certRows.filter(c => c.status === band.status);
+            const certs = certRows.filter(c => c.status === band.status).filter(c => matchesTab(tab, c as unknown as Record<string, unknown>));
             if (certs.length === 0) return null;
             return (
               <div key={band.status} className="border overflow-hidden" style={{ borderColor: band.borderColor }}>

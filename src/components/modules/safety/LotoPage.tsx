@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { LotoDrawer } from "./LotoDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const ENERGY_COLORS: Record<string, { bg: string; color: string }> = {
   "Electrical": { bg: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" },
@@ -31,6 +31,7 @@ const RECORDS: Array<{
 export function LotoPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -53,6 +54,7 @@ export function LotoPage() {
         </>
       }
       tabs={["All", "Active", "Overdue", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -66,7 +68,7 @@ export function LotoPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const e = ENERGY_COLORS[r.energy] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

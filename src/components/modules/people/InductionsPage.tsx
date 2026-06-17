@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { InductionDrawer } from "./InductionDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const TRADE_COLORS: Record<string, { bg: string; color: string }> = {
   "Carpenter":        { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -31,6 +31,7 @@ const RECORDS = [
 export function InductionsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -53,6 +54,7 @@ export function InductionsPage() {
         </>
       }
       tabs={["All", "Active", "Expiring Soon", "Expired", "Awaiting Clearance"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -66,7 +68,7 @@ export function InductionsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const tradeStyle = TRADE_COLORS[r.trade] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

@@ -80,15 +80,20 @@ function ObligationCard({ r }: { r: typeof RECORDS[number] }) {
 export function StatutoryObligationsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const overdue = rows.filter(r => r.overdue).length;
   const pending = rows.filter(r => r.status === "Pending").length;
 
-  const groups: Group[] = [
+  const allGroups: Group[] = [
     { key: "overdue",  label: "Overdue",          accent: "#f06060",                    bg: "rgba(240,96,96,0.08)",     icon: AlertTriangle, items: rows.filter(r => r.overdue)                            },
     { key: "pending",  label: "Pending",           accent: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)", icon: Clock,         items: rows.filter(r => r.status === "Pending" && !r.overdue) },
     { key: "active",   label: "Active / Ongoing",  accent: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)",   icon: Clock,         items: rows.filter(r => r.status === "Active")                },
     { key: "closed",   label: "Submitted / Closed",accent: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)",  icon: CheckCircle2,  items: rows.filter(r => r.status === "Closed" && !r.overdue)  },
-  ].filter(g => g.items.length > 0) as Group[];
+  ] as Group[];
+
+  const groups: Group[] = allGroups
+    .filter(g => !tab || tab === "All" || g.key === tab.toLowerCase())
+    .filter(g => g.items.length > 0);
 
   return (
     <>
@@ -112,6 +117,7 @@ export function StatutoryObligationsPage() {
         </>
       }
       tabs={["All", "Overdue", "Pending", "Closed"]}
+      onTabChange={setTab}
     >
       <div className="space-y-5">
         {groups.map(g => {

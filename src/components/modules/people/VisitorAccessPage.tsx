@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { VisitorDrawer } from "./VisitorDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 type VisitPurpose  = "Contractor" | "Client" | "Delivery" | "Inspection" | "Maintenance" | "Interview";
 type AccessStatus  = "On Site" | "Signed Out" | "Overstay" | "Denied";
@@ -41,6 +41,7 @@ const RECORDS: Array<{
 export function VisitorAccessPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const onSite = rows.filter(r => r.status === "On Site").length;
 
   return (
@@ -65,6 +66,7 @@ export function VisitorAccessPage() {
         </>
       }
       tabs={["Today", "On Site", "Signed Out", "Overstay", "Denied"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -79,7 +81,7 @@ export function VisitorAccessPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const purposeStyle = PURPOSE_COLORS[r.purpose];
             const statusStyle  = STATUS_COLORS[r.status];
             return (

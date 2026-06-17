@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { PermitsToWorkDrawer } from "./PermitsToWorkDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const PERMIT_TYPES: Record<string, { bg: string; color: string }> = {
   "Hot Work":          { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -39,6 +39,7 @@ const PTW_TYPE_MAP: Record<string, keyof typeof PERMIT_TYPES> = {
 export function PermitsToWorkPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -61,6 +62,7 @@ export function PermitsToWorkPage() {
         </>
       }
       tabs={["All", "Active", "Expiring Soon", "Expired", "Pending"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -75,7 +77,7 @@ export function PermitsToWorkPage() {
           <Th>Issued By</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => (
+          {rows.filter(r => matchesTab(tab, r)).map((r) => (
             <Tr key={r.ref}>
               <Td><span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>{r.ref}</span></Td>
               <Td><Badge label={r.type} bg={PERMIT_TYPES[r.type].bg} color={PERMIT_TYPES[r.type].color} /></Td>

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ActionDrawer } from "./ActionDrawer";
-import { PageShell, Stat, SeverityBadge, Badge } from "../shared";
+import { PageShell, Stat, SeverityBadge, Badge, matchesTab } from "../shared";
 
 const SOURCE_COLORS: Record<string, { bg: string; color: string }> = {
   "Incident":    { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -61,6 +61,7 @@ function ActionCard({ r, isOverdue }: { r: typeof RECORDS[number]; isOverdue: bo
 export function ActionsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -83,10 +84,11 @@ export function ActionsPage() {
         </>
       }
       tabs={["All", "Open", "Overdue", "Closed", "My Actions"]}
+      onTabChange={setTab}
     >
       <div className="grid grid-cols-3 gap-4 min-h-[300px]">
         {COLS.map(col => {
-          const items = rows.filter(r => r.status === col.key);
+          const items = rows.filter(r => r.status === col.key).filter(r => matchesTab(tab, r));
           return (
             <div key={col.key} className="flex flex-col">
               <div className="flex items-center justify-between px-3 py-2 mb-2 border-b" style={{ borderColor: "var(--b-border)" }}>

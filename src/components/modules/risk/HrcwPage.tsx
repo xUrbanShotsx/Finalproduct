@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HrcwDrawer } from "./HrcwDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
   "HRCW Cat 1":  { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -40,6 +40,7 @@ const RECORDS: Array<{
 export function HrcwPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -62,6 +63,7 @@ export function HrcwPage() {
         </>
       }
       tabs={["All", "Active", "Draft", "Overdue Review", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -76,7 +78,7 @@ export function HrcwPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const catStyle = CATEGORY_COLORS[r.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

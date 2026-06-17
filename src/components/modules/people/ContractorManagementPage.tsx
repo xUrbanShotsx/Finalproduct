@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ContractorDrawer } from "./ContractorDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Electrical":    { bg: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" },
@@ -31,6 +31,7 @@ const RECORDS = [
 export function ContractorManagementPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -53,6 +54,7 @@ export function ContractorManagementPage() {
         </>
       }
       tabs={["All", "Active", "Expired Documents", "Pending Review"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -66,7 +68,7 @@ export function ContractorManagementPage() {
           <Th>Contact</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = TYPE_COLORS[r.type] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

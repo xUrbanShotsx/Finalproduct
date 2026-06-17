@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ChemicalProcessRiskDrawer } from "./ChemicalProcessRiskDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const CHEM_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Flammable":      { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -35,6 +35,7 @@ const RECORDS: Array<{
 export function ChemicalProcessRiskPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   const aboveWes = rows.filter(r => r.aboveLimit).length;
   return (
     <>
@@ -58,6 +59,7 @@ export function ChemicalProcessRiskPage() {
         </>
       }
       tabs={["All", "Above WES", "Critical", "Pending", "Closed"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -73,7 +75,7 @@ export function ChemicalProcessRiskPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => {
+          {rows.filter(r => matchesTab(tab, r)).map((r) => {
             const typeStyle = CHEM_TYPE_COLORS[r.chemType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { WhiteCardDrawer } from "./WhiteCardDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
 
 const RECORDS = [
   { ref: "WC-2024-038", name: "Marcus Chen",   cardNo: "NSW-2019-04882", rto: "TAFE NSW",        issued: "14 Mar 2019", verified: "03 Jun 2024", verifiedBy: "S. Walsh",  status: "Active"  as const },
@@ -20,6 +20,7 @@ const RECORDS = [
 export function WhiteCardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
+  const [tab, setTab] = useState("");
   return (
     <>
     <PageShell
@@ -42,6 +43,7 @@ export function WhiteCardPage() {
         </>
       }
       tabs={["All", "Verified", "Pending Verification", "Expired"]}
+      onTabChange={setTab}
     >
       <table className="w-full">
         <TableHead>
@@ -55,7 +57,7 @@ export function WhiteCardPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.map((r) => (
+          {rows.filter(r => matchesTab(tab, r)).map((r) => (
             <Tr key={r.ref}>
               <Td><span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>{r.ref}</span></Td>
               <Td><span style={{ color: "var(--b-text)" }}>{r.name}</span></Td>
