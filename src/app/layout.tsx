@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +12,11 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Briesa — WHS Management Platform",
   description: "AI-powered Work Health & Safety software for Australian industries",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

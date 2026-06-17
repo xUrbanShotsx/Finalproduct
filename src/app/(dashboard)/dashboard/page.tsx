@@ -34,7 +34,7 @@ function StatCard({
 }) {
   return (
     <div
-      className="flex-1 min-w-0 p-5 border"
+      className="flex-1 min-w-[150px] p-5 border"
       style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
     >
       <div className="flex items-start justify-between mb-3">
@@ -299,7 +299,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6">
         {stats.map((s) => (
           <StatCard key={s.label} label={s.label} value={s.value} sub={s.sub} icon={STAT_ICON[s.icon]} iconStyle={STAT_TONE[s.tone]} />
         ))}
@@ -374,7 +374,7 @@ export default async function DashboardPage() {
             3 NEW
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {insights.map((insight) => (
             <div
               key={insight.type}
@@ -412,7 +412,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Bottom row */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Regulation feed */}
         <div
           className="border p-5"

@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgContext } from "@/lib/getOrgContext";
-import { AppSidebar } from "@/components/layout/AppSidebar";
-import { TopBar } from "@/components/layout/TopBar";
+import { DashboardChrome } from "@/components/layout/DashboardChrome";
 
 const SUPABASE_CONFIGURED =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -40,12 +39,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden" style={{ background: "var(--b-bg-canvas)" }}>
-      <TopBar industry={industry} orgName={orgName} userName={userName} />
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        <AppSidebar industry={industry} orgName={orgName} userName={userName} isDemo={isProspectDemo} />
-        <main className="flex-1 overflow-auto" style={{ background: "var(--b-bg-canvas)" }}>{children}</main>
-      </div>
-    </div>
+    <DashboardChrome industry={industry} orgName={orgName} userName={userName} isDemo={isProspectDemo}>
+      {children}
+    </DashboardChrome>
   );
 }

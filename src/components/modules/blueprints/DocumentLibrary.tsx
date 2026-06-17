@@ -83,7 +83,7 @@ function LibraryView({ bp }: { bp: Blueprint }) {
         <Link href={`/blueprints/gap-analysis?id=${bp.id}`} className="b-btn-ghost flex items-center gap-2 px-3 h-[34px] text-[12.5px]">Run Gap Analysis</Link>
       </div>
 
-      <div className="grid gap-5" style={{ gridTemplateColumns: "300px 1fr" }}>
+      <div className="grid gap-5 r-grid-2" style={{ gridTemplateColumns: "300px 1fr" }}>
         {/* Sidebar list */}
         <div className="border" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
           <div className="p-2.5 border-b" style={{ borderColor: "var(--b-border)" }}>

@@ -125,7 +125,7 @@ function GapView({ bp, save }: { bp: Blueprint; save: (g: GapReport) => void }) 
       {report && (
         <div className="space-y-5">
           {/* Score */}
-          <div className="grid gap-5" style={{ gridTemplateColumns: "260px 1fr" }}>
+          <div className="grid gap-5 r-grid-2" style={{ gridTemplateColumns: "260px 1fr" }}>
             <div className="border p-5 flex flex-col items-center justify-center text-center" style={{ borderColor: "var(--b-border)", background: "var(--b-bg-secondary)" }}>
               <ScoreRing score={report.score} />
               <div className="text-[11px] uppercase tracking-widest mt-3" style={{ color: "var(--b-text-muted)" }}>Readiness Score</div>

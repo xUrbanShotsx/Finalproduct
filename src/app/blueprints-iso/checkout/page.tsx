@@ -91,7 +91,7 @@ function Checkout() {
                   <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 700, background: done ? YELLOW : active ? "#1a1a1a" : "transparent", color: done ? "#0a0a0a" : active ? "#fff" : "#555", border: `1px solid ${done ? YELLOW : active ? "#333" : "#222"}` }}>
                     {done ? <Check size={13} /> : i + 1}
                   </div>
-                  <span style={{ fontSize: "12.5px", fontWeight: 500, color: active ? "#fff" : done ? "#999" : "#555" }}>{s}</span>
+                  <span className="r-hide-mobile" style={{ fontSize: "12.5px", fontWeight: 500, color: active ? "#fff" : done ? "#999" : "#555" }}>{s}</span>
                 </div>
                 {i < STEPS.length - 1 && <div style={{ width: "32px", height: "1px", margin: "0 14px", background: done ? YELLOW : "#222" }} />}
               </div>
@@ -273,7 +273,7 @@ function NavRow({ onBack, onNext, nextDisabled, nextLabel }: { onBack?: () => vo
 }
 
 function Row({ children }: { children: React.ReactNode }) {
-  return <div style={{ display: "grid", gridTemplateColumns: `repeat(${Array.isArray(children) ? children.length : 1}, 1fr)`, gap: "14px" }}>{children}</div>;
+  return <div className="r-grid-row" style={{ display: "grid", gridTemplateColumns: `repeat(${Array.isArray(children) ? children.length : 1}, 1fr)`, gap: "14px" }}>{children}</div>;
 }
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

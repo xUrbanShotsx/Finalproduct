@@ -45,7 +45,7 @@ export function BlueprintStore() {
       </p>
 
       {/* Standard cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {ALL_STANDARDS.map((k) => {
           const s = STANDARDS[k];
           const sel = selected.has(k);
@@ -85,7 +85,7 @@ export function BlueprintStore() {
 
       {/* Pricing bar */}
       <div className="border" style={{ borderColor: "var(--b-border)", background: "var(--b-bg-secondary)" }}>
-        <div className="grid grid-cols-3 divide-x" style={{ borderColor: "var(--b-border)" }}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 divide-x" style={{ borderColor: "var(--b-border)" }}>
           {[1, 2, 3].map((n) => {
             const active = count === n;
             return (
@@ -124,7 +124,7 @@ export function BlueprintStore() {
       </div>
 
       {/* Trust row */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
         {[
           { icon: ShieldCheck, t: "Audit-ready", d: "Mapped to the exact ISO clauses certifiers check." },
           { icon: Sparkles, t: "AI-generated for you", d: "Tailored to your org, sites, scope and real WHS data." },

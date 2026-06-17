@@ -309,7 +309,7 @@ export default function SignupPage() {
                 {/* Plan cards */}
                 <div>
                   <p className="text-[11.5px] font-semibold tracking-wide uppercase mb-3" style={{ color: "var(--b-text-muted)" }}>Choose a plan</p>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {PLANS.map((p) => {
                       const sel        = plan === p.key;
                       const price      = billing === "yearly" ? yearlyPrice(p.monthlyPrice) : p.monthlyPrice;
@@ -379,7 +379,7 @@ export default function SignupPage() {
                         <CreditCard className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--b-text-muted)" }} />
                       </div>
                     </Field>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <Field label="Expiry">
                         <input type="text" inputMode="numeric" placeholder="MM / YY" value={expiry}
                           onChange={(e) => setExpiry(formatExpiry(e.target.value))}

@@ -398,7 +398,7 @@ function AIToolbox() {
   const feature = AI_FEATURES[active];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "6px", alignItems: "start" }}>
+    <div className="r-grid-2" style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: "6px", alignItems: "start" }}>
       {/* Left — feature list */}
       <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
         {AI_FEATURES.map((f, i) => (
@@ -480,7 +480,7 @@ export default function LandingPage() {
           </div>
 
           {/* Nav */}
-          <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+          <nav className="r-hide-mobile" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
             {/* Products dropdown */}
             <div
               style={{ position: "relative" }}
@@ -606,7 +606,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
           <SectionLabel n="01" label="Platform" />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
+          <div className="r-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {MODULES.map(({ icon: Icon, name, color, tags, desc, soon }) => (
               <div
                 key={name}
@@ -648,7 +648,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
           <SectionLabel n="02" label="Industries" />
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
+          <div className="r-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {INDUSTRIES.map(({ name, tag, color, desc, items }) => (
               <div key={name} style={{ background: "#0f0f0f", border: `1px solid ${color}55`, display: "flex", flexDirection: "column" }}>
                 {/* Colour bar */}
@@ -705,7 +705,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
           <SectionLabel n="04" label="Built for the field" />
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
+          <div className="r-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "80px", alignItems: "start" }}>
             {/* Left */}
             <div>
               <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 20px", lineHeight: 1.1 }}>

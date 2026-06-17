@@ -121,7 +121,7 @@ export function Stat({
 
   return (
     <div
-      className="flex-1 min-w-0 border p-4"
+      className="flex-1 min-w-[140px] border p-4"
       style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
     >
       <div
@@ -160,7 +160,7 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-8 pt-7 pb-5 border-b flex-shrink-0" style={{ borderColor: "var(--b-border)" }}>
+      <div className="px-4 sm:px-8 pt-5 sm:pt-7 pb-5 border-b flex-shrink-0" style={{ borderColor: "var(--b-border)" }}>
         <Link
           href={back.href}
           className="b-icon-btn inline-flex items-center gap-1.5 text-[12px] mb-4"
@@ -186,12 +186,12 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
           )}
         </div>
 
-        <div className="flex gap-3">{stats}</div>
+        <div className="flex flex-wrap gap-3">{stats}</div>
       </div>
 
       {/* Toolbar */}
       <div
-        className="px-8 border-b flex items-center gap-0 flex-shrink-0"
+        className="px-4 sm:px-8 border-b flex items-center gap-0 flex-shrink-0 overflow-x-auto"
         style={{ borderColor: "var(--b-border)" }}
       >
         {tabs.map((t, i) => (
@@ -206,7 +206,7 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
           </span>
         ))}
 
-        <div className="ml-auto flex items-center gap-2 py-2">
+        <div className="ml-auto hidden md:flex items-center gap-2 py-2">
           <div
             className="flex items-center gap-2 px-3 h-[28px] border text-[12px]"
             style={{

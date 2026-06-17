@@ -206,7 +206,7 @@ function BuilderForBlueprint({
           </div>
 
           {/* live stats */}
-          <div className="grid grid-cols-3 gap-3 mb-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <Mini icon={FileText} label="Generated" value={`${done}/${total}`} />
             <Mini icon={Zap} label="Tokens" value={tokens > 0 ? `${(tokens / 1000).toFixed(0)}k` : "—"} />
             <Mini icon={Cpu} label="Prompt cache" value="Active" />
@@ -281,11 +281,11 @@ function BuilderForBlueprint({
       )}
 
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Organisation name"><Input v={org.orgName} on={(v) => set("orgName", v)} /></Field>
           <Field label="ABN"><Input v={org.abn} on={(v) => set("abn", v)} /></Field>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Field label="Industry"><Input v={org.industry} on={(v) => set("industry", v)} /></Field>
           <Field label="State">
             <select value={org.state} onChange={(e) => set("state", e.target.value)} className="w-full h-10 px-3 text-[13px] border outline-none" style={inputStyle}>
@@ -300,7 +300,7 @@ function BuilderForBlueprint({
         <Field label="Scope description">
           <textarea value={org.scopeDescription} onChange={(e) => set("scopeDescription", e.target.value)} rows={3} className="w-full px-3 py-2.5 text-[13px] border outline-none resize-none" style={inputStyle} />
         </Field>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Existing certifications (comma separated)">
             <Input v={org.existingCertifications.join(", ")} on={(v) => set("existingCertifications", v.split(",").map((x) => x.trim()).filter(Boolean))} placeholder="e.g. ISO 9001" />
           </Field>

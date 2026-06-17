@@ -224,7 +224,7 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
 
       {/* Drawer */}
       <div
-        className="fixed top-0 right-0 z-50 h-full flex flex-col transition-transform duration-300"
+        className="b-drawer-panel fixed top-0 right-0 z-50 h-full flex flex-col transition-transform duration-300"
         style={{
           width: "33.333%",
           background: "var(--b-bg-secondary)",

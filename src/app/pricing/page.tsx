@@ -62,7 +62,7 @@ const PLANS = [
 
 export default function PricingPage() {
   return (
-    <div style={{
+    <div className="r-pricing-shell" style={{
       height: "100vh",
       overflow: "hidden",
       background: "#0a0a0a",
@@ -86,7 +86,7 @@ export default function PricingPage() {
             <span style={{ fontFamily: "monospace", fontSize: "9px", fontWeight: 700, color: "#333", marginLeft: "2px" }}>V1.0</span>
           </Link>
 
-          <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+          <nav className="r-hide-mobile" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
             {[
               ["/#features",   "Platform"],
               ["/#industries", "Industries"],
@@ -153,7 +153,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plan cards */}
-        <div style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", overflow: "hidden" }}>
+        <div className="r-grid-3" style={{ flex: 1, display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px", overflow: "hidden" }}>
           {PLANS.map(plan => (
             <div
               key={plan.key}

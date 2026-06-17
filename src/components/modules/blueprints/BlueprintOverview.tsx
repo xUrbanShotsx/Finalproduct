@@ -67,7 +67,7 @@ export function BlueprintOverview() {
       </Link>
 
       {/* Submodule grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {SUBMODULES.map(({ id, icon: Icon, name, desc }) => (
           <Link key={id} href={`/blueprints/${id}`} className="border p-4 transition-colors hover:border-[var(--b-border-hover)]" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
             <Icon className="w-4 h-4 mb-2.5" style={{ color: "var(--b-accent-text)" }} />

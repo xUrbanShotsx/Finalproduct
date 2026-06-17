@@ -114,7 +114,7 @@ export default function BlueprintsIsoPage() {
           <p style={{ fontSize: "16px", color: "#666", maxWidth: "640px", margin: "-20px 0 40px", lineHeight: 1.6 }}>
             Three internationally recognised management-system standards. Buy one, or bundle them for a fully integrated system.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
+          <div className="r-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {ALL_STANDARDS.map((k) => {
               const s = STANDARDS[k];
               return (
@@ -156,7 +156,7 @@ export default function BlueprintsIsoPage() {
       <section style={{ borderBottom: "1px solid #1a1a1a" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "88px 24px" }}>
           <SectionLabel n="02" label="How it works" />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+          <div className="r-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
             {[
               ["01", "Choose your standards", "Pick one, two or three ISO standards from the Blueprint Store."],
               ["02", "Tell us about your org", "A short intake — or for ISO 45001, pull straight from your Briesa data."],
@@ -180,7 +180,7 @@ export default function BlueprintsIsoPage() {
           <p style={{ fontSize: "16px", color: "#666", maxWidth: "640px", margin: "-20px 0 40px", lineHeight: 1.6 }}>
             One-off purchase. The more standards you bundle, the more you save. No subscription to own your documents.
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
+          <div className="r-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {[1, 2, 3].map((n) => {
               const popular = n === 2;
               return (

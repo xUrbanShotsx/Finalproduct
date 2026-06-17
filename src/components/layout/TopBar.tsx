@@ -30,7 +30,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
 
   return (
     <header
-      className="flex items-center h-12 px-4 border-b flex-shrink-0 gap-2"
+      className="flex items-center h-12 px-4 border-b flex-shrink-0 gap-2 overflow-hidden"
       style={{ background: "var(--b-bg)", borderColor: "var(--b-border)" }}
     >
       {/* Breadcrumb */}
@@ -81,7 +81,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
 
       {/* + New */}
       <button
-        className="flex items-center gap-1.5 ml-2 px-3 h-[30px] border text-[11.4px] font-[500] transition-colors flex-shrink-0"
+        className="hidden md:flex items-center gap-1.5 ml-2 px-3 h-[30px] border text-[11.4px] font-[500] transition-colors flex-shrink-0"
         style={{
           background: "var(--b-accent-bg)",
           borderColor: "var(--b-accent-border)",
@@ -103,7 +103,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
       {/* Right actions */}
       <div className="flex items-center gap-1 ml-auto">
         <button
-          className="px-3 h-[30px] text-[11.4px] transition-colors"
+          className="hidden md:block px-3 h-[30px] text-[11.4px] transition-colors"
           style={{ color: "var(--b-text-tertiary)" }}
         >
           Upgrade
@@ -111,7 +111,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
 
         {/* Search */}
         <div
-          className="flex items-center gap-2 px-3 h-[30px] border text-[11.4px] cursor-pointer w-44 transition-colors"
+          className="hidden md:flex items-center gap-2 px-3 h-[30px] border text-[11.4px] cursor-pointer w-44 transition-colors"
           style={{
             background: "var(--b-bg-secondary)",
             borderColor: "var(--b-border-strong)",
@@ -135,7 +135,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
         {[SlidersHorizontal, HelpCircle, Bell].map((Icon, i) => (
           <button
             key={i}
-            className="w-8 h-8 flex items-center justify-center transition-colors"
+            className="hidden md:flex w-8 h-8 items-center justify-center transition-colors"
             style={{ color: "var(--b-text-muted)" }}
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--b-text-tertiary)")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--b-text-muted)")}
