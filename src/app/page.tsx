@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   Shield, Users, Settings, AlertTriangle, CheckSquare, BarChart3,
-  Building2, ArrowRight, CheckCircle2, Zap, MapPin, FileText, Scale,
+  Building2, ArrowRight, CheckCircle2, Zap, MapPin, FileText, Scale, ChevronDown,
 } from "lucide-react";
 
 /* ─── Logo ───────────────────────────────────────────────────────── */
@@ -452,7 +452,15 @@ function AIToolbox() {
 }
 
 /* ─── Page ───────────────────────────────────────────────────────── */
+const PRODUCTS: [string, string, string][] = [
+  ["/signup", "Construction SMS", "Safety management for construction sites"],
+  ["/signup", "Industrial SMS",   "Safety management for industrial operations"],
+  ["/signup", "Facilities SMS",   "Safety management for facilities teams"],
+  ["/signup", "Blueprints (ISO)", "AI-generated ISO 9001 / 14001 / 45001 packs"],
+];
+
 export default function LandingPage() {
+  const [productsOpen, setProductsOpen] = useState(false);
   return (
     <div style={{ background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Space Grotesk', sans-serif" }}>
 
@@ -473,8 +481,37 @@ export default function LandingPage() {
 
           {/* Nav */}
           <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+            {/* Products dropdown */}
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setProductsOpen(true)}
+              onMouseLeave={() => setProductsOpen(false)}
+            >
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "13.5px", fontWeight: 500, color: productsOpen ? "#ffffff" : "#555", cursor: "pointer", transition: "color 0.15s" }}>
+                Products
+                <ChevronDown size={13} style={{ transform: productsOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }} />
+              </span>
+              {productsOpen && (
+                <div style={{ position: "absolute", top: "100%", left: "-12px", paddingTop: "14px", zIndex: 50 }}>
+                  <div style={{ minWidth: "268px", background: "#0f0f0f", border: "1px solid #222", padding: "6px", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
+                    {PRODUCTS.map(([href, label, desc]) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        style={{ display: "block", padding: "10px 12px", textDecoration: "none" }}
+                        onMouseOver={e => ((e.currentTarget as HTMLElement).style.background = "#1a1a1a")}
+                        onMouseOut={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+                      >
+                        <div style={{ fontSize: "13px", fontWeight: 600, color: "#e0e0e0" }}>{label}</div>
+                        <div style={{ fontSize: "11.5px", color: "#555", marginTop: "2px" }}>{desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {[
-              ["#features",    "Platform"],
               ["#industries",  "Industries"],
               ["#resources",   "Resources"],
               ["/pricing",     "Pricing"],
