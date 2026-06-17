@@ -7,9 +7,9 @@ import { Label, Section, Input, Select, Textarea, Row, Col, OptionGroup } from "
 const COURSES   = ["Working at Heights — Awareness", "Asbestos Awareness", "Traffic Management — Level 1", "Manual Handling & Ergonomics", "Confined Space Entry & Rescue", "First Aid (HLTAID011)", "Emergency Warden", "Psychosocial Risk Awareness"];
 const RESULTS   = ["Pass", "Fail", "In Progress", "Withdrawn"] as const;
 
-interface Props { open: boolean; onClose: () => void }
+interface Props { open: boolean; onClose: () => void; onAdd?: (f: Record<string, string>) => void }
 
-export function TrainingRegisterDrawer({ open, onClose }: Props) {
+export function TrainingRegisterDrawer({ open, onClose, onAdd }: Props) {
   const [step, setStep] = useState(1);
   const [workerName, setWorkerName] = useState("");
   const [role,       setRole]       = useState("");
@@ -33,7 +33,7 @@ export function TrainingRegisterDrawer({ open, onClose }: Props) {
       onStepChange={setStep}
       onBack={() => step === 1 ? close() : setStep(s => s - 1)}
       onNext={() => setStep(s => s + 1)}
-      onSubmit={() => { alert("Training record saved (demo)"); close(); }}
+      onSubmit={() => { onAdd?.({ worker: workerName, role, course, date: dateComp, result, provider, certNo, expiry }); close(); }}
       submitLabel="Save Record"
     >
       {step === 1 && (

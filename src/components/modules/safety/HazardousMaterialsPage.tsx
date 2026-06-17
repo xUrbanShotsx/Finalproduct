@@ -36,7 +36,8 @@ const RECORDS: Array<{
 
 export function HazardousMaterialsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const expiredSds = RECORDS.filter(r => r.sdsExpired).length;
+  const [rows, setRows] = useState(RECORDS);
+  const expiredSds = rows.filter(r => r.sdsExpired).length;
   return (
     <>
     <PageShell
@@ -74,7 +75,7 @@ export function HazardousMaterialsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const ghsStyle = GHS_COLORS[r.ghsClass] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
@@ -102,7 +103,19 @@ export function HazardousMaterialsPage() {
         </tbody>
       </table>
     </PageShell>
-    <HazardousMaterialsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <HazardousMaterialsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `HM-${25 + prev.length}`,
+      productName: f.productName || "New material",
+      supplier: f.supplier || "—",
+      ghsClass: f.ghsClass || "Non-hazardous",
+      location: f.location || "Plant Room",
+      maxQty: f.quantity ? `${f.quantity} ${f.unit}`.trim() : "—",
+      signalWord: f.signalWord || "—",
+      sdsExpiry: f.sdsExpiry || "—",
+      spillKit: "General",
+      status: "Active" as const,
+      sdsExpired: false,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

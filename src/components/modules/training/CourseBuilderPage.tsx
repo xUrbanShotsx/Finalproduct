@@ -36,6 +36,7 @@ const DELIVERY_ICON: Record<Delivery, React.FC<{ className?: string }>> = {
 
 export function CourseBuilderPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(COURSES);
 
   return (
     <>
@@ -61,7 +62,7 @@ export function CourseBuilderPage() {
         tabs={["All", "Active", "Draft", "Archived"]}
       >
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {COURSES.map(c => {
+          {rows.map(c => {
             const catStyle = CAT_COLOR[c.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-muted)" };
             const DeliveryIcon = DELIVERY_ICON[c.delivery];
             return (
@@ -113,7 +114,14 @@ export function CourseBuilderPage() {
         </div>
       </PageShell>
 
-      <CourseBuilderDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <CourseBuilderDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+        ...COURSES[0],
+        id: `COUR-${String(100 + prev.length).padStart(3, "0")}`,
+        title: f.title || "New course",
+        category: f.category || COURSES[0].category,
+        durationHrs: Number(f.durationHrs) || 1,
+        enrolled: 0,
+      } as (typeof COURSES)[number], ...prev])} />
     </>
   );
 }

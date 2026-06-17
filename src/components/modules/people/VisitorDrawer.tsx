@@ -9,14 +9,15 @@ const PURPOSES = ["Client / Owner","Supplier Visit","Regulator / Inspector","Con
 
 const INIT = { visitorName:"", company:"", site:"", host:"", purpose:"", badgeNo:"", signIn:"", expectedOut:"" };
 
-export function VisitorDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function VisitorDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Sign In Visitor" step={1} totalSteps={1}
       stepLabels={["Visitor Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Sign In">
+      onNext={() => {}} onSubmit={submit} submitLabel="Sign In">
       <Section>
         <Row>
           <Col><Label>Visitor Name *</Label><Input value={f.visitorName} onChange={v => s("visitorName", v)} placeholder="Full name" /></Col>

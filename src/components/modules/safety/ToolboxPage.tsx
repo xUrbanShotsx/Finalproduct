@@ -92,7 +92,8 @@ const RECORDS = [
 
 export function ToolboxPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const totalAttendees = RECORDS.reduce((s, r) => s + r.attendees, 0);
+  const [rows, setRows] = useState(RECORDS);
+  const totalAttendees = rows.reduce((s, r) => s + r.attendees, 0);
 
   return (
     <>
@@ -109,7 +110,7 @@ export function ToolboxPage() {
         }
       stats={
         <>
-          <Stat label="This Month" value={String(RECORDS.filter(r => r.date.includes("Jun")).length)} sub="8 talks recorded" />
+          <Stat label="This Month" value={String(rows.filter(r => r.date.includes("Jun")).length)} sub="8 talks recorded" />
           <Stat label="Total Attendees" value={String(totalAttendees)} sub="rolling 30 days" highlight="green" />
           <Stat label="Pending Sign-Off" value="1" sub="TBX-240605-005" highlight="yellow" />
           <Stat label="Topics Covered" value="8" sub="this month" />
@@ -128,7 +129,7 @@ export function ToolboxPage() {
           <Th>Sign-Off</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const topicStyle = TOPIC_COLORS[r.topic] ?? {
               bg: "var(--b-bg-active)",
               color: "var(--b-text-tertiary)",
@@ -164,7 +165,15 @@ export function ToolboxPage() {
         </tbody>
       </table>
     </PageShell>
-    <ToolboxDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <ToolboxDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `TBX-${new Date().toISOString().slice(2,10).replace(/-/g,"")}-${String(prev.length + 1).padStart(3,"0")}`,
+      topic: f.topic || "General Safety",
+      presenter: f.facilitator || "—",
+      attendees: f.attendees.split(/[\n,]/).filter(x => x.trim()).length,
+      site: f.site || "Site 01",
+      date: f.date || new Date().toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric" }),
+      signedOff: false,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

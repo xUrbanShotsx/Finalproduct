@@ -20,9 +20,9 @@ const CERT_TYPES = [
   "Other",
 ];
 
-interface Props { open: boolean; onClose: () => void }
+interface Props { open: boolean; onClose: () => void; onAdd?: (f: Record<string, string>) => void }
 
-export function CertificatesRecordsDrawer({ open, onClose }: Props) {
+export function CertificatesRecordsDrawer({ open, onClose, onAdd }: Props) {
   const [step,        setStep]       = useState(1);
   const [certName,    setCertName]   = useState("");
   const [holder,      setHolder]     = useState("");
@@ -46,7 +46,7 @@ export function CertificatesRecordsDrawer({ open, onClose }: Props) {
       onStepChange={setStep}
       onBack={() => step === 1 ? close() : setStep(s => s - 1)}
       onNext={() => setStep(s => s + 1)}
-      onSubmit={() => { alert("Certificate saved (demo)"); close(); }}
+      onSubmit={() => { onAdd?.({ certName, holder, certNo, issuingBody, issueDate, expiryDate }); close(); }}
       submitLabel="Save Certificate"
     >
       {step === 1 && (

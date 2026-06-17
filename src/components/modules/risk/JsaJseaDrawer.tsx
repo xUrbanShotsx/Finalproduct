@@ -9,15 +9,16 @@ const TYPES = ["JSA","JSEA"] as const;
 
 const INIT = { type:"" as typeof TYPES[number]|"", task:"", site:"", supervisor:"", date:"", hazardCount:"", stepCount:"", approved:"" as "Yes"|"No"|"" };
 
-export function JsaJseaDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function JsaJseaDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   const highHazards = parseInt(f.hazardCount || "0") >= 8;
   return (
     <Drawer open={open} onClose={reset} title="New JSA" step={1} totalSteps={1}
       stepLabels={["JSA Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create JSA">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create JSA">
       <Section>
         <Row>
           <Col><Label>Type *</Label><OptionGroup options={TYPES} value={f.type} onChange={v => s("type", v)} /></Col>

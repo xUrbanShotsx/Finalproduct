@@ -8,14 +8,15 @@ const SITES = ["Site 01","Site 02","Site 03","All Sites"];
 
 const INIT = { name:"", trade:"", site:"", cardNumber:"", rto:"", issueDate:"", verified:"" as "Verified"|"Pending"|"" };
 
-export function WhiteCardDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function WhiteCardDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add White Card" step={1} totalSteps={1}
       stepLabels={["Card Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Card">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Card">
       <Section>
         <Row>
           <Col><Label>Full Name *</Label><Input value={f.name} onChange={v => s("name", v)} placeholder="Worker full name" /></Col>

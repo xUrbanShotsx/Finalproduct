@@ -10,14 +10,15 @@ const ASSIGNEES = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong"];
 
 const INIT = { noticeType:"" as typeof NOTICE_TYPES[number]|"", noticeNo:"", regulator:"", site:"", issueDate:"", complianceDate:"", description:"", assignee:"" };
 
-export function RegulatorNoticesDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function RegulatorNoticesDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Record Notice" step={1} totalSteps={1}
       stepLabels={["Notice Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Record Notice">
+      onNext={() => {}} onSubmit={submit} submitLabel="Record Notice">
       {f.noticeType === "Prohibition Notice" && (
         <Section>
           <div className="p-3 border" style={{ background: "rgba(240,96,96,0.06)", borderColor: "#f06060" }}>

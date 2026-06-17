@@ -60,6 +60,7 @@ function ActionCard({ r, isOverdue }: { r: typeof RECORDS[number]; isOverdue: bo
 
 export function ActionsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -85,7 +86,7 @@ export function ActionsPage() {
     >
       <div className="grid grid-cols-3 gap-4 min-h-[300px]">
         {COLS.map(col => {
-          const items = RECORDS.filter(r => r.status === col.key);
+          const items = rows.filter(r => r.status === col.key);
           return (
             <div key={col.key} className="flex flex-col">
               <div className="flex items-center justify-between px-3 py-2 mb-2 border-b" style={{ borderColor: "var(--b-border)" }}>
@@ -104,7 +105,17 @@ export function ActionsPage() {
         })}
       </div>
     </PageShell>
-    <ActionDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <ActionDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `ACT-${90 + prev.length}`,
+      source: (["Incident","Audit","Prestart","Inspection","Toolbox","Hazard"].includes(f.source) ? f.source : "Incident") as keyof typeof SOURCE_COLORS,
+      sourceRef: f.sourceRef || "—",
+      description: f.title || "Untitled action",
+      site: "Site 01",
+      assignee: f.assignee || "Unassigned",
+      due: f.dueDate || "TBC",
+      priority: (["High","Medium","Low"].includes(f.priority) ? f.priority : "Medium") as "High" | "Medium" | "Low",
+      status: "Open" as ColKey,
+    }, ...prev])} />
     </>
   );
 }

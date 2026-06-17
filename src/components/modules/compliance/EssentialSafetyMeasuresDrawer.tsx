@@ -10,14 +10,15 @@ const RESULTS = ["Pass","Defect Found","Not Inspected"] as const;
 
 const INIT = { esmType:"", site:"", inspector:"", inspectionDate:"", result:"" as typeof RESULTS[number]|"", defectDetail:"", rectifyDate:"", annualReportDue:"" };
 
-export function EssentialSafetyMeasuresDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function EssentialSafetyMeasuresDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Record Inspection" step={1} totalSteps={1}
       stepLabels={["Inspection Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Inspection">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Inspection">
       <Section>
         <Row>
           <Col><Label>ESM Type *</Label><Select value={f.esmType} onChange={v => s("esmType", v)} placeholder="Select type…" options={ESM_TYPES} /></Col>

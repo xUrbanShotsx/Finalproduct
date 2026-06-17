@@ -40,7 +40,8 @@ const RECORDS: Array<{
 
 export function SwmsRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const unsignedGap = RECORDS.filter(r => r.signedCount < r.requiredCount && r.status === "Active").length;
+  const [rows, setRows] = useState(RECORDS);
+  const unsignedGap = rows.filter(r => r.signedCount < r.requiredCount && r.status === "Active").length;
   return (
     <>
     <PageShell
@@ -78,7 +79,7 @@ export function SwmsRegisterPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const catStyle = HRCW_COLORS[r.hrcwCategory] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const signedComplete = r.signedCount >= r.requiredCount;
             return (
@@ -107,7 +108,13 @@ export function SwmsRegisterPage() {
         </tbody>
       </table>
     </PageShell>
-    <SwmsRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <SwmsRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

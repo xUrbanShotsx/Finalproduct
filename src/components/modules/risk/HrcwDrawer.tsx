@@ -9,14 +9,15 @@ const OWNERS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { hrcwCat:"", site:"", regRef:"", swmsRef:"", workDescription:"", owner:"", startDate:"", endDate:"", notifiable:"" };
 
-export function HrcwDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function HrcwDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New HRCW Record" step={1} totalSteps={1}
       stepLabels={["HRCW Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add HRCW Record">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add HRCW Record">
       <Section>
         <Label>HRCW Category *</Label>
         <Select value={f.hrcwCat} onChange={v => s("hrcwCat", v)} placeholder="Select category…" options={HRCW_CATS} />

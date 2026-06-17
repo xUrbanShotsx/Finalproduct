@@ -30,6 +30,7 @@ const RECORDS: Array<{
 
 export function LotoPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -65,7 +66,7 @@ export function LotoPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const e = ENERGY_COLORS[r.energy] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
@@ -91,7 +92,17 @@ export function LotoPage() {
         </tbody>
       </table>
     </PageShell>
-    <LotoDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <LotoDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `LOTO-${22 + prev.length}`,
+      equipment: f.equipment || "Equipment",
+      energy: f.energySource || "Electrical",
+      points: f.isolationPoints || "—",
+      lockHolder: f.lockHolder || "—",
+      applied: f.appliedAt ? f.appliedAt.slice(5).replace("T", " ") : "Today",
+      permit: f.permit || "—",
+      status: "Active" as const,
+      overdue: false,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

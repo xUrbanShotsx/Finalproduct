@@ -86,8 +86,9 @@ function ZoneCard({ r }: { r: typeof RECORDS[number] }) {
 
 export function WorkZonePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const active  = RECORDS.filter(r => r.status === "Active").length;
-  const highRisk = RECORDS.filter(r => r.status === "Active" && (r.zoneType === "Exclusion Zone" || r.zoneType === "Crane Swing Zone" || r.zoneType === "No-Go Zone")).length;
+  const [rows, setRows] = useState(RECORDS);
+  const active  = rows.filter(r => r.status === "Active").length;
+  const highRisk = rows.filter(r => r.status === "Active" && (r.zoneType === "Exclusion Zone" || r.zoneType === "Crane Swing Zone" || r.zoneType === "No-Go Zone")).length;
 
   return (
     <>
@@ -113,10 +114,16 @@ export function WorkZonePage() {
       tabs={["All", "Active", "Pending", "Closed", "Traffic Management"]}
     >
       <div className="grid grid-cols-2 gap-3">
-        {RECORDS.map(r => <ZoneCard key={r.ref} r={r} />)}
+        {rows.map(r => <ZoneCard key={r.ref} r={r} />)}
       </div>
     </PageShell>
-    <WorkZoneDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <WorkZoneDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

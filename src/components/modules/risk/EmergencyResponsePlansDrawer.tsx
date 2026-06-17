@@ -9,14 +9,15 @@ const OWNERS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { erpType:"", title:"", site:"", owner:"", version:"Rev 1", approvalDate:"", reviewDate:"", drillDate:"", description:"" };
 
-export function EmergencyResponsePlansDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function EmergencyResponsePlansDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New ERP" step={1} totalSteps={1}
       stepLabels={["ERP Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create ERP">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create ERP">
       <Section>
         <Row>
           <Col><Label>ERP Type *</Label><Select value={f.erpType} onChange={v => s("erpType", v)} placeholder="Select type…" options={ERP_TYPES} /></Col>

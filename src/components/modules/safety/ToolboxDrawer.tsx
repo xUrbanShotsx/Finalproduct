@@ -10,16 +10,17 @@ const FACILITATORS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. 
 
 const INIT = { topic:"", site:"", facilitator:"", date:"", time:"", duration:"", attendees:"", keyPoints:"" };
 
-export function ToolboxDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ToolboxDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Toolbox Talk" step={step} totalSteps={2}
       stepLabels={["Talk Details","Attendees & Notes"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Record Talk">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Record Talk">
       {step === 1 && <>
         <Section>
           <Label>Topic *</Label>

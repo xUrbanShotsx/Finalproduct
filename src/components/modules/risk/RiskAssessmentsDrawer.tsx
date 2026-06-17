@@ -12,16 +12,17 @@ const HOC = ["Elimination","Substitution","Engineering","Administrative","PPE"];
 
 const INIT = { assessmentType:"", title:"", site:"", activity:"", likelihood:"", consequence:"", hoc:"", owner:"", date:"", reviewDate:"" };
 
-export function RiskAssessmentsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function RiskAssessmentsDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Assessment" step={step} totalSteps={2}
       stepLabels={["Assessment Details","Ratings & Controls"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Create Assessment">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Create Assessment">
       {step === 1 && <>
         <Section>
           <Label>Assessment Type *</Label>

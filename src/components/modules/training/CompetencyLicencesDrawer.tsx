@@ -23,9 +23,9 @@ const LICENCE_TYPES = [
 
 const VERIFICATION = ["Verified", "Pending Verification", "Unverified"] as const;
 
-interface Props { open: boolean; onClose: () => void }
+interface Props { open: boolean; onClose: () => void; onAdd?: (f: Record<string, string>) => void }
 
-export function CompetencyLicencesDrawer({ open, onClose }: Props) {
+export function CompetencyLicencesDrawer({ open, onClose, onAdd }: Props) {
   const [step, setStep] = useState(1);
   const [workerName,    setWorkerName]    = useState("");
   const [role,          setRole]          = useState("");
@@ -55,7 +55,7 @@ Keep it concise — bullet points only, one per line.`;
       onStepChange={setStep}
       onBack={() => step === 1 ? close() : setStep(s => s - 1)}
       onNext={() => setStep(s => s + 1)}
-      onSubmit={() => { alert("Licence record saved (demo)"); close(); }}
+      onSubmit={() => { onAdd?.({ workerName, role, licenceType, licenceNo, issueDate, expiryDate }); close(); }}
       submitLabel="Save Licence"
     >
       {step === 1 && (

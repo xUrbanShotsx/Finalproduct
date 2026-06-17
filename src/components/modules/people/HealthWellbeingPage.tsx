@@ -39,6 +39,7 @@ const RECORDS: Array<{
 
 export function HealthWellbeingPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -74,7 +75,7 @@ export function HealthWellbeingPage() {
           <Th>Next Review</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const typeStyle = CHECK_TYPE_COLORS[r.type];
             const outcomeStyle = OUTCOME_COLORS[r.outcome];
             return (
@@ -97,7 +98,13 @@ export function HealthWellbeingPage() {
         </tbody>
       </table>
     </PageShell>
-    <HealthWellbeingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <HealthWellbeingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

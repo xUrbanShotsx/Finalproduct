@@ -8,14 +8,15 @@ const SUPPORT = ["EAP Referral","Return to Work Plan","Counselling","Peer Suppor
 
 const INIT = { category:"", anonymous:"" as "Yes"|"No"|"", date:"", support:"", outcome:"", notes:"" };
 
-export function HealthWellbeingDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function HealthWellbeingDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New H&W Record" step={1} totalSteps={1}
       stepLabels={["Record Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Record">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Record">
       <Section>
         <Row>
           <Col><Label>Category *</Label><Select value={f.category} onChange={v => s("category", v)} placeholder="Select category…" options={CATEGORIES} /></Col>

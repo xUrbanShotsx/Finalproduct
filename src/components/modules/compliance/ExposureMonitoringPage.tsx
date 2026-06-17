@@ -34,7 +34,8 @@ const RECORDS: Array<{
 
 export function ExposureMonitoringPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const exceedances = RECORDS.filter(r => r.exceedance).length;
+  const [rows, setRows] = useState(RECORDS);
+  const exceedances = rows.filter(r => r.exceedance).length;
   return (
     <>
     <PageShell
@@ -50,7 +51,7 @@ export function ExposureMonitoringPage() {
         }
       stats={
         <>
-          <Stat label="Active Agents"     value={String(RECORDS.length)} sub="under monitoring"                         />
+          <Stat label="Active Agents"     value={String(rows.length)} sub="under monitoring"                         />
           <Stat label="Above WES"          value={String(exceedances)}    sub="immediate action required" highlight="red"   />
           <Stat label=">50% WES"           value="3"                      sub="approaching limits"        highlight="yellow"/>
           <Stat label="Monitoring Due"     value="2"                      sub="EXP-022, EXP-023"         highlight="green"  />
@@ -72,7 +73,7 @@ export function ExposureMonitoringPage() {
           <Th>Next Monitor</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const agentStyle = AGENT_COLORS[r.agentType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const pctColor = r.percentWes > 100 ? "#f06060" : r.percentWes >= 50 ? "var(--b-badge-yellow-text)" : "var(--b-badge-green-text)";
             return (
@@ -101,7 +102,13 @@ export function ExposureMonitoringPage() {
         </tbody>
       </table>
     </PageShell>
-    <ExposureMonitoringDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <ExposureMonitoringDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

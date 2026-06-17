@@ -115,6 +115,7 @@ function AssetCard({ r }: { r: typeof RECORDS[number] }) {
 
 export function PlantEquipmentPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   const ORDER: Array<typeof RECORDS[number]["status"]> = ["Grounded","Active","In Service","Inactive"];
   const sorted = [...RECORDS].sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
 
@@ -145,7 +146,13 @@ export function PlantEquipmentPage() {
         {sorted.map(r => <AssetCard key={r.assetId} r={r} />)}
       </div>
     </PageShell>
-    <PlantEquipmentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <PlantEquipmentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

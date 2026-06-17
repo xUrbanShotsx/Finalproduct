@@ -66,6 +66,7 @@ function StatusIcon({ s }: { s: LicStatus }) {
 export function CompetencyLicencesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [collapsed,  setCollapsed]  = useState<Record<string, boolean>>({});
+  const [groups,     setGroups]     = useState(GROUPS);
 
   function toggle(type: string) {
     setCollapsed(prev => ({ ...prev, [type]: !prev[type] }));
@@ -95,7 +96,7 @@ export function CompetencyLicencesPage() {
         tabs={["All", "Current", "Expiring (30d)", "Expired", "Unverified"]}
       >
         <div className="p-6 space-y-3">
-          {GROUPS.map(g => {
+          {groups.map(g => {
             const open = !collapsed[g.type];
             const expiredCount  = g.records.filter(r => r.status === "Expired").length;
             const expiringCount = g.records.filter(r => r.status === "Expiring").length;
@@ -157,7 +158,24 @@ export function CompetencyLicencesPage() {
         </div>
       </PageShell>
 
-      <CompetencyLicencesDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <CompetencyLicencesDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setGroups(prev => {
+        const rec: LicRecord = {
+          worker: f.workerName || "New worker",
+          role: f.role || "—",
+          licenceNo: f.licenceNo || "—",
+          issueDate: f.issueDate || "—",
+          expiryDate: f.expiryDate || "—",
+          status: "Current",
+          daysToExpiry: 365,
+          verified: false,
+        };
+        const type = f.licenceType || "Other Licences";
+        const idx = prev.findIndex(g => g.type === type);
+        if (idx === -1) return [{ type, records: [rec] }, ...prev];
+        const next = [...prev];
+        next[idx] = { ...next[idx], records: [rec, ...next[idx].records] };
+        return next;
+      })} />
     </>
   );
 }

@@ -10,14 +10,15 @@ const STATUS = ["Scheduled","In Progress","Complete"] as const;
 
 const INIT = { auditType:"", site:"", auditor:"", plannedDate:"", status:"" as typeof STATUS[number]|"", scope:"" };
 
-export function InspectionsAuditsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function InspectionsAuditsDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Schedule Audit" step={1} totalSteps={1}
       stepLabels={["Audit Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Schedule Audit">
+      onNext={() => {}} onSubmit={submit} submitLabel="Schedule Audit">
       <Section>
         <Row>
           <Col><Label>Audit Type *</Label><Select value={f.auditType} onChange={v => s("auditType", v)} placeholder="Select type…" options={AUDIT_TYPES} /></Col>

@@ -7,6 +7,10 @@ import { AiButton } from "../AiButton";
 interface Props {
   open: boolean;
   onClose: () => void;
+  onAdd?: (form: {
+    incidentType: string; date: string; time: string; site: string;
+    specificLocation: string; severity: string; assignee: string;
+  }) => void;
 }
 
 const INCIDENT_TYPES = [
@@ -157,7 +161,7 @@ function Textarea({
   );
 }
 
-export function ReportIncidentDrawer({ open, onClose }: Props) {
+export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     incidentType: "",
@@ -190,6 +194,15 @@ export function ReportIncidentDrawer({ open, onClose }: Props) {
       regulatorNotified: "", assignee: "", witnesses: "",
     });
     onClose();
+  }
+
+  function handleSubmit() {
+    onAdd?.({
+      incidentType: form.incidentType, date: form.date, time: form.time,
+      site: form.site, specificLocation: form.specificLocation,
+      severity: form.severity, assignee: form.assignee,
+    });
+    handleClose();
   }
 
   const labelClass = "block text-[11px] font-semibold uppercase tracking-widest mb-1.5";
@@ -473,7 +486,7 @@ export function ReportIncidentDrawer({ open, onClose }: Props) {
             </button>
           ) : (
             <button
-              onClick={handleClose}
+              onClick={handleSubmit}
               className="b-btn-accent flex items-center gap-1.5 px-5 h-[34px] text-[12.5px] font-medium"
             >
               <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />

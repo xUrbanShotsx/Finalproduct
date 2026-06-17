@@ -10,14 +10,15 @@ const ASSIGNEES = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee
 
 const INIT = { hrcwCat:"", evidenceType:"" as typeof EVIDENCE_TYPES[number]|"", site:"", ref:"", date:"", compliant:"" as "Yes"|"No"|"", assignee:"", notes:"" };
 
-export function HrcwComplianceDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function HrcwComplianceDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Evidence" step={1} totalSteps={1}
       stepLabels={["Evidence Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add Evidence">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add Evidence">
       <Section>
         <Row>
           <Col><Label>HRCW Category *</Label><Select value={f.hrcwCat} onChange={v => s("hrcwCat", v)} placeholder="Select category…" options={HRCW_CATS} /></Col>

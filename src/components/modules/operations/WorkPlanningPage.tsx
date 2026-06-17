@@ -85,6 +85,7 @@ function WorkCard({ r }: { r: typeof RECORDS[number] }) {
 
 export function WorkPlanningPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -110,7 +111,7 @@ export function WorkPlanningPage() {
     >
       <div className="space-y-4">
         {LANE_ORDER.map(status => {
-          const items = RECORDS.filter(r => r.status === status);
+          const items = rows.filter(r => r.status === status);
           if (items.length === 0) return null;
           const st = STATUS_CONFIG[status];
           return (
@@ -130,7 +131,13 @@ export function WorkPlanningPage() {
         })}
       </div>
     </PageShell>
-    <WorkPlanningDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <WorkPlanningDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

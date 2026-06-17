@@ -79,6 +79,7 @@ const RECORDS = [
 
 export function PrestartPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -114,7 +115,7 @@ export function PrestartPage() {
           <Th right>Actions</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[11px]" style={{ color: "var(--b-text)" }}>
@@ -155,7 +156,16 @@ export function PrestartPage() {
         </tbody>
       </table>
     </PageShell>
-    <PrestartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <PrestartDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(d) => setRows(prev => [{
+      ref: `PRE-${new Date().toISOString().slice(2,10).replace(/-/g,"")}-${String(prev.length + 19).padStart(3,"0")}`,
+      asset: d.asset,
+      operator: d.operator,
+      site: d.site,
+      time: new Date().toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", hour12: false }),
+      result: d.result,
+      defects: d.defects,
+      actions: d.defects,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

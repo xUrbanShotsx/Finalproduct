@@ -99,6 +99,7 @@ function RiskBand({ level, items }: { level: RiskLevel; items: typeof RECORDS })
 
 export function HazardRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -127,12 +128,18 @@ export function HazardRegisterPage() {
           <RiskBand
             key={level}
             level={level}
-            items={RECORDS.filter(r => r.residualRisk === level)}
+            items={rows.filter(r => r.residualRisk === level)}
           />
         ))}
       </div>
     </PageShell>
-    <HazardRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <HazardRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

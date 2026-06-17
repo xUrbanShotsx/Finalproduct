@@ -10,15 +10,16 @@ const PRIORITIES = ["Critical","High","Medium","Low"];
 
 const INIT = { title:"", source:"", sourceRef:"", priority:"", dueDate:"", assignee:"", description:"" };
 
-export function ActionDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ActionDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Action" step={1} totalSteps={1}
       stepLabels={["Action Details"]}
       onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create Action">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create Action">
       <Section>
         <Label>Action Title *</Label>
         <Input value={f.title} onChange={v => s("title", v)} placeholder="Brief description of the required action" />

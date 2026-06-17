@@ -9,14 +9,15 @@ const SUPPORT = ["No action required","EAP Referral","Counselling","Peer Support
 
 const INIT = { hazardType:"", site:"", anonymous:"" as "Yes"|"No"|"", eapReferral:"" as "Yes"|"No"|"", support:"", description:"", date:"" };
 
-export function PsychosocialRiskDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PsychosocialRiskDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Report Hazard" step={1} totalSteps={1}
       stepLabels={["Report Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Submit Report">
+      onNext={() => {}} onSubmit={submit} submitLabel="Submit Report">
       <Section>
         <Row>
           <Col><Label>Hazard Type *</Label><Select value={f.hazardType} onChange={v => s("hazardType", v)} placeholder="Select type…" options={HAZARD_TYPES} /></Col>

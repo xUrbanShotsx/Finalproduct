@@ -34,6 +34,7 @@ const RESULT_BADGE: Record<Result, React.ReactNode> = {
 
 export function TrainingRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
 
   return (
     <>
@@ -59,7 +60,7 @@ export function TrainingRegisterPage() {
         tabs={["All", "Pass", "In Progress", "Fail", "Expired"]}
       >
         <div className="space-y-0">
-          {RECORDS.map(r => {
+          {rows.map(r => {
             const expired = r.daysToExpiry !== null && r.daysToExpiry < 0;
             const expiring = r.daysToExpiry !== null && r.daysToExpiry >= 0 && r.daysToExpiry <= 30;
             return (
@@ -118,7 +119,13 @@ export function TrainingRegisterPage() {
         </div>
       </PageShell>
 
-      <TrainingRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <TrainingRegisterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

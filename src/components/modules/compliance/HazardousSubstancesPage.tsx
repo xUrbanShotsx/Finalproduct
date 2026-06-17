@@ -37,7 +37,8 @@ const RECORDS: Array<{
 
 export function HazardousSubstancesPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const expiredSds = RECORDS.filter(r => r.sdsExpired).length;
+  const [rows, setRows] = useState(RECORDS);
+  const expiredSds = rows.filter(r => r.sdsExpired).length;
   return (
     <>
     <PageShell
@@ -76,7 +77,7 @@ export function HazardousSubstancesPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const ghsStyle = GHS_COLORS[r.ghsClass] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
@@ -105,7 +106,13 @@ export function HazardousSubstancesPage() {
         </tbody>
       </table>
     </PageShell>
-    <HazardousSubstancesDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <HazardousSubstancesDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

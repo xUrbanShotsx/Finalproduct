@@ -43,6 +43,7 @@ const ACCESS_LOG = [
 
 export function SiteAccessControlPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [accessLog, setAccessLog] = useState(ACCESS_LOG);
   return (
     <>
     <PageShell
@@ -95,7 +96,7 @@ export function SiteAccessControlPage() {
           <Th>Note</Th>
         </TableHead>
         <tbody>
-          {ACCESS_LOG.map((r, i) => {
+          {accessLog.map((r, i) => {
             const entryStyle = ENTRY_COLORS[r.result];
             return (
               <Tr key={i}>
@@ -112,7 +113,15 @@ export function SiteAccessControlPage() {
         </tbody>
       </table>
     </PageShell>
-    <SiteAccessControlDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <SiteAccessControlDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setAccessLog(prev => [{
+      time: new Date().toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", hour12: false }),
+      person: f.name || "New entrant",
+      zone: f.zone || "—",
+      site: f.site || "Site 01",
+      type: "Worker",
+      result: "Granted",
+      reason: f.purpose || "—",
+    } as (typeof ACCESS_LOG)[number], ...prev])} />
     </>
   );
 }

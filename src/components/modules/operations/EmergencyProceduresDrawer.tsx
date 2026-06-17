@@ -9,14 +9,15 @@ const OWNERS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { procType:"", title:"", site:"", owner:"", reviewDate:"", drillDate:"", version:"Rev 1", description:"", keyContacts:"" };
 
-export function EmergencyProceduresDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function EmergencyProceduresDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Procedure" step={1} totalSteps={1}
       stepLabels={["Procedure Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create Procedure">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create Procedure">
       <Section>
         <Row>
           <Col><Label>Procedure Type *</Label><Select value={f.procType} onChange={v => s("procType", v)} placeholder="Select type…" options={PROC_TYPES} /></Col>

@@ -86,6 +86,7 @@ const RECORDS = [
 
 export function SwmsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -120,7 +121,7 @@ export function SwmsPage() {
           <Th>Author</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>
@@ -166,7 +167,17 @@ export function SwmsPage() {
         </tbody>
       </table>
     </PageShell>
-    <SwmsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <SwmsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `SWMS-${104 + prev.length}`,
+      title: f.title || "Untitled SWMS",
+      hrcw: f.hrcw ? [f.hrcw] : [],
+      version: f.version || "Rev 1",
+      status: (f.approvedBy ? "Active" : "Draft"),
+      reviewDue: f.reviewDate || "—",
+      overdue: false,
+      dueSoon: false,
+      author: f.preparedBy || "—",
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

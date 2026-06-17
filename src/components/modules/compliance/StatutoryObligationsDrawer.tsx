@@ -10,14 +10,15 @@ const FREQUENCY = ["Annual","Six-Monthly","Quarterly","Monthly","One-off","Ongoi
 
 const INIT = { oblType:"", title:"", site:"", owner:"", frequency:"", dueDate:"", description:"", notified:"" as "Yes"|"No"|"" };
 
-export function StatutoryObligationsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function StatutoryObligationsDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Obligation" step={1} totalSteps={1}
       stepLabels={["Obligation Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add Obligation">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add Obligation">
       <Section>
         <Row>
           <Col><Label>Type *</Label><Select value={f.oblType} onChange={v => s("oblType", v)} placeholder="Select type…" options={OBL_TYPES} /></Col>

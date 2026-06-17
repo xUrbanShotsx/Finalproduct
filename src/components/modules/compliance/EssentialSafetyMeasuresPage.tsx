@@ -40,8 +40,9 @@ const RECORDS: Array<{
 
 export function EssentialSafetyMeasuresPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const overdue = RECORDS.filter(r => r.overdue).length;
-  const defects = RECORDS.filter(r => r.defect).length;
+  const [rows, setRows] = useState(RECORDS);
+  const overdue = rows.filter(r => r.overdue).length;
+  const defects = rows.filter(r => r.defect).length;
   return (
     <>
     <PageShell
@@ -57,7 +58,7 @@ export function EssentialSafetyMeasuresPage() {
         }
       stats={
         <>
-          <Stat label="Total ESMs"         value={String(RECORDS.length)} sub="tracked across buildings"              />
+          <Stat label="Total ESMs"         value={String(rows.length)} sub="tracked across buildings"              />
           <Stat label="Inspection Overdue" value={String(overdue)}        sub="ESM-008 · smoke control" highlight="red"   />
           <Stat label="Defects Found"      value={String(defects)}        sub="ESM-007 · extinguisher"  highlight="yellow"/>
           <Stat label="Annual Report Due"  value="31 Jul"                 sub="to building surveyor"    highlight="green" />
@@ -80,7 +81,7 @@ export function EssentialSafetyMeasuresPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const typeStyle = ESM_TYPE_COLORS[r.esmType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
@@ -110,7 +111,13 @@ export function EssentialSafetyMeasuresPage() {
         </tbody>
       </table>
     </PageShell>
-    <EssentialSafetyMeasuresDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <EssentialSafetyMeasuresDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

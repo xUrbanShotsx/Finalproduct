@@ -35,7 +35,8 @@ const RECORDS: Array<{
 
 export function DefectReportingPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const grounded = RECORDS.filter(r => r.grounded && r.status === "Open").length;
+  const [rows, setRows] = useState(RECORDS);
+  const grounded = rows.filter(r => r.grounded && r.status === "Open").length;
 
   return (
     <>
@@ -52,7 +53,7 @@ export function DefectReportingPage() {
         }
       stats={
         <>
-          <Stat label="Open Defects"    value={String(RECORDS.filter(r => r.status === "Open").length)} sub="require action"  />
+          <Stat label="Open Defects"    value={String(rows.filter(r => r.status === "Open").length)} sub="require action"  />
           <Stat label="Grounded Assets" value={String(grounded)} sub="out of service" highlight="red"   />
           <Stat label="High / Critical" value="5"  sub="priority action"              highlight="yellow" />
           <Stat label="Closed (Week)"   value="4"  sub="resolved and cleared"         highlight="green"  />
@@ -74,7 +75,7 @@ export function DefectReportingPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const catStyle = DEFECT_CATEGORY[r.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
@@ -98,7 +99,13 @@ export function DefectReportingPage() {
         </tbody>
       </table>
     </PageShell>
-    <DefectReportingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <DefectReportingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

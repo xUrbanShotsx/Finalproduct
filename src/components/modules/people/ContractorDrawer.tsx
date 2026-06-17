@@ -8,16 +8,17 @@ const SITES = ["Site 01","Site 02","Site 03","All Sites"];
 
 const INIT = { company:"", abn:"", contact:"", phone:"", site:"", licenceType:"", licenceNo:"", licenceExpiry:"", insuranceExpiry:"", wcoExpiry:"" };
 
-export function ContractorDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ContractorDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Contractor" step={step} totalSteps={2}
       stepLabels={["Company Details","Licences & Insurance"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Save Contractor">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Save Contractor">
       {step === 1 && <>
         <Section>
           <Label>Company Name *</Label>

@@ -40,7 +40,8 @@ const RECORDS: Array<{
 
 export function VisitorAccessPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const onSite = RECORDS.filter(r => r.status === "On Site").length;
+  const [rows, setRows] = useState(RECORDS);
+  const onSite = rows.filter(r => r.status === "On Site").length;
 
   return (
     <>
@@ -78,7 +79,7 @@ export function VisitorAccessPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const purposeStyle = PURPOSE_COLORS[r.purpose];
             const statusStyle  = STATUS_COLORS[r.status];
             return (
@@ -106,7 +107,13 @@ export function VisitorAccessPage() {
         </tbody>
       </table>
     </PageShell>
-    <VisitorDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <VisitorDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

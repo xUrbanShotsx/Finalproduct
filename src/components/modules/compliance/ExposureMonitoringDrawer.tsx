@@ -8,14 +8,15 @@ const SITES = ["Site 01","Site 02","Site 03"];
 
 const INIT = { agent:"", workerGroup:"", site:"", area:"", wes:"", measured:"", aboveWes:"" as "Yes"|"No"|"", monitorDate:"", nextMonitor:"" };
 
-export function ExposureMonitoringDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ExposureMonitoringDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Monitor" step={1} totalSteps={1}
       stepLabels={["Monitoring Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Record">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Record">
       <Section>
         <Row>
           <Col><Label>Agent *</Label><Select value={f.agent} onChange={v => s("agent", v)} placeholder="Select agent…" options={AGENTS} /></Col>

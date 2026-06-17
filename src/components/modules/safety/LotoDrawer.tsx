@@ -8,14 +8,15 @@ const EQUIPMENT = ["Conveyor B","Pump 3","Boiler 1","Compressor A","Mixer 2","Pa
 
 const INIT = { equipment:"", energySource:"", isolationPoints:"", lockHolder:"", appliedAt:"", permit:"" };
 
-export function LotoDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function LotoDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New LOTO Record" step={1} totalSteps={1}
       stepLabels={["Isolation Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Apply Lockout">
+      onNext={() => {}} onSubmit={submit} submitLabel="Apply Lockout">
       <Section>
         <Row>
           <Col><Label>Equipment *</Label><Select value={f.equipment} onChange={v => s("equipment", v)} placeholder="Select equipment…" options={EQUIPMENT} /></Col>

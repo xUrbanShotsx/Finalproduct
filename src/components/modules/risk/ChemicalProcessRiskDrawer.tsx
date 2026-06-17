@@ -9,14 +9,15 @@ const CONTROL_METHODS = ["Elimination","Substitution","Engineering (LEV)","Admin
 
 const INIT = { agent:"", workerGroup:"", site:"", area:"", wes:"", measured:"", controlMethod:"", aboveWes:"" as "Yes"|"No"|"", monitorDate:"", nextMonitor:"" };
 
-export function ChemicalProcessRiskDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ChemicalProcessRiskDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Chemical" step={1} totalSteps={1}
       stepLabels={["Monitoring Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add Record">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add Record">
       <Section>
         <Row>
           <Col><Label>Agent *</Label><Select value={f.agent} onChange={v => s("agent", v)} placeholder="Select agent…" options={AGENTS} /></Col>

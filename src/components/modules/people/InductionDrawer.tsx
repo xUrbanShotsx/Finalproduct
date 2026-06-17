@@ -9,14 +9,15 @@ const INDUCTION_TYPES = ["Site Induction","WHS Induction","HRCW Induction","Visi
 
 const INIT = { name:"", trade:"", company:"", site:"", inductionType:"" as typeof INDUCTION_TYPES[number]|"", date:"", whiteCard:"", accessGranted:"" as "Yes"|"No"|"" };
 
-export function InductionDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function InductionDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Induction" step={1} totalSteps={1}
       stepLabels={["Induction Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Record Induction">
+      onNext={() => {}} onSubmit={submit} submitLabel="Record Induction">
       <Section>
         <Row>
           <Col><Label>Full Name *</Label><Input value={f.name} onChange={v => s("name", v)} placeholder="Worker full name" /></Col>

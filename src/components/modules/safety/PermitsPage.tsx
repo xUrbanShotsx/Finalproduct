@@ -81,8 +81,18 @@ const RECORDS = [
   },
 ];
 
+const PERMIT_TYPE_MAP: Record<string, keyof typeof PERMIT_TYPES> = {
+  "Working at Heights": "Heights",
+  "Excavation": "Excavation",
+  "Confined Space": "Confined Space",
+  "Hot Work": "Hot Work",
+  "Electrical Isolation": "General Access",
+  "General Work": "General Access",
+};
+
 export function PermitsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -118,7 +128,7 @@ export function PermitsPage() {
           <Th>Issued By</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>
@@ -159,7 +169,17 @@ export function PermitsPage() {
         </tbody>
       </table>
     </PageShell>
-    <PermitDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <PermitDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `PTW-${22 + prev.length}`,
+      type: PERMIT_TYPE_MAP[f.permitType] ?? "General Access",
+      description: f.description || f.permitType || "Work permit",
+      location: f.site || f.location || "Site 01",
+      issued: f.plannedStart ? f.plannedStart.slice(0,10) : "Today",
+      expires: f.plannedEnd ? f.plannedEnd.slice(0,10) : "—",
+      status: "Active" as const,
+      issuedBy: f.approvedBy || "—",
+      expiringSoon: false,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

@@ -44,10 +44,11 @@ function StatusIcon({ status }: { status: CertStatus }) {
 
 export function CertificatesRecordsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [certRows, setCertRows] = useState(ALL_CERTS);
 
-  const expired  = ALL_CERTS.filter(c => c.status === "Expired").length;
-  const expiring = ALL_CERTS.filter(c => c.status === "Expiring").length;
-  const current  = ALL_CERTS.filter(c => c.status === "Current").length;
+  const expired  = certRows.filter(c => c.status === "Expired").length;
+  const expiring = certRows.filter(c => c.status === "Expiring").length;
+  const current  = certRows.filter(c => c.status === "Current").length;
 
   return (
     <>
@@ -74,7 +75,7 @@ export function CertificatesRecordsPage() {
       >
         <div className="p-6 space-y-5">
           {BANDS.map(band => {
-            const certs = ALL_CERTS.filter(c => c.status === band.status);
+            const certs = certRows.filter(c => c.status === band.status);
             if (certs.length === 0) return null;
             return (
               <div key={band.status} className="border overflow-hidden" style={{ borderColor: band.borderColor }}>
@@ -147,7 +148,17 @@ export function CertificatesRecordsPage() {
         </div>
       </PageShell>
 
-      <CertificatesRecordsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <CertificatesRecordsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setCertRows(prev => [{
+        holder: f.holder || "New holder",
+        role: "—",
+        certType: f.certName || "Certificate",
+        certNo: f.certNo || "—",
+        issuingBody: f.issuingBody || "—",
+        issueDate: f.issueDate || "—",
+        expiryDate: f.expiryDate || "—",
+        status: "Current",
+        daysToExpiry: 365,
+      }, ...prev])} />
     </>
   );
 }

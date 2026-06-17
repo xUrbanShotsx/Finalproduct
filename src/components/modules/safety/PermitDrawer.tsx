@@ -10,16 +10,17 @@ const PEOPLE = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { permitType:"", site:"", location:"", plannedStart:"", plannedEnd:"", description:"", controls:"", approvedBy:"" };
 
-export function PermitDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PermitDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Permit to Work" step={step} totalSteps={2}
       stepLabels={["Permit Details","Controls & Approval"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Issue Permit">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Issue Permit">
       {step === 1 && <>
         <Section>
           <Label>Permit Type *</Label>

@@ -28,6 +28,7 @@ const RECORDS = [
 
 export function EmergencyProceduresPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -64,7 +65,7 @@ export function EmergencyProceduresPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const typeStyle = PROC_TYPE_COLORS[r.type] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const drillColor = r.daysToNextDrill < 0 ? "#f06060"
               : r.daysToNextDrill <= 30 ? "var(--b-badge-yellow-text)"
@@ -90,7 +91,13 @@ export function EmergencyProceduresPage() {
         </tbody>
       </table>
     </PageShell>
-    <EmergencyProceduresDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <EmergencyProceduresDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

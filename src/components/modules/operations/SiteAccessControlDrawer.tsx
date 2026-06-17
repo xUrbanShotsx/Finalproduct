@@ -9,14 +9,15 @@ const ACCESS_LEVELS = ["Granted","Escorted","Denied"] as const;
 
 const INIT = { name:"", company:"", site:"", zone:"", access:"" as typeof ACCESS_LEVELS[number]|"", purpose:"", induction:"" as "Yes"|"No"|"", signIn:"" };
 
-export function SiteAccessControlDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SiteAccessControlDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Manage Access" step={1} totalSteps={1}
       stepLabels={["Access Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Record Access">
+      onNext={() => {}} onSubmit={submit} submitLabel="Record Access">
       <Section>
         <Row>
           <Col><Label>Full Name *</Label><Input value={f.name} onChange={v => s("name", v)} placeholder="Full name" /></Col>

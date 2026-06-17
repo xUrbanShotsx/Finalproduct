@@ -10,14 +10,15 @@ const SEVERITY = ["Minor","Moderate","Major","Critical"] as const;
 
 const INIT = { asset:"", site:"", severity:"" as typeof SEVERITY[number]|"", description:"", grounded:"" as "Yes"|"No"|"", assignee:"", dueDate:"", partNo:"" };
 
-export function DefectReportingDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function DefectReportingDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Report Defect" step={1} totalSteps={1}
       stepLabels={["Defect Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Report Defect">
+      onNext={() => {}} onSubmit={submit} submitLabel="Report Defect">
       <Section>
         <Row>
           <Col><Label>Asset *</Label><Select value={f.asset} onChange={v => s("asset", v)} placeholder="Select asset…" options={ASSETS} /></Col>

@@ -79,14 +79,15 @@ function ObligationCard({ r }: { r: typeof RECORDS[number] }) {
 
 export function StatutoryObligationsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const overdue = RECORDS.filter(r => r.overdue).length;
-  const pending = RECORDS.filter(r => r.status === "Pending").length;
+  const [rows, setRows] = useState(RECORDS);
+  const overdue = rows.filter(r => r.overdue).length;
+  const pending = rows.filter(r => r.status === "Pending").length;
 
   const groups: Group[] = [
-    { key: "overdue",  label: "Overdue",          accent: "#f06060",                    bg: "rgba(240,96,96,0.08)",     icon: AlertTriangle, items: RECORDS.filter(r => r.overdue)                            },
-    { key: "pending",  label: "Pending",           accent: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)", icon: Clock,         items: RECORDS.filter(r => r.status === "Pending" && !r.overdue) },
-    { key: "active",   label: "Active / Ongoing",  accent: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)",   icon: Clock,         items: RECORDS.filter(r => r.status === "Active")                },
-    { key: "closed",   label: "Submitted / Closed",accent: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)",  icon: CheckCircle2,  items: RECORDS.filter(r => r.status === "Closed" && !r.overdue)  },
+    { key: "overdue",  label: "Overdue",          accent: "#f06060",                    bg: "rgba(240,96,96,0.08)",     icon: AlertTriangle, items: rows.filter(r => r.overdue)                            },
+    { key: "pending",  label: "Pending",           accent: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)", icon: Clock,         items: rows.filter(r => r.status === "Pending" && !r.overdue) },
+    { key: "active",   label: "Active / Ongoing",  accent: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)",   icon: Clock,         items: rows.filter(r => r.status === "Active")                },
+    { key: "closed",   label: "Submitted / Closed",accent: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)",  icon: CheckCircle2,  items: rows.filter(r => r.status === "Closed" && !r.overdue)  },
   ].filter(g => g.items.length > 0) as Group[];
 
   return (
@@ -104,10 +105,10 @@ export function StatutoryObligationsPage() {
       }
       stats={
         <>
-          <Stat label="Total Obligations" value={String(RECORDS.length)} sub="tracked"                              />
+          <Stat label="Total Obligations" value={String(rows.length)} sub="tracked"                              />
           <Stat label="Overdue"           value={String(overdue)}        sub="SOB-003 · ESM report" highlight="red"   />
           <Stat label="Pending"           value={String(pending)}        sub="due this quarter"     highlight="yellow"/>
-          <Stat label="Closed (YTD)"      value={String(RECORDS.filter(r => r.status === "Closed").length)} sub="submitted on time" highlight="green" />
+          <Stat label="Closed (YTD)"      value={String(rows.filter(r => r.status === "Closed").length)} sub="submitted on time" highlight="green" />
         </>
       }
       tabs={["All", "Overdue", "Pending", "Closed"]}
@@ -132,7 +133,13 @@ export function StatutoryObligationsPage() {
         })}
       </div>
     </PageShell>
-    <StatutoryObligationsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <StatutoryObligationsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

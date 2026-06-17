@@ -10,14 +10,15 @@ const RESULT = ["Verified","Partial","Failed"] as const;
 
 const INIT = { crcType:"", site:"", description:"", verifier:"", date:"", result:"" as typeof RESULT[number]|"", notes:"" };
 
-export function CriticalRiskControlsDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function CriticalRiskControlsDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Verify Controls" step={1} totalSteps={1}
       stepLabels={["Verification Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Verification">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Verification">
       <Section>
         <Row>
           <Col><Label>CRC Type *</Label><Select value={f.crcType} onChange={v => s("crcType", v)} placeholder="Select type…" options={CRC_TYPES} /></Col>

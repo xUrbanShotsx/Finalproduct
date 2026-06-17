@@ -9,14 +9,15 @@ const WORKERS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee",
 
 const INIT = { ppeType:"", serialNo:"", worker:"", site:"", issueDate:"", inspectionDue:"", expiryDate:"", fallArrest:"" as "Yes"|"No"|"" };
 
-export function PpeRegisterDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PpeRegisterDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Issue PPE" step={1} totalSteps={1}
       stepLabels={["PPE Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Issue PPE">
+      onNext={() => {}} onSubmit={submit} submitLabel="Issue PPE">
       <Section>
         <Label>PPE Type *</Label>
         <Select value={f.ppeType} onChange={v => s("ppeType", v)} placeholder="Select PPE type…" options={PPE_TYPES} />

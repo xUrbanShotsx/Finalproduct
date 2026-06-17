@@ -89,8 +89,9 @@ function ControlCard({ r }: { r: typeof RECORDS[number] }) {
 
 export function CriticalRiskControlsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const failed  = RECORDS.filter(r => r.result === "Failed").length;
-  const partial = RECORDS.filter(r => r.result === "Partial").length;
+  const [rows, setRows] = useState(RECORDS);
+  const failed  = rows.filter(r => r.result === "Failed").length;
+  const partial = rows.filter(r => r.result === "Partial").length;
 
   // Sort: Failed first, then Partial, then Not Checked, then Verified
   const ORDER: VerifyResult[] = ["Failed","Partial","Not Checked","Verified"];
@@ -111,10 +112,10 @@ export function CriticalRiskControlsPage() {
       }
       stats={
         <>
-          <Stat label="Controls Today"   value={String(RECORDS.length)} sub="scheduled"                              />
+          <Stat label="Controls Today"   value={String(rows.length)} sub="scheduled"                              />
           <Stat label="Failed"           value={String(failed)}         sub="CRC-014"                  highlight="red"    />
           <Stat label="Partial"          value={String(partial)}        sub="engineer review pending"  highlight="yellow" />
-          <Stat label="Verified"         value={String(RECORDS.filter(r => r.result === "Verified").length)} sub="confirmed in place" highlight="green" />
+          <Stat label="Verified"         value={String(rows.filter(r => r.result === "Verified").length)} sub="confirmed in place" highlight="green" />
         </>
       }
       tabs={["Today", "Failed", "Partial", "Not Checked", "History"]}
@@ -123,7 +124,13 @@ export function CriticalRiskControlsPage() {
         {sorted.map(r => <ControlCard key={r.ref} r={r} />)}
       </div>
     </PageShell>
-    <CriticalRiskControlsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <CriticalRiskControlsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

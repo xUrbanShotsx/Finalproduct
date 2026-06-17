@@ -40,6 +40,7 @@ const RECORDS: Array<{
 
 export function WardenRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -76,7 +77,7 @@ export function WardenRegisterPage() {
           <Th>Contact</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const roleStyle     = ROLE_COLORS[r.role];
             const trainingStyle = TRAINING_COLORS[r.trainingStatus];
             return (
@@ -103,7 +104,13 @@ export function WardenRegisterPage() {
         </tbody>
       </table>
     </PageShell>
-    <WardenDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <WardenDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

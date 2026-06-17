@@ -13,16 +13,17 @@ type Result = "Pass" | "Fail" | "";
 const INIT_CHECKS = Object.fromEntries(CHECKS.map(c => [c, "" as Result])) as Record<Check, Result>;
 const INIT = { site:"", supervisor:"", shift:"" as typeof SHIFTS[number]|"", date:"" };
 
-export function OperationalReadinessDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function OperationalReadinessDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const [checks, setChecks] = useState(INIT_CHECKS);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); setChecks(INIT_CHECKS); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   const fails = Object.values(checks).filter(v => v === "Fail").length;
   return (
     <Drawer open={open} onClose={reset} title="Readiness Check" step={1} totalSteps={1}
       stepLabels={["Check Items"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Submit Check">
+      onNext={() => {}} onSubmit={submit} submitLabel="Submit Check">
       <Section>
         <Row>
           <Col><Label>Site *</Label><Select value={f.site} onChange={v => s("site", v)} placeholder="Select site…" options={SITES} /></Col>

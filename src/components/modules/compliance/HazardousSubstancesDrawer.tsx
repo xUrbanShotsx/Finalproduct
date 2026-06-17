@@ -10,14 +10,15 @@ const UNITS = ["L","mL","kg","g","t"];
 
 const INIT = { productName:"", ghsClass:"", signalWord:"" as typeof SIGNAL_WORDS[number]|"", site:"", location:"", quantity:"", unit:"", sdsExpiry:"", supplier:"" };
 
-export function HazardousSubstancesDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function HazardousSubstancesDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Substance" step={1} totalSteps={1}
       stepLabels={["Substance Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add to Register">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add to Register">
       <Section>
         <Label>Product Name *</Label>
         <Input value={f.productName} onChange={v => s("productName", v)} placeholder="e.g. Bondcrete SB 50" />

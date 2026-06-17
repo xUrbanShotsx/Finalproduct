@@ -19,6 +19,7 @@ const RECORDS = [
 
 export function WhiteCardPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -54,7 +55,7 @@ export function WhiteCardPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <Tr key={r.ref}>
               <Td><span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>{r.ref}</span></Td>
               <Td><span style={{ color: "var(--b-text)" }}>{r.name}</span></Td>
@@ -78,7 +79,13 @@ export function WhiteCardPage() {
         </tbody>
       </table>
     </PageShell>
-    <WhiteCardDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <WhiteCardDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

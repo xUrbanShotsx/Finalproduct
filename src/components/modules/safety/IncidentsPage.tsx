@@ -29,6 +29,7 @@ function StatusIcon({ status }: { status: string }) {
 
 export function IncidentsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
 
   return (
     <>
@@ -54,7 +55,7 @@ export function IncidentsPage() {
         tabs={["All", "Open", "Under Investigation", "Closed", "Notifiable"]}
       >
         <div className="space-y-2 p-1">
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <div
               key={r.ref}
               className="flex items-stretch border cursor-pointer transition-colors"
@@ -112,7 +113,17 @@ export function IncidentsPage() {
         </div>
       </PageShell>
 
-      <ReportIncidentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <ReportIncidentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(form) => setRows(prev => [{
+        ref: `INC-${45 + prev.length}`,
+        date: form.date || new Date().toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric" }),
+        time: form.time || new Date().toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit", hour12: false }),
+        type: form.incidentType || "Near Miss",
+        location: [form.site, form.specificLocation].filter(Boolean).join(" — ") || "Site 01",
+        severity: (["Critical","High","Medium","Low"].includes(form.severity) ? form.severity : "Medium") as "Critical" | "High" | "Medium" | "Low",
+        status: "Open" as const,
+        assignee: form.assignee || "Unassigned",
+        daysOpen: 0,
+      } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

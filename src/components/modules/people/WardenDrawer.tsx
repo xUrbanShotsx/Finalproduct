@@ -8,14 +8,15 @@ const SITES = ["Site 01","Site 02","Site 03","All Sites"];
 
 const INIT = { name:"", role:"", site:"", floor:"", phone:"", trainingDate:"", trainingExpiry:"" };
 
-export function WardenDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function WardenDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Warden" step={1} totalSteps={1}
       stepLabels={["Warden Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add Warden">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add Warden">
       <Section>
         <Row>
           <Col><Label>Full Name *</Label><Input value={f.name} onChange={v => s("name", v)} placeholder="Full name" /></Col>

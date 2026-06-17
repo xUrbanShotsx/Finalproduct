@@ -36,7 +36,8 @@ const RECORDS: Array<{
 
 export function HrcwCompliancePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const nonCompliant = RECORDS.filter(r => !r.compliant).length;
+  const [rows, setRows] = useState(RECORDS);
+  const nonCompliant = rows.filter(r => !r.compliant).length;
   return (
     <>
     <PageShell
@@ -52,10 +53,10 @@ export function HrcwCompliancePage() {
         }
       stats={
         <>
-          <Stat label="Active Categories" value={String(RECORDS.filter(r => r.status === "Active").length)} sub="under Reg 291"                     />
+          <Stat label="Active Categories" value={String(rows.filter(r => r.status === "Active").length)} sub="under Reg 291"                     />
           <Stat label="Non-Compliant"     value={String(nonCompliant)} sub="gap in evidence"                highlight="red"   />
           <Stat label="SWMS Gaps"         value="2"                    sub="missing or unsigned"            highlight="yellow"/>
-          <Stat label="Compliant"         value={String(RECORDS.filter(r => r.compliant).length)} sub="full evidence on file" highlight="green" />
+          <Stat label="Compliant"         value={String(rows.filter(r => r.compliant).length)} sub="full evidence on file" highlight="green" />
         </>
       }
       tabs={["All", "Non-Compliant", "Active", "Pending", "Closed"]}
@@ -73,7 +74,7 @@ export function HrcwCompliancePage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => {
+          {rows.map((r) => {
             const swmsStyle = EVIDENCE_COLORS[r.swmsStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const permitStyle = EVIDENCE_COLORS[r.permitStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const notifStyle = EVIDENCE_COLORS[r.notificationStatus] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
@@ -99,7 +100,13 @@ export function HrcwCompliancePage() {
         </tbody>
       </table>
     </PageShell>
-    <HrcwComplianceDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <HrcwComplianceDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
+      const base = RECORDS[0];
+      const overlay = Object.fromEntries(Object.entries(f).filter(([k, v]) => k in (base as object) && v !== "")) as Partial<typeof base>;
+      const idKey = ("ref" in (base as object) ? "ref" : Object.keys(base as object)[0]) as keyof typeof base;
+      const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
+      return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
+    })} />
     </>
   );
 }

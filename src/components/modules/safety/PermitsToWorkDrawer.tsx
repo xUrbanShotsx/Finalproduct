@@ -9,14 +9,15 @@ const RISK = ["Low","Medium","High"] as const;
 
 const INIT = { permitType:"", description:"", area:"", risk:"" as typeof RISK[number]|"", issuedTo:"", validFrom:"", validTo:"", isolations:"" };
 
-export function PermitsToWorkDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PermitsToWorkDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Permit to Work" step={1} totalSteps={1}
       stepLabels={["Permit Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Issue Permit">
+      onNext={() => {}} onSubmit={submit} submitLabel="Issue Permit">
       <Section>
         <Row>
           <Col><Label>Permit Type *</Label><Select value={f.permitType} onChange={v => s("permitType", v)} placeholder="Select type…" options={PERMIT_TYPES} /></Col>

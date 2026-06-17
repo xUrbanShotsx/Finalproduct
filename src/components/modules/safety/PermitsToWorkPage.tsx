@@ -27,8 +27,18 @@ const RECORDS: Array<{
   { ref: "PTW-035", type: "Confined Space", description: "Tank inspection — T-04 (planned)",          area: "Tank Farm",     issued: "20 Jun 06:00", expires: "20 Jun 16:00", status: "Pending", issuedBy: "M. Jones", loto: "LOTO-021", expiringSoon: false },
 ];
 
+const PTW_TYPE_MAP: Record<string, keyof typeof PERMIT_TYPES> = {
+  "Hot Work": "Hot Work",
+  "Confined Space": "Confined Space",
+  "Isolation / Energy Control": "Isolation",
+  "Line Breaking": "Line Breaking",
+  "Working at Height": "Working at Height",
+  "Electrical": "Electrical",
+};
+
 export function PermitsToWorkPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(RECORDS);
   return (
     <>
     <PageShell
@@ -65,7 +75,7 @@ export function PermitsToWorkPage() {
           <Th>Issued By</Th>
         </TableHead>
         <tbody>
-          {RECORDS.map((r) => (
+          {rows.map((r) => (
             <Tr key={r.ref}>
               <Td><span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>{r.ref}</span></Td>
               <Td><Badge label={r.type} bg={PERMIT_TYPES[r.type].bg} color={PERMIT_TYPES[r.type].color} /></Td>
@@ -89,7 +99,18 @@ export function PermitsToWorkPage() {
         </tbody>
       </table>
     </PageShell>
-    <PermitsToWorkDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+    <PermitsToWorkDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+      ref: `PTW-${36 + prev.length}`,
+      type: PTW_TYPE_MAP[f.permitType] ?? "Hot Work",
+      description: f.description || f.permitType || "Permit to work",
+      area: f.area || "Process Line A",
+      issued: f.validFrom ? f.validFrom.slice(5).replace("T", " ") : "Today",
+      expires: f.validTo ? f.validTo.slice(5).replace("T", " ") : "—",
+      status: "Active" as const,
+      issuedBy: f.issuedTo || "—",
+      loto: f.isolations || "—",
+      expiringSoon: false,
+    } as (typeof RECORDS)[number], ...prev])} />
     </>
   );
 }

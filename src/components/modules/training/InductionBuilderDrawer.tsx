@@ -9,9 +9,9 @@ const INDUSTRIES = ["Construction", "Industrial", "Facilities", "All Industries"
 const DELIVERY   = ["In-Person", "Online", "Hybrid"] as const;
 const SIGN_OFF   = ["Digital Signature", "Paper Sign-off", "No Sign-off"] as const;
 
-interface Props { open: boolean; onClose: () => void }
+interface Props { open: boolean; onClose: () => void; onAdd?: (f: Record<string, string>) => void }
 
-export function InductionBuilderDrawer({ open, onClose }: Props) {
+export function InductionBuilderDrawer({ open, onClose, onAdd }: Props) {
   const [step,       setStep]      = useState(1);
   const [title,      setTitle]     = useState("");
   const [industry,   setIndustry]  = useState("");
@@ -42,7 +42,7 @@ Output: numbered list only. No headers or markdown.`;
       onStepChange={setStep}
       onBack={() => step === 1 ? close() : setStep(s => s - 1)}
       onNext={() => setStep(s => s + 1)}
-      onSubmit={() => { alert("Induction saved (demo)"); close(); }}
+      onSubmit={() => { onAdd?.({ title, industry, roles, signOff }); close(); }}
       submitLabel="Save Induction"
     >
       {step === 1 && (

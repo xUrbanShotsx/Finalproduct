@@ -9,9 +9,9 @@ const CATEGORIES = ["Safety", "Compliance", "Health & Wellbeing", "Operations", 
 const DELIVERY   = ["Online", "Face-to-Face", "Blended"] as const;
 const ASSESSMENT = ["Quiz / MCQ", "Practical Assessment", "Observation Checklist", "Written Assignment", "No Assessment"];
 
-interface Props { open: boolean; onClose: () => void }
+interface Props { open: boolean; onClose: () => void; onAdd?: (f: Record<string, string>) => void }
 
-export function CourseBuilderDrawer({ open, onClose }: Props) {
+export function CourseBuilderDrawer({ open, onClose, onAdd }: Props) {
   const [step, setStep] = useState(1);
   const [title,       setTitle]       = useState("");
   const [category,    setCategory]    = useState("");
@@ -43,7 +43,7 @@ Output numbered modules (4–6 modules) with 2–3 learning objectives each. Kee
       onStepChange={setStep}
       onBack={() => step === 1 ? close() : setStep(s => s - 1)}
       onNext={() => setStep(s => s + 1)}
-      onSubmit={() => { alert("Course saved (demo)"); close(); }}
+      onSubmit={() => { onAdd?.({ title, category, delivery, durationHrs: duration }); close(); }}
       submitLabel="Create Course"
     >
       {step === 1 && (

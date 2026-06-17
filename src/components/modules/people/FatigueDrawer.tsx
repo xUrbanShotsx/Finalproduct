@@ -9,14 +9,15 @@ const RISK = ["Low","Moderate","High","Critical"] as const;
 
 const INIT = { worker:"", site:"", shiftStart:"", shiftEnd:"", consecutiveDays:"", riskLevel:"" as typeof RISK[number]|"", flagged:"" as "Yes"|"No"|"" };
 
-export function FatigueDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function FatigueDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Log Fatigue Record" step={1} totalSteps={1}
       stepLabels={["Fatigue Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Save Record">
+      onNext={() => {}} onSubmit={submit} submitLabel="Save Record">
       <Section>
         <Row>
           <Col><Label>Worker *</Label><Select value={f.worker} onChange={v => s("worker", v)} placeholder="Select worker…" options={WORKERS} /></Col>

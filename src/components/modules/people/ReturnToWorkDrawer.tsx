@@ -8,14 +8,15 @@ const COORDINATORS = ["J. Smith","M. Jones","K. Davis","T. Walsh","HR Team"];
 
 const INIT = { worker:"", incidentRef:"", rtwStart:"", capacity:"" as typeof CAPACITY[number]|"", restrictions:"", practitioner:"", coordinator:"", notes:"" };
 
-export function ReturnToWorkDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ReturnToWorkDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New RTW Plan" step={1} totalSteps={1}
       stepLabels={["RTW Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create RTW Plan">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create RTW Plan">
       <Section>
         <Row>
           <Col><Label>Worker *</Label><Input value={f.worker} onChange={v => s("worker", v)} placeholder="Full name" /></Col>

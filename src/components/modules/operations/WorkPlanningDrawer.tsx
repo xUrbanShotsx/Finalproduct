@@ -10,16 +10,17 @@ const PRIORITIES = ["Scheduled","Urgent","Hold"];
 
 const INIT = { title:"", site:"", supervisor:"", trade:"", priority:"", plannedStart:"", plannedEnd:"", swmsRef:"", permitRef:"", description:"" };
 
-export function WorkPlanningDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function WorkPlanningDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New Work Plan" step={step} totalSteps={2}
       stepLabels={["Work Details","Controls & Refs"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Create Work Plan">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Create Work Plan">
       {step === 1 && <>
         <Section>
           <Label>Work Plan Title *</Label>

@@ -14,7 +14,7 @@ type Result = "Pass" | "Fail" | "";
 const INIT_CHECKS = Object.fromEntries(CHECKS.map(c => [c, "" as Result])) as Record<Check, Result>;
 const INIT = { asset:"", site:"", operator:"", date:"", notes:"" };
 
-export function PrestartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PrestartDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (d: { asset: string; operator: string; site: string; result: "Pass" | "Fail"; defects: number }) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const [checks, setChecks] = useState(INIT_CHECKS);
@@ -22,11 +22,15 @@ export function PrestartDrawer({ open, onClose }: { open: boolean; onClose: () =
   const reset = () => { setStep(1); setF(INIT); setChecks(INIT_CHECKS); onClose(); };
   const failedChecks = CHECKS.filter(c => checks[c] === "Fail");
   const fails = failedChecks.length;
+  const submit = () => {
+    onAdd?.({ asset: f.asset || "Unspecified asset", operator: f.operator || "—", site: f.site || "Site 01", result: fails > 0 ? "Fail" : "Pass", defects: fails });
+    reset();
+  };
   return (
     <Drawer open={open} onClose={reset} title="Start Prestart Check" step={step} totalSteps={2}
       stepLabels={["Asset & Operator","Checklist"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Submit Prestart">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Submit Prestart">
       {step === 1 && <>
         <Section>
           <Label>Asset / Plant *</Label>

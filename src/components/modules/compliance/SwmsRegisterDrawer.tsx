@@ -9,14 +9,15 @@ const PEOPLE = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { title:"", hrcw:"", site:"", location:"", description:"", preparedBy:"", reviewDate:"", version:"Rev 1" };
 
-export function SwmsRegisterDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SwmsRegisterDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="New SWMS" step={1} totalSteps={1}
       stepLabels={["SWMS Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Create SWMS">
+      onNext={() => {}} onSubmit={submit} submitLabel="Create SWMS">
       <Section>
         <Label>SWMS Title *</Label>
         <Input value={f.title} onChange={v => s("title", v)} placeholder="e.g. Working at Heights — Scaffold Erection" />

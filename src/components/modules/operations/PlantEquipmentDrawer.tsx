@@ -13,16 +13,17 @@ type Result = "Pass" | "Fail" | "";
 const INIT_CHECKS = Object.fromEntries(CHECKS.map(c => [c, "" as Result])) as Record<Check, Result>;
 const INIT = { assetType:"", assetId:"", site:"", operator:"", date:"" };
 
-export function PlantEquipmentDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function PlantEquipmentDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const [checks, setChecks] = useState(INIT_CHECKS);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); setChecks(INIT_CHECKS); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   const fails = Object.values(checks).filter(v => v === "Fail").length;
   return (
     <Drawer open={open} onClose={reset} title="Pre-op Check" step={1} totalSteps={1}
       stepLabels={["Pre-op Checklist"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Submit Pre-op">
+      onNext={() => {}} onSubmit={submit} submitLabel="Submit Pre-op">
       <Section>
         <Row>
           <Col><Label>Asset Type *</Label><Select value={f.assetType} onChange={v => s("assetType", v)} placeholder="Select type…" options={ASSET_TYPES} /></Col>

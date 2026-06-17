@@ -11,16 +11,17 @@ const OWNERS = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","
 
 const INIT = { hazardType:"", title:"", site:"", location:"", likelihood:"", consequence:"", controls:"", owner:"", reviewDate:"" };
 
-export function HazardRegisterDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function HazardRegisterDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [step, setStep] = useState(1);
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: string) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setStep(1); setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Hazard" step={step} totalSteps={2}
       stepLabels={["Hazard Details","Risk Rating"]}
       onStepChange={setStep} onBack={() => step === 1 ? reset() : setStep(1)}
-      onNext={() => setStep(2)} onSubmit={reset} submitLabel="Add to Register">
+      onNext={() => setStep(2)} onSubmit={submit} submitLabel="Add to Register">
       {step === 1 && <>
         <Section>
           <Label>Hazard Title *</Label>

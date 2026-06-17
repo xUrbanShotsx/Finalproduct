@@ -25,6 +25,7 @@ const IND_COLOR: Record<string, { bg: string; color: string }> = {
 
 export function InductionBuilderPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [rows, setRows] = useState(INDUCTIONS);
 
   return (
     <>
@@ -50,7 +51,7 @@ export function InductionBuilderPage() {
         tabs={["All", "Active", "Draft", "Archived"]}
       >
         <div className="p-6 space-y-3">
-          {INDUCTIONS.map(ind => {
+          {rows.map(ind => {
             const ic = IND_COLOR[ind.industry] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-muted)" };
             return (
               <div
@@ -112,7 +113,15 @@ export function InductionBuilderPage() {
         </div>
       </PageShell>
 
-      <InductionBuilderDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <InductionBuilderDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => [{
+        ...INDUCTIONS[0],
+        id: `IND-${String(100 + prev.length).padStart(3, "0")}`,
+        title: f.title || "New induction",
+        industry: f.industry || INDUCTIONS[0].industry,
+        roles: f.roles || "—",
+        signOff: f.signOff || INDUCTIONS[0].signOff,
+        completions: 0,
+      } as (typeof INDUCTIONS)[number], ...prev])} />
     </>
   );
 }

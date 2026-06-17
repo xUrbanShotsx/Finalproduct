@@ -10,14 +10,15 @@ const ASSIGNEES = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee
 
 const INIT = { hazardType:"", surface:"", site:"", location:"", description:"", controls:"", inspectionDue:"" as "Overdue"|"Due Soon"|"OK"|"", assignee:"", dueDate:"" };
 
-export function SlipTripFallDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SlipTripFallDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Report Hazard" step={1} totalSteps={1}
       stepLabels={["Hazard Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Report Hazard">
+      onNext={() => {}} onSubmit={submit} submitLabel="Report Hazard">
       <Section>
         <Row>
           <Col><Label>Hazard Type *</Label><Select value={f.hazardType} onChange={v => s("hazardType", v)} placeholder="Select type…" options={HAZARD_TYPES} /></Col>

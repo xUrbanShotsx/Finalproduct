@@ -9,14 +9,15 @@ const STATUSES = ["Current","Amendment Pending","Superseded"] as const;
 
 const INIT = { instrType:"" as typeof INSTRUMENT_TYPES[number]|"", jurisdiction:"", title:"", ref:"", status:"" as typeof STATUSES[number]|"", commencement:"", reviewDate:"", amendmentPending:"" as "Yes"|"No"|"" };
 
-export function LegislativeRegisterDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function LegislativeRegisterDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
   const s = <K extends keyof typeof INIT>(k: K, v: (typeof INIT)[K]) => setF(p => ({ ...p, [k]: v }));
   const reset = () => { setF(INIT); onClose(); };
+  const submit = () => { onAdd?.(f); reset(); };
   return (
     <Drawer open={open} onClose={reset} title="Add Instrument" step={1} totalSteps={1}
       stepLabels={["Instrument Details"]} onStepChange={() => {}} onBack={reset}
-      onNext={() => {}} onSubmit={reset} submitLabel="Add to Register">
+      onNext={() => {}} onSubmit={submit} submitLabel="Add to Register">
       <Section>
         <Row>
           <Col><Label>Type *</Label><Select value={f.instrType} onChange={v => s("instrType", v as typeof INIT["instrType"])} placeholder="Select type…" options={[...INSTRUMENT_TYPES]} /></Col>
