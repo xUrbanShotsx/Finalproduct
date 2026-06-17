@@ -557,7 +557,7 @@ export default function LandingPage() {
               onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = "#aaa"; (e.currentTarget as HTMLElement).style.borderColor = "#333"; }}
               onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = "#555"; (e.currentTarget as HTMLElement).style.borderColor = "#222"; }}
             >
-              View live demo
+              Try Free Demo
             </Link>
           </div>
 
