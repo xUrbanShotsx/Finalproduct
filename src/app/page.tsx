@@ -456,7 +456,7 @@ const PRODUCTS: [string, string, string][] = [
   ["/signup", "Construction SMS", "Safety management for construction sites"],
   ["/signup", "Industrial SMS",   "Safety management for industrial operations"],
   ["/signup", "Facilities SMS",   "Safety management for facilities teams"],
-  ["/signup", "Blueprints (ISO)", "AI-generated ISO 9001 / 14001 / 45001 packs"],
+  ["/signup", "Blueprints (ISO)", "ISO 9001 / 14001 / 45001 packs"],
 ];
 
 export default function LandingPage() {
