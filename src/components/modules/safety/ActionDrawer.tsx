@@ -7,8 +7,13 @@ import { AiButton } from "../AiButton";
 const SOURCES = ["Incident","Near Miss","Audit","Inspection","SWMS","Risk Assessment","Regulator Notice","Other"];
 const ASSIGNEES = ["J. Smith","M. Jones","K. Davis","T. Walsh","D. Wong","S. Lee","P. Nguyen"];
 const PRIORITIES = ["Critical","High","Medium","Low"];
+const SITES = ["Site 01","Site 02","Site 03","All Sites","Office"];
+const CONTROL_TYPES = ["Elimination","Substitution","Engineering","Administrative","PPE"];
 
-const INIT = { title:"", source:"", sourceRef:"", priority:"", dueDate:"", assignee:"", description:"" };
+const INIT = {
+  title:"", source:"", sourceRef:"", priority:"", dueDate:"", assignee:"", description:"",
+  site:"", location:"", controlType:"", verification:"", evidenceRequired:"",
+};
 
 export function ActionDrawer({ open, onClose, onAdd }: { open: boolean; onClose: () => void; onAdd?: (f: typeof INIT) => void }) {
   const [f, setF] = useState(INIT);
@@ -37,8 +42,22 @@ export function ActionDrawer({ open, onClose, onAdd }: { open: boolean; onClose:
         </Row>
       </Section>
       <Section>
-        <Label>Assignee *</Label>
-        <Select value={f.assignee} onChange={v => s("assignee", v)} placeholder="Select assignee…" options={ASSIGNEES} />
+        <Row>
+          <Col><Label>Site *</Label><Select value={f.site} onChange={v => s("site", v)} placeholder="Select site…" options={SITES} /></Col>
+          <Col><Label>Location / area</Label><Input value={f.location} onChange={v => s("location", v)} placeholder="e.g. Level 3 — east edge" /></Col>
+        </Row>
+      </Section>
+      <Section>
+        <Row>
+          <Col><Label>Assignee *</Label><Select value={f.assignee} onChange={v => s("assignee", v)} placeholder="Select assignee…" options={ASSIGNEES} /></Col>
+          <Col><Label>Control type</Label><Select value={f.controlType} onChange={v => s("controlType", v)} placeholder="Hierarchy of control…" options={CONTROL_TYPES} /></Col>
+        </Row>
+      </Section>
+      <Section>
+        <Row>
+          <Col><Label>Verification method</Label><Input value={f.verification} onChange={v => s("verification", v)} placeholder="How will close-out be verified?" /></Col>
+          <Col><Label>Evidence required?</Label><Select value={f.evidenceRequired} onChange={v => s("evidenceRequired", v)} placeholder="Select…" options={["Yes","No"]} /></Col>
+        </Row>
       </Section>
       <div>
         <div className="flex items-center justify-between mb-1.5">

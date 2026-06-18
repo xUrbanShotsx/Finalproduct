@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Plus, ChevronDown } from "lucide-react";
+import { X, Plus, ChevronDown, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { AiButton } from "../AiButton";
 
@@ -28,6 +28,8 @@ const INCIDENT_TYPES = [
 const SITES = ["Site 01", "Site 02", "Site 03", "All Sites", "Office"];
 const SEVERITIES = ["Critical", "High", "Medium", "Low"] as const;
 const ASSIGNEES = ["J. Smith", "M. Jones", "K. Davis", "T. Walsh", "D. Wong", "S. Lee", "P. Nguyen"];
+const TREATMENTS = ["None", "First aid on site", "Medical (GP / clinic)", "Hospital — outpatient", "Hospital — admitted"] as const;
+const BODY_PARTS = ["Head / face", "Eyes", "Neck / back", "Shoulder / arm", "Hand / fingers", "Torso", "Leg / knee", "Foot / ankle", "Multiple", "Other"];
 
 /* ── Shared field styles ── */
 const fieldBase: React.CSSProperties = {
@@ -163,23 +165,31 @@ function Textarea({
 
 export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({
+  const BLANK = {
     incidentType: "",
     date: "",
     time: "",
     site: "",
     specificLocation: "",
+    activity: "",
+    equipmentInvolved: "",
+    conditions: "",
     description: "",
     immediateActions: "",
     severity: "" as (typeof SEVERITIES)[number] | "",
     injuryOccurred: "" as "Yes" | "No" | "",
     injuredPerson: "",
     injuryType: "",
+    bodyPart: "",
+    treatment: "" as (typeof TREATMENTS)[number] | "",
+    daysLost: "",
     notifiableIncident: "" as "Yes" | "No" | "",
     regulatorNotified: "" as "Notified" | "Not yet" | "",
+    rootCause: "",
     assignee: "",
     witnesses: "",
-  });
+  };
+  const [form, setForm] = useState(BLANK);
 
   function set<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -187,12 +197,7 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
 
   function handleClose() {
     setStep(1);
-    setForm({
-      incidentType: "", date: "", time: "", site: "", specificLocation: "",
-      description: "", immediateActions: "", severity: "", injuryOccurred: "",
-      injuredPerson: "", injuryType: "", notifiableIncident: "",
-      regulatorNotified: "", assignee: "", witnesses: "",
-    });
+    setForm(BLANK);
     onClose();
   }
 
@@ -211,65 +216,58 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
 
   return (
     <>
-      {/* Overlay */}
+      {/* Full-page form */}
       <div
-        className="fixed inset-0 z-40 transition-opacity duration-300"
+        className="fixed inset-0 z-50 flex flex-col"
         style={{
-          background: "rgba(0,0,0,0.55)",
+          background: "var(--b-bg-canvas)",
           opacity: open ? 1 : 0,
+          transform: open ? "translateY(0)" : "translateY(10px)",
           pointerEvents: open ? "auto" : "none",
-        }}
-        onClick={handleClose}
-      />
-
-      {/* Drawer */}
-      <div
-        className="b-drawer-panel fixed top-0 right-0 z-50 h-full flex flex-col transition-transform duration-300"
-        style={{
-          width: "33.333%",
-          background: "var(--b-bg-secondary)",
-          borderLeft: "1px solid var(--b-border)",
-          transform: open ? "translateX(0)" : "translateX(100%)",
+          transition: "opacity 200ms ease, transform 200ms ease",
         }}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-6 py-4 flex-shrink-0 border-b"
-          style={{ borderColor: "var(--b-border)" }}
+          className="flex items-center gap-3 px-4 sm:px-6 h-14 flex-shrink-0 border-b"
+          style={{ background: "var(--b-bg)", borderColor: "var(--b-border)" }}
         >
-          <div>
-            <div className="text-[15px] font-semibold" style={{ color: "var(--b-text)" }}>Report Incident</div>
-            <div className="text-[11.5px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>Step {step} of 3</div>
-          </div>
-          <button onClick={handleClose} className="b-icon-btn w-8 h-8 flex items-center justify-center">
-            <X className="w-4 h-4" />
+          <button onClick={handleClose} aria-label="Close" className="b-icon-btn w-9 h-9 flex items-center justify-center -ml-2">
+            <X className="w-5 h-5" />
           </button>
+          <div className="min-w-0">
+            <div className="text-[15px] font-semibold" style={{ color: "var(--b-text)" }}>Report Incident</div>
+            <div className="text-[11.5px]" style={{ color: "var(--b-text-muted)" }}>Step {step} of 3</div>
+          </div>
         </div>
 
         {/* Step tabs */}
-        <div className="flex flex-shrink-0" style={{ borderBottom: "1px solid var(--b-border)" }}>
-          {[
-            { n: 1, label: "Incident Details" },
-            { n: 2, label: "People & Injury" },
-            { n: 3, label: "Assign & Submit" },
-          ].map(({ n, label }) => (
-            <div
-              key={n}
-              className="flex-1 py-2.5 text-center text-[11px] font-semibold cursor-pointer transition-colors"
-              style={{
-                color: step === n ? "var(--b-accent-text)" : "var(--b-text-muted)",
-                borderBottom: step === n ? "2px solid var(--b-accent-text)" : "2px solid transparent",
-                background: step === n ? "var(--b-accent-bg)" : "transparent",
-              }}
-              onClick={() => setStep(n)}
-            >
-              {n}. {label}
-            </div>
-          ))}
+        <div className="flex-shrink-0 overflow-x-auto border-b" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
+          <div className="mx-auto max-w-[760px] flex">
+            {[
+              { n: 1, label: "Incident Details" },
+              { n: 2, label: "People & Injury" },
+              { n: 3, label: "Assign & Submit" },
+            ].map(({ n, label }) => (
+              <button
+                key={n}
+                className="flex-1 min-w-[120px] py-3 text-center text-[12px] font-semibold cursor-pointer transition-colors"
+                style={{
+                  color: step === n ? "var(--b-accent-text)" : "var(--b-text-muted)",
+                  borderBottom: step === n ? "2px solid var(--b-accent-text)" : "2px solid transparent",
+                  background: step === n ? "var(--b-accent-bg)" : "transparent",
+                }}
+                onClick={() => setStep(n)}
+              >
+                {n}. {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-5">
+        <div className="flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-[760px] px-5 sm:px-8 py-7 pb-28">
 
           {/* Step 1 */}
           {step === 1 && (
@@ -312,6 +310,23 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
                     onChange={(v) => set("specificLocation", v)}
                     placeholder="e.g. Level 3 — North slab edge"
                   />
+                </div>
+              </div>
+
+              <div style={divider}>
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className={labelClass} style={labelStyle}>Activity at time of incident</label>
+                    <Input value={form.activity} onChange={(v) => set("activity", v)} placeholder="e.g. Stripping formwork" />
+                  </div>
+                  <div className="flex-1">
+                    <label className={labelClass} style={labelStyle}>Plant / equipment involved</label>
+                    <Input value={form.equipmentInvolved} onChange={(v) => set("equipmentInvolved", v)} placeholder="e.g. Tower crane TC-04" />
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <label className={labelClass} style={labelStyle}>Environmental conditions</label>
+                  <Input value={form.conditions} onChange={(v) => set("conditions", v)} placeholder="e.g. Wet underfoot, low light, high wind" />
                 </div>
               </div>
 
@@ -371,13 +386,27 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
                       placeholder="Full name"
                     />
                   </div>
-                  <div>
+                  <div className="mb-3">
                     <label className={labelClass} style={labelStyle}>Nature of Injury</label>
                     <Input
                       value={form.injuryType}
                       onChange={(v) => set("injuryType", v)}
                       placeholder="e.g. Laceration to right hand, sprain to left ankle"
                     />
+                  </div>
+                  <div className="flex gap-3 mb-3">
+                    <div className="flex-1">
+                      <label className={labelClass} style={labelStyle}>Body part</label>
+                      <Select value={form.bodyPart} onChange={(v) => set("bodyPart", v)} placeholder="Select…" options={BODY_PARTS} />
+                    </div>
+                    <div className="flex-1">
+                      <label className={labelClass} style={labelStyle}>Days lost (est.)</label>
+                      <Input type="number" value={form.daysLost} onChange={(v) => set("daysLost", v)} placeholder="0" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={labelClass} style={labelStyle}>Treatment provided</label>
+                    <OptionGroup options={TREATMENTS} value={form.treatment} onChange={(v) => set("treatment", v)} />
                   </div>
                 </div>
               )}
@@ -422,6 +451,16 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
           {step === 3 && (
             <div>
               <div style={divider}>
+                <label className={labelClass} style={labelStyle}>Root cause / contributing factors</label>
+                <Textarea
+                  rows={3}
+                  value={form.rootCause}
+                  onChange={(v) => set("rootCause", v)}
+                  placeholder="What conditions or decisions contributed? (e.g. inadequate edge protection, time pressure, no SWMS review)"
+                />
+              </div>
+
+              <div style={divider}>
                 <label className={labelClass} style={labelStyle}>Assign Investigation To</label>
                 <Select
                   value={form.assignee}
@@ -463,36 +502,36 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
               )}
             </div>
           )}
+          </div>
         </div>
 
         {/* Footer */}
-        <div
-          className="flex items-center justify-between px-6 py-4 flex-shrink-0 border-t"
-          style={{ borderColor: "var(--b-border)", background: "var(--b-bg-secondary)" }}
-        >
-          <button
-            onClick={step === 1 ? handleClose : () => setStep((s) => s - 1)}
-            className="b-btn-ghost px-4 h-[34px] text-[12.5px] font-medium"
-          >
-            {step === 1 ? "Cancel" : "← Back"}
-          </button>
+        <div className="border-t flex-shrink-0" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
+          <div className="mx-auto max-w-[760px] px-5 sm:px-8 py-3.5 flex items-center justify-between gap-3">
+            <button
+              onClick={step === 1 ? handleClose : () => setStep((s) => s - 1)}
+              className="b-btn-ghost flex items-center gap-1.5 px-4 h-[40px] text-[13px] font-medium"
+            >
+              {step === 1 ? "Cancel" : <><ArrowLeft className="w-3.5 h-3.5" /> Back</>}
+            </button>
 
-          {step < 3 ? (
-            <button
-              onClick={() => setStep((s) => s + 1)}
-              className="b-btn-accent flex items-center gap-1.5 px-5 h-[34px] text-[12.5px] font-medium"
-            >
-              Next →
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              className="b-btn-accent flex items-center gap-1.5 px-5 h-[34px] text-[12.5px] font-medium"
-            >
-              <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
-              Submit Incident
-            </button>
-          )}
+            {step < 3 ? (
+              <button
+                onClick={() => setStep((s) => s + 1)}
+                className="b-btn-accent flex items-center gap-1.5 px-6 h-[40px] text-[13px] font-semibold"
+              >
+                Next →
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                className="b-btn-accent flex items-center gap-1.5 px-6 h-[40px] text-[13px] font-semibold"
+              >
+                <Plus className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} />
+                Submit Incident
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>
