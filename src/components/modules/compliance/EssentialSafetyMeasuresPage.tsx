@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { EssentialSafetyMeasuresDrawer } from "./EssentialSafetyMeasuresDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const ESM_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Sprinkler System":        { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -42,6 +42,7 @@ export function EssentialSafetyMeasuresPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const overdue = rows.filter(r => r.overdue).length;
   const defects = rows.filter(r => r.defect).length;
   return (
@@ -67,6 +68,8 @@ export function EssentialSafetyMeasuresPage() {
       }
       tabs={["All", "Overdue", "Defects", "Due Soon", "Completed"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -83,7 +86,7 @@ export function EssentialSafetyMeasuresPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const typeStyle = ESM_TYPE_COLORS[r.esmType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

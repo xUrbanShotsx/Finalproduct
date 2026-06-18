@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { VisitorDrawer } from "./VisitorDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type VisitPurpose  = "Contractor" | "Client" | "Delivery" | "Inspection" | "Maintenance" | "Interview";
 type AccessStatus  = "On Site" | "Signed Out" | "Overstay" | "Denied";
@@ -42,6 +42,7 @@ export function VisitorAccessPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const onSite = rows.filter(r => r.status === "On Site").length;
 
   return (
@@ -67,6 +68,8 @@ export function VisitorAccessPage() {
       }
       tabs={["Today", "On Site", "Signed Out", "Overstay", "Denied"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -81,7 +84,7 @@ export function VisitorAccessPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const purposeStyle = PURPOSE_COLORS[r.purpose];
             const statusStyle  = STATUS_COLORS[r.status];
             return (

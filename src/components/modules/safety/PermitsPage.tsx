@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { PermitDrawer } from "./PermitDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const PERMIT_TYPES = {
   Heights:          { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -94,6 +94,7 @@ export function PermitsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -117,6 +118,8 @@ export function PermitsPage() {
       }
       tabs={["All", "Active", "Expiring Soon", "Expired"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -130,7 +133,7 @@ export function PermitsPage() {
           <Th>Issued By</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => (
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => (
             <Tr key={r.ref}>
               <Td>
                 <span className="font-mono text-[12px]" style={{ color: "var(--b-text)" }}>

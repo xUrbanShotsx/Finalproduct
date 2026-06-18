@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { ToolboxDrawer } from "./ToolboxDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const TOPIC_COLORS: Record<string, { bg: string; color: string }> = {
   "Silica Dust":         { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -94,6 +94,7 @@ export function ToolboxPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const totalAttendees = rows.reduce((s, r) => s + r.attendees, 0);
 
   return (
@@ -119,6 +120,8 @@ export function ToolboxPage() {
       }
       tabs={["All", "This Month", "Pending Sign-Off", "Signed Off"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -131,7 +134,7 @@ export function ToolboxPage() {
           <Th>Sign-Off</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const topicStyle = TOPIC_COLORS[r.topic] ?? {
               bg: "var(--b-bg-active)",
               color: "var(--b-text-tertiary)",

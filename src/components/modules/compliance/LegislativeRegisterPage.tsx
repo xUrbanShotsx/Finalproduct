@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { LegislativeRegisterDrawer } from "./LegislativeRegisterDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const INSTRUMENT_COLORS: Record<string, { bg: string; color: string }> = {
   "Act":                 { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -36,6 +36,7 @@ export function LegislativeRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -59,6 +60,8 @@ export function LegislativeRegisterPage() {
       }
       tabs={["All", "Acts & Regs", "Codes of Practice", "Standards", "Overdue Review"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -73,7 +76,7 @@ export function LegislativeRegisterPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const instStyle = INSTRUMENT_COLORS[r.instrument] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

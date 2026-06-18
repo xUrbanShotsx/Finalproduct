@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, CheckCircle2, XCircle, AlertCircle, Clock } from "lucide-react";
 import { CriticalRiskControlsDrawer } from "./CriticalRiskControlsDrawer";
-import { PageShell, Stat, Badge, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type VerifyResult = "Verified" | "Failed" | "Partial" | "Not Checked";
 
@@ -91,12 +91,13 @@ export function CriticalRiskControlsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const failed  = rows.filter(r => r.result === "Failed").length;
   const partial = rows.filter(r => r.result === "Partial").length;
 
   // Sort: Failed first, then Partial, then Not Checked, then Verified
   const ORDER: VerifyResult[] = ["Failed","Partial","Not Checked","Verified"];
-  const sorted = [...rows].filter(r => matchesTab(tab, r)).sort((a, b) => ORDER.indexOf(a.result) - ORDER.indexOf(b.result));
+  const sorted = [...rows].filter(r => matchesTab(tab, r) && matchesSite(site, r)).sort((a, b) => ORDER.indexOf(a.result) - ORDER.indexOf(b.result));
 
   return (
     <>
@@ -121,6 +122,8 @@ export function CriticalRiskControlsPage() {
       }
       tabs={["Today", "Failed", "Partial", "Not Checked", "History"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {sorted.map(r => <ControlCard key={r.ref} r={r} />)}

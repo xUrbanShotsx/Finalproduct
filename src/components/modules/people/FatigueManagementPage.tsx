@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { FatigueDrawer } from "./FatigueDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type ShiftType   = "Day" | "Night" | "Overtime" | "Split";
 type RiskLevel   = "Low" | "Moderate" | "High" | "Critical";
@@ -41,6 +41,7 @@ export function FatigueManagementPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -64,6 +65,8 @@ export function FatigueManagementPage() {
       }
       tabs={["Today", "This Week", "Low", "Moderate", "High / Critical"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -79,7 +82,7 @@ export function FatigueManagementPage() {
           <Th>Action Taken</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const shiftStyle = SHIFT_COLORS[r.shiftType];
             const riskStyle  = RISK_COLORS[r.fatigueRisk];
             return (

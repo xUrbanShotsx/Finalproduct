@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, MapPin, Clock, Megaphone, Map as MapIcon, Users, X, Send, Check, ChevronRight } from "lucide-react";
 import { WorkZoneDrawer } from "./WorkZoneDrawer";
-import { PageShell, Stat, Badge, StatusBadge, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, StatusBadge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type ZoneStatus = "Active" | "Pending" | "Closed";
 
@@ -229,6 +229,7 @@ export function WorkZonePage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const [evacPlan, setEvacPlan] = useState<EvacPlan | null>(null);
   const [notifyOpen, setNotifyOpen] = useState(false);
   const [notifySite, setNotifySite] = useState<string | undefined>(undefined);
@@ -267,6 +268,8 @@ export function WorkZonePage() {
       }
       tabs={["All", "Active", "Pending", "Closed", "Traffic Management"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <div className="p-4 sm:p-6 space-y-6">
         {/* Emergency evacuation plans */}
@@ -332,7 +335,7 @@ export function WorkZonePage() {
         <div>
           <h2 className="text-[12px] font-bold uppercase tracking-widest mb-3" style={{ color: "var(--b-text)" }}>Work Zones</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {rows.filter(r => matchesTab(tab, r)).map(r => <ZoneCard key={r.ref} r={r} />)}
+            {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map(r => <ZoneCard key={r.ref} r={r} />)}
           </div>
         </div>
       </div>

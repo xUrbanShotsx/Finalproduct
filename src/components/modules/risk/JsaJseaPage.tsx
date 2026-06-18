@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { JsaJseaDrawer } from "./JsaJseaDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const TASK_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Non-routine":  { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -33,6 +33,7 @@ export function JsaJseaPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -56,6 +57,8 @@ export function JsaJseaPage() {
       }
       tabs={["All", "Active", "Draft", "Closed"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -71,7 +74,7 @@ export function JsaJseaPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const typeStyle = TASK_TYPE_COLORS[r.taskType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

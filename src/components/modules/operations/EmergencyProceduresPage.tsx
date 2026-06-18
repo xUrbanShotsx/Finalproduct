@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { EmergencyProceduresDrawer } from "./EmergencyProceduresDrawer";
-import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const PROC_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Fire":           { bg: "rgba(240,96,96,0.1)",      color: "#f06060" },
@@ -30,6 +30,7 @@ export function EmergencyProceduresPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -53,6 +54,8 @@ export function EmergencyProceduresPage() {
       }
       tabs={["All", "Active", "Draft", "Drill Overdue", "Drill Due Soon"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -67,7 +70,7 @@ export function EmergencyProceduresPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const typeStyle = PROC_TYPE_COLORS[r.type] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             const drillColor = r.daysToNextDrill < 0 ? "#f06060"
               : r.daysToNextDrill <= 30 ? "var(--b-badge-yellow-text)"

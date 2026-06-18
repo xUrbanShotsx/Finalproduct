@@ -1,7 +1,39 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Search, Download } from "lucide-react";
+import { ArrowLeft, Plus, Search, Download, MapPin } from "lucide-react";
+
+/* ── Job / project site filtering ──
+   Pulls the "site" dimension from whichever column a record uses, so the same
+   site dropdown works across every register. */
+const SITE_FIELDS = ["site", "building", "area"];
+const SITE_LOOSE_FIELDS = ["location", "sites", "building"];
+
+export function rowSite(row: Record<string, unknown>): string {
+  for (const k of SITE_FIELDS) {
+    const v = row[k];
+    if (typeof v === "string" && v && !/^all/i.test(v)) return v;
+  }
+  return "";
+}
+
+export function siteOptionsOf(rows: unknown[]): string[] {
+  const set = new Set<string>();
+  rows.forEach((r) => { const s = rowSite(r as Record<string, unknown>); if (s) set.add(s); });
+  return [...set].sort();
+}
+
+export function matchesSite(site: string, row: Record<string, unknown>): boolean {
+  if (!site) return true;
+  for (const k of SITE_FIELDS) {
+    if (String(row[k] ?? "") === site) return true;
+  }
+  for (const k of SITE_LOOSE_FIELDS) {
+    const v = String(row[k] ?? "");
+    if (v === site || v.includes(site) || /^all/i.test(v)) return true;
+  }
+  return false;
+}
 
 /* ── Generic tab/filter predicate ──
    Returns true when a row belongs under the given tab label.
@@ -152,11 +184,14 @@ interface ShellProps {
   stats: React.ReactNode;
   tabs: string[];
   onTabChange?: (tab: string) => void;
+  siteOptions?: string[];
+  onSiteChange?: (site: string) => void;
   children: React.ReactNode;
 }
 
-export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs, onTabChange, children }: ShellProps) {
+export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs, onTabChange, siteOptions, onSiteChange, children }: ShellProps) {
   const [active, setActive] = useState(0);
+  const showSite = !!siteOptions && siteOptions.length > 1;
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -169,7 +204,7 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
           {back.label}
         </Link>
 
-        <div className="flex items-start justify-between gap-4 mb-5">
+        <div className="flex items-start justify-between gap-4 mb-5 flex-wrap">
           <div>
             <h1 className="text-[20px] font-semibold" style={{ color: "var(--b-text)" }}>
               {title}
@@ -178,12 +213,27 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
               {description}
             </p>
           </div>
-          {ctaSlot ?? (
-            <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[34px] text-[12.5px] font-medium flex-shrink-0">
-              <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
-              {cta}
-            </button>
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {showSite && (
+              <div className="flex items-center gap-1.5 pl-2.5 pr-1 h-[34px] border" style={{ borderColor: "var(--b-border-strong)", background: "var(--b-bg-secondary)" }}>
+                <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--b-text-muted)" }} />
+                <select
+                  onChange={(e) => onSiteChange?.(e.target.value)}
+                  className="h-full bg-transparent text-[12.5px] outline-none cursor-pointer pr-1"
+                  style={{ color: "var(--b-text-secondary)" }}
+                >
+                  <option value="">All sites</option>
+                  {siteOptions!.map((s) => <option key={s} value={s} style={{ background: "var(--b-bg-secondary)" }}>{s}</option>)}
+                </select>
+              </div>
+            )}
+            {ctaSlot ?? (
+              <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[34px] text-[12.5px] font-medium flex-shrink-0">
+                <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
+                {cta}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-3">{stats}</div>

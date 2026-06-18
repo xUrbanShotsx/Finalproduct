@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { ActionDrawer } from "./ActionDrawer";
-import { PageShell, Stat, SeverityBadge, Badge, matchesTab } from "../shared";
+import { PageShell, Stat, SeverityBadge, Badge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 import { getExtraActions } from "@/lib/safetyActions";
 
 const SOURCE_COLORS: Record<string, { bg: string; color: string }> = {
@@ -63,6 +63,7 @@ export function ActionsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
 
   // Merge actions pushed from other modules (e.g. Blueprints gap analysis).
   useEffect(() => {
@@ -100,10 +101,12 @@ export function ActionsPage() {
       }
       tabs={["All", "Open", "Overdue", "Closed", "My Actions"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:min-h-[300px]">
         {COLS.map(col => {
-          const items = rows.filter(r => r.status === col.key).filter(r => matchesTab(tab, r));
+          const items = rows.filter(r => r.status === col.key).filter(r => matchesTab(tab, r) && matchesSite(site, r));
           return (
             <div key={col.key} className="flex flex-col">
               <div className="flex items-center justify-between px-3 py-2 mb-2 border-b" style={{ borderColor: "var(--b-border)" }}>

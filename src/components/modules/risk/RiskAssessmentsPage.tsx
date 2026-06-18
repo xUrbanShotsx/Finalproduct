@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { RiskAssessmentsDrawer } from "./RiskAssessmentsDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const HOC_COLORS: Record<string, { bg: string; color: string }> = {
   "Elimination":    { bg: "var(--b-badge-green-bg)",  color: "var(--b-badge-green-text)" },
@@ -39,6 +39,7 @@ export function RiskAssessmentsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -62,6 +63,8 @@ export function RiskAssessmentsPage() {
       }
       tabs={["All", "Critical", "High", "Draft", "Closed"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -78,7 +81,7 @@ export function RiskAssessmentsPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const hocStyle = HOC_COLORS[r.highestControl] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>

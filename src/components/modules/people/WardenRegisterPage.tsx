@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { WardenDrawer } from "./WardenDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type WardenRole = "Chief Warden" | "Floor Warden" | "Deputy Warden" | "First Aid Officer";
 type TrainingStatus = "Current" | "Expiring Soon" | "Expired" | "Not Trained";
@@ -42,6 +42,7 @@ export function WardenRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -65,6 +66,8 @@ export function WardenRegisterPage() {
       }
       tabs={["All", "Chief Wardens", "Floor Wardens", "First Aid", "Training Due"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -79,7 +82,7 @@ export function WardenRegisterPage() {
           <Th>Contact</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const roleStyle     = ROLE_COLORS[r.role];
             const trainingStyle = TRAINING_COLORS[r.trainingStatus];
             return (

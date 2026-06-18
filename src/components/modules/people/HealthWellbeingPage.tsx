@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { HealthWellbeingDrawer } from "./HealthWellbeingDrawer";
-import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type CheckType = "Wellness Check" | "EAP Referral" | "Mental Health" | "Fatigue Screen" | "Return to Work";
 type Outcome   = "Well" | "Follow-up Required" | "Referred" | "Monitoring" | "Escalated";
@@ -41,6 +41,7 @@ export function HealthWellbeingPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -64,6 +65,8 @@ export function HealthWellbeingPage() {
       }
       tabs={["All", "Follow-up Required", "EAP Referrals", "Wellness Checks", "Fatigue Screens"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -77,7 +80,7 @@ export function HealthWellbeingPage() {
           <Th>Next Review</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const typeStyle = CHECK_TYPE_COLORS[r.type];
             const outcomeStyle = OUTCOME_COLORS[r.outcome];
             return (

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus, AlertTriangle, Clock, CheckCircle2, Building2, Shield } from "lucide-react";
 import { StatutoryObligationsDrawer } from "./StatutoryObligationsDrawer";
-import { PageShell, Stat, Badge } from "../shared";
+import { PageShell, Stat, Badge, matchesSite, siteOptionsOf } from "../shared";
 
 const OBLIGATION_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Occupancy Certificate":  { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
@@ -81,14 +81,16 @@ export function StatutoryObligationsPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   const overdue = rows.filter(r => r.overdue).length;
   const pending = rows.filter(r => r.status === "Pending").length;
 
+  const sited = rows.filter(r => matchesSite(site, r as unknown as Record<string, unknown>));
   const allGroups: Group[] = [
-    { key: "overdue",  label: "Overdue",          accent: "#f06060",                    bg: "rgba(240,96,96,0.08)",     icon: AlertTriangle, items: rows.filter(r => r.overdue)                            },
-    { key: "pending",  label: "Pending",           accent: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)", icon: Clock,         items: rows.filter(r => r.status === "Pending" && !r.overdue) },
-    { key: "active",   label: "Active / Ongoing",  accent: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)",   icon: Clock,         items: rows.filter(r => r.status === "Active")                },
-    { key: "closed",   label: "Submitted / Closed",accent: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)",  icon: CheckCircle2,  items: rows.filter(r => r.status === "Closed" && !r.overdue)  },
+    { key: "overdue",  label: "Overdue",          accent: "#f06060",                    bg: "rgba(240,96,96,0.08)",     icon: AlertTriangle, items: sited.filter(r => r.overdue)                            },
+    { key: "pending",  label: "Pending",           accent: "var(--b-badge-yellow-text)", bg: "var(--b-badge-yellow-bg)", icon: Clock,         items: sited.filter(r => r.status === "Pending" && !r.overdue) },
+    { key: "active",   label: "Active / Ongoing",  accent: "var(--b-badge-blue-text)",   bg: "var(--b-badge-blue-bg)",   icon: Clock,         items: sited.filter(r => r.status === "Active")                },
+    { key: "closed",   label: "Submitted / Closed",accent: "var(--b-badge-green-text)",  bg: "var(--b-badge-green-bg)",  icon: CheckCircle2,  items: sited.filter(r => r.status === "Closed" && !r.overdue)  },
   ] as Group[];
 
   const groups: Group[] = allGroups
@@ -118,6 +120,8 @@ export function StatutoryObligationsPage() {
       }
       tabs={["All", "Overdue", "Pending", "Closed"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <div className="space-y-5">
         {groups.map(g => {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Clock, Users, BookOpen, Monitor, LayoutList, Blend } from "lucide-react";
-import { PageShell, Stat, Badge, matchesTab } from "../shared";
+import { PageShell, Stat, Badge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 import { CourseBuilderDrawer } from "./CourseBuilderDrawer";
 
 type Delivery = "Online" | "Face-to-Face" | "Blended";
@@ -38,6 +38,7 @@ export function CourseBuilderPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(COURSES);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
 
   return (
     <>
@@ -62,9 +63,11 @@ export function CourseBuilderPage() {
         }
         tabs={["All", "Active", "Draft", "Archived"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
       >
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {rows.filter(r => matchesTab(tab, r)).map(c => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map(c => {
             const catStyle = CAT_COLOR[c.category] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-muted)" };
             const DeliveryIcon = DELIVERY_ICON[c.delivery];
             return (

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { PsychosocialRiskDrawer } from "./PsychosocialRiskDrawer";
-import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab } from "../shared";
+import { PageShell, Stat, SeverityBadge, StatusBadge, Badge, TableHead, Th, Tr, Td, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 const PSYCH_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Job Demands":       { bg: "var(--b-badge-yellow-bg)", color: "var(--b-badge-yellow-text)" },
@@ -36,6 +36,7 @@ export function PsychosocialRiskPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const [site, setSite] = useState("");
   return (
     <>
     <PageShell
@@ -59,6 +60,8 @@ export function PsychosocialRiskPage() {
       }
       tabs={["All", "High Risk", "Open Investigation", "Closed"]}
       onTabChange={setTab}
+      siteOptions={siteOptionsOf(rows)}
+      onSiteChange={setSite}
     >
       <table className="w-full">
         <TableHead>
@@ -73,7 +76,7 @@ export function PsychosocialRiskPage() {
           <Th>Status</Th>
         </TableHead>
         <tbody>
-          {rows.filter(r => matchesTab(tab, r)).map((r) => {
+          {rows.filter(r => matchesTab(tab, r) && matchesSite(site, r)).map((r) => {
             const typeStyle = PSYCH_TYPE_COLORS[r.psType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
             return (
               <Tr key={r.ref}>
