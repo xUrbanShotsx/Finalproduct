@@ -462,6 +462,7 @@ const PRODUCTS: [string, string, string][] = [
 export default function LandingPage() {
   const [productsOpen, setProductsOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
   return (
     <div style={{ background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Space Grotesk', sans-serif" }}>
 
@@ -545,8 +546,40 @@ export default function LandingPage() {
               )}
             </div>
 
+            {/* Resources dropdown */}
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setResourcesOpen(true)}
+              onMouseLeave={() => setResourcesOpen(false)}
+            >
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "13.5px", fontWeight: 500, color: resourcesOpen ? "#ffffff" : "#555", cursor: "pointer", transition: "color 0.15s" }}>
+                Resources
+                <ChevronDown size={13} style={{ transform: resourcesOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }} />
+              </span>
+              {resourcesOpen && (
+                <div style={{ position: "absolute", top: "100%", left: "-12px", paddingTop: "14px", zIndex: 50 }}>
+                  <div style={{ minWidth: "240px", background: "#0f0f0f", border: "1px solid #222", padding: "6px", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
+                    {[
+                      ["/newsroom", "Newsroom", "Updates, releases and announcements"],
+                      ["/#resources", "AI Toolbox", "See Briesa's AI features in action"],
+                    ].map(([href, label, desc]) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        style={{ display: "block", padding: "10px 12px", textDecoration: "none" }}
+                        onMouseOver={e => ((e.currentTarget as HTMLElement).style.background = "#1a1a1a")}
+                        onMouseOut={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+                      >
+                        <div style={{ fontSize: "13px", fontWeight: 600, color: "#e0e0e0" }}>{label}</div>
+                        <div style={{ fontSize: "11.5px", color: "#555", marginTop: "2px" }}>{desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {[
-              ["#resources",   "Resources"],
               ["/pricing",     "Pricing"],
             ].map(([href, label]) => (
               <Link
