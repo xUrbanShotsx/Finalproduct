@@ -287,7 +287,7 @@ export default async function DashboardPage() {
           <h1 className="text-[22px] font-semibold" style={{ color: "var(--b-text)" }}>Dashboard</h1>
           <p className="text-[13px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>{today} · operational snapshot</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <button className="b-icon-btn p-2 border" style={{ borderColor: "var(--b-border)" }}>
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -334,7 +334,7 @@ export default async function DashboardPage() {
               </button>
             </div>
           </div>
-          <div className="flex gap-8 flex-shrink-0">
+          <div className="hidden md:flex gap-8 flex-shrink-0">
             <div className="text-right">
               <div className="text-[2rem] font-bold leading-none" style={{ color: "var(--b-text)" }}>{banner.workersInScope}</div>
               <div
@@ -358,7 +358,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* AI Insights */}
-      <div className="mb-6">
+      <div className="mb-6 hidden md:block">
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} />
           <span
@@ -415,7 +415,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Regulation feed */}
         <div
-          className="border p-5"
+          className="border p-5 hidden md:block"
           style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
         >
           <div className="flex items-center justify-between mb-4">

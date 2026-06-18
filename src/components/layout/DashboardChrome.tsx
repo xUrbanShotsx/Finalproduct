@@ -37,19 +37,9 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
 
   return (
     <div className="flex flex-col h-screen overflow-hidden" style={{ background: "var(--b-bg-canvas)" }}>
-      {/* Top row: hamburger (mobile) + topbar */}
-      <div className="flex items-stretch flex-shrink-0">
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          className="md:hidden flex items-center justify-center w-12 border-b border-r flex-shrink-0"
-          style={{ background: "var(--b-bg)", borderColor: "var(--b-border)", color: "var(--b-text-tertiary)" }}
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-        <div className="flex-1 min-w-0">
-          <TopBar industry={industry} orgName={orgName} userName={userName} />
-        </div>
+      {/* Top row: topbar (menu lives in the bottom bar on mobile) */}
+      <div className="flex-shrink-0">
+        <TopBar industry={industry} orgName={orgName} userName={userName} />
       </div>
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
