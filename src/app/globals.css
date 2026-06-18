@@ -262,15 +262,35 @@
   main .p-8 { padding: 16px !important; }
   main .p-6 { padding: 14px !important; }
 
-  /* Wide tables scroll horizontally rather than crushing */
-  .b-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  main table { min-width: 560px; }
+  /* Dashboard data tables become stacked cards (no sideways scrolling) */
+  main table, main thead, main tbody, main tr, main td { display: block; width: auto; }
+  main table { min-width: 0 !important; }
+  main thead { display: none; }
+  main tbody tr {
+    border: 1px solid var(--b-border) !important;
+    background: var(--b-bg-secondary);
+    margin: 0 0 8px;
+    padding: 10px 12px;
+  }
+  main tbody td {
+    border: none !important;
+    padding: 4px 0 !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+  main tbody td:first-child { font-weight: 700; margin-bottom: 2px; }
 
   /* Slide-over drawers go (near) full width */
   .b-drawer-panel { width: 100% !important; max-width: 420px; }
 
   /* Two-up dashboard splits stack */
   .r-stack > * { grid-column: 1 / -1 !important; }
+
+  /* Bigger touch targets */
+  .b-tab { height: 42px !important; }
+
+  /* Leave room for the mobile bottom nav */
+  .b-has-bottomnav { padding-bottom: 68px !important; }
 }
 
 /* Mobile dashboard sidebar (off-canvas) */
