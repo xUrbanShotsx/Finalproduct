@@ -50,8 +50,8 @@ const TOOLS: Partial<Record<ModuleKey, Tool[]>> = {
   ],
   operations: [
     { kind: "view", view: "inspections", defaultKind: "Defect", label: "Report a defect", desc: "Photo, annotate, out-of-service", icon: Camera },
-    { kind: "link", href: "/operations/defect-reporting", label: "Defects", desc: "Defect register", icon: ListChecks },
     { kind: "link", href: "/operations/site-access-control", label: "Site access", desc: "Who's on site", icon: Users },
+    { kind: "link", href: "/operations/safe-work-procedures", label: "Safe work procedures", desc: "Step-by-step procedures", icon: ListChecks },
   ],
   risk: [
     { kind: "view", view: "inspections", defaultKind: "Hazard", label: "Log a hazard", desc: "Photo & GPS from the field", icon: Camera },

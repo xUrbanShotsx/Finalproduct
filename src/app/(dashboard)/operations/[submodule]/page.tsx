@@ -7,8 +7,6 @@ import type { ModuleKey } from "@/config/modules";
 import { SubModulePage } from "@/components/modules/SubModulePage";
 import { SafeWorkProceduresPage } from "@/components/modules/operations/SafeWorkProceduresPage";
 import { SiteAccessControlPage } from "@/components/modules/operations/SiteAccessControlPage";
-import { WorkPlanningPage } from "@/components/modules/operations/WorkPlanningPage";
-import { DefectReportingPage } from "@/components/modules/operations/DefectReportingPage";
 import { EmergencyProceduresPage } from "@/components/modules/operations/EmergencyProceduresPage";
 import { PlantEquipmentPage } from "@/components/modules/operations/PlantEquipmentPage";
 import { OperationalReadinessPage } from "@/components/modules/operations/OperationalReadinessPage";
@@ -20,8 +18,6 @@ const MODULE_KEY = "operations" as ModuleKey;
 const SPECIFIC: Record<string, React.FC> = {
   "safe-work-procedures":   SafeWorkProceduresPage,
   "site-access-control":    SiteAccessControlPage,
-  "work-planning":          WorkPlanningPage,
-  "defect-reporting":       DefectReportingPage,
   "emergency-procedures":   EmergencyProceduresPage,
   "plant-equipment":        PlantEquipmentPage,
   "operational-readiness":  OperationalReadinessPage,
