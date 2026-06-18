@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Shield, Users, Settings, AlertTriangle, CheckSquare, Building2, BarChart3,
   GraduationCap, Map, Lock, X, ChevronRight, ArrowLeft, LayoutDashboard,
-  Building, Users2, Activity, CreditCard, SlidersHorizontal, LogOut,
+  Building, Users2, Activity, CreditCard, SlidersHorizontal, LogOut, HardHat,
   type LucideIcon,
 } from "lucide-react";
 import { getSubModules, CORE_MODULES, type Industry, type ModuleKey } from "@/config/modules";
@@ -86,6 +86,16 @@ export function MobileMenu({ open, onClose, industry, isDemo }: Props) {
       <div className="flex-1 overflow-y-auto p-4">
         {!activeMod ? (
           <>
+            {/* Quick: Field Tools */}
+            <Link href="/field" className="flex items-center gap-3 border px-4 py-3.5 mb-2" style={{ borderColor: "var(--b-accent-border)", background: "var(--b-accent-bg)" }}>
+              <HardHat className="w-[18px] h-[18px]" style={{ color: "var(--b-accent-text)" }} />
+              <div className="flex-1">
+                <span className="text-[14px] font-semibold block" style={{ color: "var(--b-text)" }}>Field Tools</span>
+                <span className="text-[11px]" style={{ color: "var(--b-text-secondary)" }}>Wallet · sign-on · inspections · permits</span>
+              </div>
+              <ChevronRight className="w-4 h-4" style={{ color: "var(--b-text-muted)" }} />
+            </Link>
+
             {/* Quick: Dashboard */}
             <Link href="/dashboard" className="flex items-center gap-3 border px-4 py-3.5 mb-4" style={{ borderColor: "var(--b-border)", background: "var(--b-bg)" }}>
               <LayoutDashboard className="w-[18px] h-[18px]" style={{ color: "var(--b-accent-text)" }} />

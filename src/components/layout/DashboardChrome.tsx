@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, LayoutDashboard, Shield, CheckSquare, Map, GraduationCap } from "lucide-react";
+import { Menu, LayoutDashboard, Shield, CheckSquare, HardHat } from "lucide-react";
 import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
 import { MobileMenu } from "./MobileMenu";
@@ -26,14 +26,12 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
 
   const seg = pathname.split("/")[1] || "dashboard";
 
-  // Bottom-bar destinations (mobile). Blueprints only when unlocked.
+  // Bottom-bar destinations (mobile).
   const navItems: { href: string; label: string; icon: typeof Shield; key: string }[] = [
     { href: "/dashboard", label: "Home", icon: LayoutDashboard, key: "dashboard" },
+    { href: "/field", label: "Field", icon: HardHat, key: "field" },
     { href: "/safety", label: "Safety", icon: Shield, key: "safety" },
     { href: "/compliance", label: "Compliance", icon: CheckSquare, key: "compliance" },
-    isDemo
-      ? { href: "/training", label: "Training", icon: GraduationCap, key: "training" }
-      : { href: "/blueprints", label: "Blueprints", icon: Map, key: "blueprints" },
   ];
 
   return (
