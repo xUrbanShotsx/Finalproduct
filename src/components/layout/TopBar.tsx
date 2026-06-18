@@ -54,9 +54,9 @@ export function TopBar({ orgName, userName }: TopBarProps) {
           </span>
         </div>
 
-        {/* Module crumb */}
+        {/* Module crumb — hidden on mobile */}
         {moduleLabel && moduleSegment !== "dashboard" && (
-          <>
+          <span className="hidden md:flex items-center">
             <div className="w-px h-4 flex-shrink-0 mx-1.5" style={{ background: "var(--b-border-strong)" }} />
             <Link
               href={`/${moduleSegment}`}
@@ -65,17 +65,17 @@ export function TopBar({ orgName, userName }: TopBarProps) {
             >
               {moduleLabel}
             </Link>
-          </>
+          </span>
         )}
 
-        {/* Submodule crumb */}
+        {/* Submodule crumb — hidden on mobile */}
         {subLabel && (
-          <>
+          <span className="hidden md:flex items-center">
             <div className="w-px h-4 flex-shrink-0 mx-1.5" style={{ background: "var(--b-border-strong)" }} />
             <span className="text-[11.4px] font-[500]" style={{ color: "var(--b-text)" }}>
               {subLabel}
             </span>
-          </>
+          </span>
         )}
       </div>
 
