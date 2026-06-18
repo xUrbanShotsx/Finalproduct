@@ -7,6 +7,7 @@ import { Menu, LayoutDashboard, Shield, CheckSquare, IdCard } from "lucide-react
 import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
 import { MobileMenu } from "./MobileMenu";
+import { ResponsiveTableLabels } from "./ResponsiveTableLabels";
 import type { Industry } from "@/config/modules";
 
 interface Props {
@@ -54,6 +55,9 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
 
       {/* Mobile full-screen module launcher */}
       <MobileMenu open={open} onClose={() => setOpen(false)} industry={industry} isDemo={isDemo} />
+
+      {/* Mobile: label table cells from their column headers */}
+      <ResponsiveTableLabels />
 
       {/* Mobile bottom tab bar */}
       <nav

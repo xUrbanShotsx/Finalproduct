@@ -144,7 +144,7 @@ export function PlantEquipmentPage() {
       tabs={["All", "Active", "Grounded", "Service Due", "Pre-op Fail"]}
       onTabChange={setTab}
     >
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {sorted.map(r => <AssetCard key={r.assetId} r={r} />)}
       </div>
     </PageShell>

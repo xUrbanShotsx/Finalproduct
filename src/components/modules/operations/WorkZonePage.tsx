@@ -115,7 +115,7 @@ export function WorkZonePage() {
       tabs={["All", "Active", "Pending", "Closed", "Traffic Management"]}
       onTabChange={setTab}
     >
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {rows.filter(r => matchesTab(tab, r)).map(r => <ZoneCard key={r.ref} r={r} />)}
       </div>
     </PageShell>

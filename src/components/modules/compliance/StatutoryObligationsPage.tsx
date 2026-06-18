@@ -131,7 +131,7 @@ export function StatutoryObligationsPage() {
                 <span className="text-[11px] font-[600] px-1.5 py-0.5" style={{ background: g.bg, color: g.accent }}>{g.items.length}</span>
               </div>
               {/* Cards */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {g.items.map(r => <ObligationCard key={r.ref} r={r} />)}
               </div>
             </div>

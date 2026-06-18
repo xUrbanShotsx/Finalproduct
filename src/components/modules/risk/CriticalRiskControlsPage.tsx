@@ -122,7 +122,7 @@ export function CriticalRiskControlsPage() {
       tabs={["Today", "Failed", "Partial", "Not Checked", "History"]}
       onTabChange={setTab}
     >
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {sorted.map(r => <ControlCard key={r.ref} r={r} />)}
       </div>
     </PageShell>

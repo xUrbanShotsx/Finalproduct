@@ -101,7 +101,7 @@ export function ActionsPage() {
       tabs={["All", "Open", "Overdue", "Closed", "My Actions"]}
       onTabChange={setTab}
     >
-      <div className="grid grid-cols-3 gap-4 min-h-[300px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:min-h-[300px]">
         {COLS.map(col => {
           const items = rows.filter(r => r.status === col.key).filter(r => matchesTab(tab, r));
           return (

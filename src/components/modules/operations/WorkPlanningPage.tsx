@@ -125,7 +125,7 @@ export function WorkPlanningPage() {
                 <span className="text-[11px] font-[600] px-1.5 py-0.5" style={{ background: st.bg, color: st.accent }}>{items.length}</span>
               </div>
               {/* Cards row */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {items.map(r => <WorkCard key={r.ref} r={r} />)}
               </div>
             </div>
