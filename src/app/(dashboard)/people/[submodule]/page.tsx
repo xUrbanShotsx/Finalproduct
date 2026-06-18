@@ -7,7 +7,7 @@ import { getSubModules } from "@/config/modules";
 import type { ModuleKey, Industry } from "@/config/modules";
 import { SubModulePage } from "@/components/modules/SubModulePage";
 import { InductionsPage }           from "@/components/modules/people/InductionsPage";
-import { WhiteCardPage }            from "@/components/modules/people/WhiteCardPage";
+import { TrainingMatrixRegisterPage } from "@/components/modules/people/TrainingMatrixRegisterPage";
 import { ContractorManagementPage } from "@/components/modules/people/ContractorManagementPage";
 import { HealthWellbeingPage }      from "@/components/modules/people/HealthWellbeingPage";
 import { ReturnToWorkPage }         from "@/components/modules/people/ReturnToWorkPage";
@@ -24,7 +24,7 @@ const SUPABASE_CONFIGURED =
 
 const SPECIFIC: Record<string, React.FC> = {
   "inductions":            InductionsPage,
-  "white-card":            WhiteCardPage,
+  "training-matrix-register": TrainingMatrixRegisterPage,
   "contractor-management": ContractorManagementPage,
   "health-wellbeing":      HealthWellbeingPage,
   "return-to-work":        ReturnToWorkPage,

@@ -170,7 +170,7 @@ const INDUSTRIES = [
     tag: "OPEN",
     color: "#00ff7f",
     desc: "From SWMS and HRCW permits to plant pre-ops and work zone management. Built to the requirements of SafeWork NSW and state equivalents.",
-    items: ["Incidents · SWMS · Permits", "White Card Register", "Plant & Equipment", "High Risk Work Licensing", "Work Zone Controls"],
+    items: ["Incidents · SWMS · Permits", "Training Matrix & Register", "Plant & Equipment", "High Risk Work Licensing", "Work Zone Controls"],
   },
   {
     name: "Industrial",

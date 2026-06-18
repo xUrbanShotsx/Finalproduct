@@ -217,9 +217,9 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
       offlineCapable: false,
     },
     {
-      id: "white-card",
-      name: "White Card Register",
-      description: "Construction induction (White Card) records and verification for all workers on site",
+      id: "training-matrix-register",
+      name: "Training Matrix & Register",
+      description: "Worker training records and an at-a-glance competency matrix across required courses",
       industries: ["construction"],
       mobileAccess: "full",
       offlineCapable: true,
