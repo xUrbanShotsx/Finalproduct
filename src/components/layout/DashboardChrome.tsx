@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, LayoutDashboard, Shield, CheckSquare, HardHat } from "lucide-react";
+import { Menu, LayoutDashboard, Shield, CheckSquare, IdCard } from "lucide-react";
 import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
 import { MobileMenu } from "./MobileMenu";
@@ -29,7 +29,7 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
   // Bottom-bar destinations (mobile).
   const navItems: { href: string; label: string; icon: typeof Shield; key: string }[] = [
     { href: "/dashboard", label: "Home", icon: LayoutDashboard, key: "dashboard" },
-    { href: "/field", label: "Field", icon: HardHat, key: "field" },
+    { href: "/wallet", label: "Wallet", icon: IdCard, key: "wallet" },
     { href: "/safety", label: "Safety", icon: Shield, key: "safety" },
     { href: "/compliance", label: "Compliance", icon: CheckSquare, key: "compliance" },
   ];

@@ -11,7 +11,7 @@ const KINDS: FieldRecord["kind"][] = ["Incident", "Defect", "Hazard", "Inspectio
 const PEOPLE = ["M. Jones", "K. Davis", "T. Walsh", "S. Lee", "Unassigned"];
 const CHECKLIST = ["Guarding in place", "No visible leaks", "Emergency stop works", "Tyres / tracks OK", "Controls functional"];
 
-export function InspectionsView({ f, back }: { f: F; back: () => void }) {
+export function InspectionsView({ f, back, defaultKind = "Defect", title = "Inspections & Defects" }: { f: F; back: () => void; defaultKind?: FieldRecord["kind"]; title?: string }) {
   const { state, setState } = f;
   const [creating, setCreating] = useState(false);
   const [resumeId, setResumeId] = useState<string | null>(null);
@@ -21,11 +21,11 @@ export function InspectionsView({ f, back }: { f: F; back: () => void }) {
 
   if (creating || resumeId) {
     const existing = resumeId ? state.records.find((r) => r.id === resumeId) : null;
-    return <RecordForm f={f} initial={existing} onDone={() => { setCreating(false); setResumeId(null); }} />;
+    return <RecordForm f={f} initial={existing} defaultKind={defaultKind} onDone={() => { setCreating(false); setResumeId(null); }} />;
   }
 
   return (
-    <Screen title="Inspections & Defects" onBack={back} action={
+    <Screen title={title} onBack={back} action={
       <button onClick={() => setCreating(true)} className="w-9 h-9 flex items-center justify-center" style={{ color: "var(--b-accent-text)" }}><Plus className="w-5 h-5" /></button>
     }>
       <Btn onClick={() => setCreating(true)} className="w-full mb-4"><Plus className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} /> New item from the field</Btn>
@@ -71,10 +71,10 @@ function RecordRow({ r, onClick }: { r: FieldRecord; onClick: () => void }) {
   );
 }
 
-function RecordForm({ f, initial, onDone }: { f: F; initial?: FieldRecord | null; onDone: () => void }) {
+function RecordForm({ f, initial, onDone, defaultKind = "Defect" }: { f: F; initial?: FieldRecord | null; onDone: () => void; defaultKind?: FieldRecord["kind"] }) {
   const { setState } = f;
   const geo = useGeo();
-  const [kind, setKind] = useState<FieldRecord["kind"]>(initial?.kind ?? "Defect");
+  const [kind, setKind] = useState<FieldRecord["kind"]>(initial?.kind ?? defaultKind);
   const [title, setTitle] = useState(initial?.title ?? "");
   const [note, setNote] = useState(initial?.note ?? "");
   const [photos, setPhotos] = useState<string[]>(initial?.photos ?? []);
