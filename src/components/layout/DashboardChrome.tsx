@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Menu, LayoutDashboard, Shield, CheckSquare, Map, GraduationCap } from "lucide-react";
 import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
+import { MobileMenu } from "./MobileMenu";
 import type { Industry } from "@/config/modules";
 
 interface Props {
@@ -48,16 +49,13 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
           <AppSidebar industry={industry} orgName={orgName} userName={userName} isDemo={isDemo} />
         </div>
 
-        {/* Mobile off-canvas sidebar */}
-        <div className="b-mobile-overlay md:hidden" data-open={open} onClick={() => setOpen(false)} />
-        <div className="b-mobile-sidebar md:hidden" data-open={open}>
-          <AppSidebar industry={industry} orgName={orgName} userName={userName} isDemo={isDemo} />
-        </div>
-
         <main className="flex-1 overflow-auto b-has-bottomnav" style={{ background: "var(--b-bg-canvas)" }}>
           {children}
         </main>
       </div>
+
+      {/* Mobile full-screen module launcher */}
+      <MobileMenu open={open} onClose={() => setOpen(false)} industry={industry} isDemo={isDemo} />
 
       {/* Mobile bottom tab bar */}
       <nav
