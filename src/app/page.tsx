@@ -461,6 +461,7 @@ const PRODUCTS: [string, string, string][] = [
 
 export default function LandingPage() {
   const [productsOpen, setProductsOpen] = useState(false);
+  const [companyOpen, setCompanyOpen] = useState(false);
   return (
     <div style={{ background: "#0a0a0a", color: "#e0e0e0", fontFamily: "'Space Grotesk', sans-serif" }}>
 
@@ -511,8 +512,40 @@ export default function LandingPage() {
               )}
             </div>
 
+            {/* Company dropdown */}
+            <div
+              style={{ position: "relative" }}
+              onMouseEnter={() => setCompanyOpen(true)}
+              onMouseLeave={() => setCompanyOpen(false)}
+            >
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "13.5px", fontWeight: 500, color: companyOpen ? "#ffffff" : "#555", cursor: "pointer", transition: "color 0.15s" }}>
+                Company
+                <ChevronDown size={13} style={{ transform: companyOpen ? "rotate(180deg)" : "none", transition: "transform 0.15s" }} />
+              </span>
+              {companyOpen && (
+                <div style={{ position: "absolute", top: "100%", left: "-12px", paddingTop: "14px", zIndex: 50 }}>
+                  <div style={{ minWidth: "220px", background: "#0f0f0f", border: "1px solid #222", padding: "6px", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
+                    {[
+                      ["/about", "About", "Our story and where we're headed"],
+                      ["/contact", "Contact", "Get in touch with the team"],
+                    ].map(([href, label, desc]) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        style={{ display: "block", padding: "10px 12px", textDecoration: "none" }}
+                        onMouseOver={e => ((e.currentTarget as HTMLElement).style.background = "#1a1a1a")}
+                        onMouseOut={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+                      >
+                        <div style={{ fontSize: "13px", fontWeight: 600, color: "#e0e0e0" }}>{label}</div>
+                        <div style={{ fontSize: "11.5px", color: "#555", marginTop: "2px" }}>{desc}</div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {[
-              ["#industries",  "Industries"],
               ["#resources",   "Resources"],
               ["/pricing",     "Pricing"],
             ].map(([href, label]) => (
