@@ -207,7 +207,7 @@ function FiltersDropdown({ siteOptions, siteValue, onSiteChange }: {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((p) => !p)}
-        className="b-btn-ghost flex items-center gap-1.5 px-3 h-[28px] text-[12px] transition-colors"
+        className="b-btn-ghost flex items-center gap-1.5 px-3 h-[34px] text-[12.5px] font-medium transition-colors"
         style={{
           background: open || hasActive ? "var(--b-bg-active)" : undefined,
           color: hasActive ? "var(--b-text)" : undefined,
@@ -332,6 +332,13 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
+            {showSite && (
+              <FiltersDropdown
+                siteOptions={siteOptions!}
+                siteValue={activeSite}
+                onSiteChange={(v) => { setActiveSite(v); onSiteChange?.(v); }}
+              />
+            )}
             {ctaSlot ?? (
               <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[34px] text-[12.5px] font-medium flex-shrink-0">
                 <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
@@ -373,13 +380,6 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
             <Search className="w-3 h-3 flex-shrink-0" />
             <span>Search…</span>
           </div>
-          {showSite && (
-            <FiltersDropdown
-              siteOptions={siteOptions!}
-              siteValue={activeSite}
-              onSiteChange={(v) => { setActiveSite(v); onSiteChange?.(v); }}
-            />
-          )}
           <button
             className="b-btn-ghost flex items-center gap-1.5 px-3 h-[28px] text-[12px]"
           >
