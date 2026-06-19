@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Plus, Search, Download, MapPin } from "lucide-react";
+import { ArrowLeft, Plus, Search, Download, MapPin, Check, SlidersHorizontal } from "lucide-react";
 
 /* ── Job / project site filtering ──
    Pulls the "site" dimension from whichever column a record uses, so the same
@@ -174,6 +174,123 @@ export function Stat({
   );
 }
 
+/* ── Filters dropdown (toolbar) ── */
+function FiltersDropdown({ siteOptions, siteValue, onSiteChange }: {
+  siteOptions: string[];
+  siteValue: string;
+  onSiteChange: (v: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  useEffect(() => {
+    if (open) { setQuery(""); setTimeout(() => inputRef.current?.focus(), 0); }
+  }, [open]);
+
+  const filtered = ["All sites", ...siteOptions].filter((s) =>
+    !query || s.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const hasActive = !!siteValue;
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((p) => !p)}
+        className="b-btn-ghost flex items-center gap-1.5 px-3 h-[28px] text-[12px] transition-colors"
+        style={{
+          background: open || hasActive ? "var(--b-bg-active)" : undefined,
+          color: hasActive ? "var(--b-text)" : undefined,
+        }}
+      >
+        <SlidersHorizontal className="w-3 h-3" />
+        Filters
+        {hasActive && (
+          <span
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: "var(--b-accent-text)" }}
+          />
+        )}
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 top-[calc(100%+4px)] z-50 w-56 border shadow-sm"
+          style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border-strong)" }}
+        >
+          {/* Section header */}
+          <div className="px-3 pt-2.5 pb-1.5 border-b" style={{ borderColor: "var(--b-border)" }}>
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--b-text-muted)" }}>
+              <MapPin className="w-3 h-3" />
+              Site
+            </div>
+          </div>
+          {/* Search */}
+          <div className="flex items-center gap-2 px-2.5 border-b" style={{ borderColor: "var(--b-border)" }}>
+            <Search className="w-3 h-3 flex-shrink-0" style={{ color: "var(--b-text-muted)" }} />
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search sites…"
+              className="flex-1 h-[30px] bg-transparent text-[12px] outline-none"
+              style={{ color: "var(--b-text-secondary)" }}
+            />
+          </div>
+          {/* Options */}
+          <div className="max-h-44 overflow-y-auto py-1">
+            {filtered.length === 0 ? (
+              <div className="px-3 py-1.5 text-[12px]" style={{ color: "var(--b-text-muted)" }}>No sites found</div>
+            ) : filtered.map((s) => {
+              const selected = s === "All sites" ? !siteValue : s === siteValue;
+              return (
+                <button
+                  key={s}
+                  onClick={() => { onSiteChange(s === "All sites" ? "" : s); setOpen(false); }}
+                  className="flex items-center gap-2.5 w-full px-3 py-1.5 text-left text-[12px]"
+                  style={{
+                    background: selected ? "var(--b-bg-active)" : "transparent",
+                    color: selected ? "var(--b-text)" : "var(--b-text-secondary)",
+                  }}
+                  onMouseEnter={(e) => { if (!selected) (e.currentTarget as HTMLElement).style.background = "var(--b-bg-active)"; }}
+                  onMouseLeave={(e) => { if (!selected) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                >
+                  <Check className="w-3 h-3 flex-shrink-0" style={{ opacity: selected ? 1 : 0, color: "var(--b-accent-text)" }} />
+                  {s}
+                </button>
+              );
+            })}
+          </div>
+          {/* Clear */}
+          {hasActive && (
+            <div className="border-t px-3 py-2" style={{ borderColor: "var(--b-border)" }}>
+              <button
+                onClick={() => { onSiteChange(""); setOpen(false); }}
+                className="text-[11.5px] transition-colors"
+                style={{ color: "var(--b-text-muted)" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--b-text-secondary)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--b-text-muted)")}
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Page shell ── */
 interface ShellProps {
   back: { href: string; label: string };
@@ -191,7 +308,8 @@ interface ShellProps {
 
 export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs, onTabChange, siteOptions, onSiteChange, children }: ShellProps) {
   const [active, setActive] = useState(0);
-  const showSite = !!siteOptions && siteOptions.length > 1;
+  const [activeSite, setActiveSite] = useState("");
+  const showSite = !!siteOptions && siteOptions.length > 0;
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -214,19 +332,6 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            {showSite && (
-              <div className="flex items-center gap-1.5 pl-2.5 pr-1 h-[34px] border" style={{ borderColor: "var(--b-border-strong)", background: "var(--b-bg-secondary)" }}>
-                <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--b-text-muted)" }} />
-                <select
-                  onChange={(e) => onSiteChange?.(e.target.value)}
-                  className="h-full bg-transparent text-[12.5px] outline-none cursor-pointer pr-1"
-                  style={{ color: "var(--b-text-secondary)" }}
-                >
-                  <option value="">All sites</option>
-                  {siteOptions!.map((s) => <option key={s} value={s} style={{ background: "var(--b-bg-secondary)" }}>{s}</option>)}
-                </select>
-              </div>
-            )}
             {ctaSlot ?? (
               <button className="b-btn-accent flex items-center gap-1.5 px-4 h-[34px] text-[12.5px] font-medium flex-shrink-0">
                 <Plus className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
@@ -268,6 +373,13 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
             <Search className="w-3 h-3 flex-shrink-0" />
             <span>Search…</span>
           </div>
+          {showSite && (
+            <FiltersDropdown
+              siteOptions={siteOptions!}
+              siteValue={activeSite}
+              onSiteChange={(v) => { setActiveSite(v); onSiteChange?.(v); }}
+            />
+          )}
           <button
             className="b-btn-ghost flex items-center gap-1.5 px-3 h-[28px] text-[12px]"
           >
