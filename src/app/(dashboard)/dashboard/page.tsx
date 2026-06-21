@@ -14,6 +14,7 @@ import {
   ChevronRight,
   BookOpen,
 } from "lucide-react";
+import { DashboardOnboarding } from "@/components/dashboard/DashboardOnboarding";
 
 const SUPABASE_CONFIGURED =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -299,7 +300,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div id="tour-stat-cards" className="flex flex-wrap gap-4 mb-6">
         {stats.map((s) => (
           <StatCard key={s.label} label={s.label} value={s.value} sub={s.sub} icon={STAT_ICON[s.icon]} iconStyle={STAT_TONE[s.tone]} />
         ))}
@@ -307,6 +308,7 @@ export default async function DashboardPage() {
 
       {/* AI banner */}
       <div
+        id="tour-ai-banner"
         className="border p-5 mb-6"
         style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
       >
@@ -358,7 +360,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* AI Insights */}
-      <div className="mb-6 hidden md:block">
+      <div id="tour-ai-insights" className="mb-6 hidden md:block">
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="w-4 h-4" style={{ color: "var(--b-accent-text)" }} />
           <span
@@ -468,6 +470,7 @@ export default async function DashboardPage() {
 
         {/* Tasks today */}
         <div
+          id="tour-tasks"
           className="border p-5"
           style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
         >
@@ -508,6 +511,8 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <DashboardOnboarding />
     </div>
   );
 }
