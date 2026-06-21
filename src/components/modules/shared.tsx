@@ -323,7 +323,7 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
         </Link>
 
         <div className="flex items-start justify-between gap-4 mb-5 flex-wrap">
-          <div>
+          <div id="tour-page-title">
             <h1 className="text-[20px] font-semibold" style={{ color: "var(--b-text)" }}>
               {title}
             </h1>
