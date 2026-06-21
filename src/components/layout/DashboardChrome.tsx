@@ -8,6 +8,7 @@ import { AppSidebar } from "./AppSidebar";
 import { TopBar } from "./TopBar";
 import { MobileMenu } from "./MobileMenu";
 import { ResponsiveTableLabels } from "./ResponsiveTableLabels";
+import { DashboardOnboarding } from "@/components/dashboard/DashboardOnboarding";
 import type { Industry } from "@/config/modules";
 
 interface Props {
@@ -58,6 +59,8 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
 
       {/* Mobile: label table cells from their column headers */}
       <ResponsiveTableLabels />
+
+      <DashboardOnboarding industry={industry} />
 
       {/* Mobile bottom tab bar */}
       <nav

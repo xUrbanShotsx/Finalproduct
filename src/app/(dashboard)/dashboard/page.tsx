@@ -14,7 +14,6 @@ import {
   ChevronRight,
   BookOpen,
 } from "lucide-react";
-import { DashboardOnboarding } from "@/components/dashboard/DashboardOnboarding";
 
 const SUPABASE_CONFIGURED =
   !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -512,7 +511,6 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <DashboardOnboarding />
     </div>
   );
 }

@@ -311,7 +311,7 @@ export function PageShell({ back, title, description, cta, ctaSlot, stats, tabs,
   const [activeSite, setActiveSite] = useState("");
   const showSite = !!siteOptions && siteOptions.length > 0;
   return (
-    <div className="flex flex-col h-full">
+    <div id="tour-page-shell" className="flex flex-col h-full">
       {/* Header */}
       <div className="px-4 sm:px-8 pt-5 sm:pt-7 pb-5 border-b flex-shrink-0" style={{ borderColor: "var(--b-border)" }}>
         <Link

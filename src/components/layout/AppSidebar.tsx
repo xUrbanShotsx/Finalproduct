@@ -109,7 +109,7 @@ export function AppSidebar({ industry, userName, isDemo = false }: AppSidebarPro
           const isOpen = openModules.has(mod.key);
 
           return (
-            <div key={mod.key}>
+            <div key={mod.key} id={`tour-nav-${mod.key}`}>
               <div
                 className={cn(
                   navItem(`/${mod.key}`, isActive),
