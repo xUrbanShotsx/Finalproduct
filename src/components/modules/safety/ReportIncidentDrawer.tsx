@@ -450,13 +450,52 @@ export function ReportIncidentDrawer({ open, onClose, onAdd }: Props) {
           {/* Step 3 */}
           {step === 3 && (
             <div>
+              {/* ICAM method callout */}
+              <div
+                className="mb-6 p-3.5 border"
+                style={{ background: "var(--b-bg-secondary)", borderColor: "var(--b-border)" }}
+              >
+                <div className="text-[12px] font-semibold mb-1" style={{ color: "var(--b-text)" }}>
+                  ICAM Preliminary Assessment
+                </div>
+                <p className="text-[11.5px]" style={{ color: "var(--b-text-muted)" }}>
+                  A full ICAM + TapRooT investigation will be opened once this report is submitted. Complete the preliminary fields below to guide the investigator.
+                </p>
+              </div>
+
               <div style={divider}>
-                <label className={labelClass} style={labelStyle}>Root cause / contributing factors</label>
+                <label className={labelClass} style={labelStyle}>Likely ICAM Causal Layer *</label>
+                <p className="text-[11.5px] mb-2.5" style={{ color: "var(--b-text-muted)" }}>
+                  Which level of the ICAM causal chain appears most relevant at this stage?
+                </p>
+                <Select
+                  value={form.rootCause}
+                  onChange={(v) => set("rootCause", v)}
+                  placeholder="Select initial ICAM layer…"
+                  options={[
+                    "A — Absent or Failed Defences (barrier/safeguard failure)",
+                    "B — Individual / Team Actions (error, decision or task condition)",
+                    "C — Organisational / Management Factor (system, policy or culture)",
+                    "Multiple layers — full investigation required",
+                  ]}
+                />
+              </div>
+
+              <div style={divider}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={labelClass} style={{ ...labelStyle, marginBottom: 0 }}>Immediate Cause Description</label>
+                  <AiButton
+                    disabled={!form.incidentType}
+                    label="AI Draft"
+                    prompt={`Write a 2–3 sentence preliminary ICAM immediate cause description for a "${form.incidentType || "workplace incident"}"${form.severity ? ` (${form.severity} severity)` : ""}${form.specificLocation ? ` at ${form.specificLocation}` : ""}. Focus on the most likely absent/failed defence and the immediate preceding action. Use professional Australian WHS investigation language.`}
+                    onStream={chunk => set("rootCause", chunk ? form.rootCause + chunk : "")}
+                  />
+                </div>
                 <Textarea
                   rows={3}
                   value={form.rootCause}
                   onChange={(v) => set("rootCause", v)}
-                  placeholder="What conditions or decisions contributed? (e.g. inadequate edge protection, time pressure, no SWMS review)"
+                  placeholder="Describe the immediate cause — what defence or safeguard was absent, and what action led directly to the incident…"
                 />
               </div>
 

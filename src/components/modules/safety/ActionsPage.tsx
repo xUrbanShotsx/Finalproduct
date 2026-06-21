@@ -15,15 +15,20 @@ const SOURCE_COLORS: Record<string, { bg: string; color: string }> = {
 };
 
 type ColKey = "Open" | "Overdue" | "Closed";
-const RECORDS = [
-  { ref: "ACT-089", source: "Incident",  sourceRef: "INC-044",          description: "Install debris netting on Level 3 scaffold perimeter",        site: "Site 01",  assignee: "J. Smith",  due: "18 Jun 2024", priority: "High"   as const, status: "Open"    as ColKey },
-  { ref: "ACT-088", source: "Audit",     sourceRef: "AUD-12",            description: "Update fall protection section in SWMS-103",                  site: "Office",   assignee: "M. Jones",  due: "15 Jun 2024", priority: "Medium" as const, status: "Open"    as ColKey },
-  { ref: "ACT-087", source: "Prestart",  sourceRef: "PRE-240610-012",    description: "Calibrate noise dosimeter — Site 02 excavation crew",         site: "Site 02",  assignee: "K. Davis",  due: "12 Jun 2024", priority: "Low"    as const, status: "Overdue" as ColKey },
-  { ref: "ACT-086", source: "Incident",  sourceRef: "INC-043",           description: "Review First Aid kit locations across all sites",              site: "All Sites",assignee: "L. Brown",  due: "10 Jun 2024", priority: "Low"    as const, status: "Closed"  as ColKey },
-  { ref: "ACT-085", source: "Inspection",sourceRef: "INS-031",           description: "Repair damaged guardrail — Level 2 east walkway",             site: "Site 01",  assignee: "T. Walsh",  due: "08 Jun 2024", priority: "High"   as const, status: "Closed"  as ColKey },
-  { ref: "ACT-084", source: "Hazard",    sourceRef: "HAZ-019",           description: "Install spill kit at chemical storage — B-Block",             site: "Site 01",  assignee: "R. Kim",    due: "05 Jun 2024", priority: "Medium" as const, status: "Closed"  as ColKey },
-  { ref: "ACT-083", source: "Toolbox",   sourceRef: "TBX-240527-001",    description: "Update traffic management plan — Site 02 entry",              site: "Site 02",  assignee: "D. Wong",   due: "30 May 2024", priority: "Medium" as const, status: "Overdue" as ColKey },
-  { ref: "ACT-082", source: "Audit",     sourceRef: "AUD-11",            description: "Conduct emergency drill — Site 03",                           site: "Site 03",  assignee: "J. Smith",  due: "28 May 2024", priority: "High"   as const, status: "Overdue" as ColKey },
+type ActionType = "Immediate" | "Systemic" | "Preventive" | undefined;
+const RECORDS: Array<{
+  ref: string; source: string; sourceRef: string; description: string;
+  site: string; assignee: string; due: string; priority: "High" | "Medium" | "Low";
+  status: ColKey; icamFactor?: string; taprootCategory?: string; actionType?: ActionType;
+}> = [
+  { ref: "ACT-089", source: "Incident",   sourceRef: "INC-044", description: "Install temporary edge protection — Level 3 north face, 2 m barriers with mid-rail",      site: "Site 01",   assignee: "J. Smith",  due: "18 Jun 2024", priority: "High"   as const, status: "Open"    as ColKey, icamFactor: "Absent/Failed Defence",    taprootCategory: "Procedure Difficulty", actionType: "Immediate" },
+  { ref: "ACT-088", source: "Incident",   sourceRef: "INC-044", description: "Develop SWMS for slab edge works — mandatory edge protection requirements before commencement", site: "Office",  assignee: "M. Jones",  due: "21 Jun 2024", priority: "High"   as const, status: "Open"    as ColKey, icamFactor: "Organisational Factor",    taprootCategory: "Procedure Difficulty", actionType: "Systemic" },
+  { ref: "ACT-087", source: "Prestart",   sourceRef: "PRE-240610-012", description: "Calibrate noise dosimeter — Site 02 excavation crew",                             site: "Site 02",   assignee: "K. Davis",  due: "12 Jun 2024", priority: "Low"    as const, status: "Overdue" as ColKey },
+  { ref: "ACT-086", source: "Incident",   sourceRef: "INC-043", description: "Remove exposed reo bars; implement daily laydown inspection checklist",                   site: "All Sites", assignee: "L. Brown",  due: "10 Jun 2024", priority: "Low"    as const, status: "Closed"  as ColKey, icamFactor: "Absent/Failed Defence",    taprootCategory: "Work Direction",       actionType: "Immediate" },
+  { ref: "ACT-085", source: "Inspection", sourceRef: "INS-031", description: "Repair damaged guardrail — Level 2 east walkway",                                         site: "Site 01",   assignee: "T. Walsh",  due: "08 Jun 2024", priority: "High"   as const, status: "Closed"  as ColKey },
+  { ref: "ACT-084", source: "Incident",   sourceRef: "INC-044", description: "Competency assessment for all Level 3 workers — high-risk edge work induction required",  site: "Site 01",   assignee: "K. Davis",  due: "28 Jun 2024", priority: "Medium" as const, status: "Open"    as ColKey, icamFactor: "Organisational Factor",    taprootCategory: "Training Difficulty",  actionType: "Systemic" },
+  { ref: "ACT-083", source: "Toolbox",    sourceRef: "TBX-240527-001", description: "Update traffic management plan — Site 02 entry",                                   site: "Site 02",   assignee: "D. Wong",   due: "30 May 2024", priority: "Medium" as const, status: "Overdue" as ColKey },
+  { ref: "ACT-082", source: "Incident",   sourceRef: "INC-044", description: "Programme review with senior management — eliminate time pressure on safety-critical tasks", site: "All Sites", assignee: "Site Director", due: "30 Jun 2024", priority: "High" as const, status: "Open" as ColKey, icamFactor: "Organisational Factor", taprootCategory: "Management System",  actionType: "Preventive" },
 ];
 
 const COLS: Array<{ key: ColKey; label: string; accent: string; bg: string }> = [
@@ -31,6 +36,12 @@ const COLS: Array<{ key: ColKey; label: string; accent: string; bg: string }> = 
   { key: "Overdue", label: "Overdue", accent: "#f06060",                   bg: "rgba(240,96,96,0.08)" },
   { key: "Closed",  label: "Closed",  accent: "var(--b-badge-green-text)", bg: "var(--b-badge-green-bg)" },
 ];
+
+const ACTION_TYPE_STYLE: Record<string, { bg: string; color: string }> = {
+  Immediate:  { bg: "rgba(240,96,96,0.1)",     color: "#f06060" },
+  Systemic:   { bg: "var(--b-badge-blue-bg)",  color: "var(--b-badge-blue-text)" },
+  Preventive: { bg: "var(--b-badge-green-bg)", color: "var(--b-badge-green-text)" },
+};
 
 function ActionCard({ r, isOverdue }: { r: typeof RECORDS[number]; isOverdue: boolean }) {
   const srcStyle = SOURCE_COLORS[r.source] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
@@ -48,6 +59,27 @@ function ActionCard({ r, isOverdue }: { r: typeof RECORDS[number]; isOverdue: bo
       <div className="flex items-center gap-2 flex-wrap">
         <Badge label={r.source} bg={srcStyle.bg} color={srcStyle.color} />
         <span className="font-mono text-[11px]" style={{ color: "var(--b-text-muted)" }}>{r.sourceRef}</span>
+        {r.actionType && (
+          <span className="text-[10.5px] font-semibold px-1.5 py-0.5" style={ACTION_TYPE_STYLE[r.actionType]}>
+            {r.actionType}
+          </span>
+        )}
+        {r.icamFactor && (
+          <span
+            className="text-[10.5px] px-1.5 py-0.5"
+            style={{ background: "var(--b-bg-active)", color: "var(--b-text-muted)", border: "1px solid var(--b-border)" }}
+          >
+            ICAM: {r.icamFactor}
+          </span>
+        )}
+        {r.taprootCategory && (
+          <span
+            className="text-[10.5px] px-1.5 py-0.5"
+            style={{ background: "var(--b-badge-blue-bg)", color: "var(--b-badge-blue-text)" }}
+          >
+            {r.taprootCategory}
+          </span>
+        )}
       </div>
       <div className="flex items-center justify-between text-[11.5px]" style={{ color: "var(--b-text-muted)" }}>
         <span>{r.assignee} · {r.site}</span>
