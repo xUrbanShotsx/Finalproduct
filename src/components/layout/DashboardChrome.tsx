@@ -60,7 +60,7 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
       {/* Mobile: label table cells from their column headers */}
       <ResponsiveTableLabels />
 
-      <DashboardOnboarding industry={industry} />
+      {isDemo && <DashboardOnboarding industry={industry} />}
 
       {/* Mobile bottom tab bar */}
       <nav
