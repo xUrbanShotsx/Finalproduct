@@ -39,6 +39,9 @@ export default function DemoPage() {
     // so paid add-ons (e.g. Blueprints) stay locked in this view.
     document.cookie = "b-demo-industry=construction; path=/; max-age=86400";
     document.cookie = "b-demo-prospect=1; path=/; max-age=86400";
+    // Always start the tour fresh for every new demo visitor.
+    localStorage.removeItem("briesa-tour-phase");
+    localStorage.removeItem("briesa-tour-checked");
     router.push("/dashboard");
   }
 

@@ -38,8 +38,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
     userName = ctx.userName;
   }
 
+  // Only treat as a prospect demo when Supabase is not configured (i.e. the
+  // public demo flow). Real authenticated users must never see the demo tour
+  // even if the b-demo-prospect cookie happens to still be set.
+  const isDemo = !SUPABASE_CONFIGURED && isProspectDemo;
+
   return (
-    <DashboardChrome industry={industry} orgName={orgName} userName={userName} isDemo={isProspectDemo}>
+    <DashboardChrome industry={industry} orgName={orgName} userName={userName} isDemo={isDemo}>
       {children}
     </DashboardChrome>
   );
