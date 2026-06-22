@@ -773,9 +773,9 @@ export default function AIToolboxPage() {
 
       {/* ── Industry breakdown ── */}
       <section style={{ borderBottom: "1px solid #1a1a1a", padding: "96px 0" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ padding: "0 24px" }}>
           <Reveal>
-            <div style={{ marginBottom: "56px" }}>
+            <div style={{ maxWidth: "1200px", margin: "0 auto", marginBottom: "56px" }}>
               <div style={{ fontFamily: "monospace", fontSize: "11px", fontWeight: 700, color: "#333", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "12px" }}>[04] — BY INDUSTRY</div>
               <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 900, letterSpacing: "-0.035em", color: "#ffffff", margin: 0 }}>
                 Tailored to your industry
@@ -785,7 +785,7 @@ export default function AIToolboxPage() {
               </p>
             </div>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "6px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
             {INDUSTRIES.map((ind, i) => {
               const Icon = ind.icon;
               const hov = hoveredIndustry === i;
