@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Plus, Search, Bell, HelpCircle, SlidersHorizontal, ChevronRight } from "lucide-react";
-import type { Industry, ModuleKey } from "@/config/modules";
+import { Plus, Search, Bell, HelpCircle, SlidersHorizontal, Sun, Moon } from "lucide-react";
+import type { Industry } from "@/config/modules";
 
 const MODULE_LABELS: Record<string, string> = {
   safety: "Safety", people: "People", operations: "Operations",
@@ -19,6 +20,27 @@ interface TopBarProps {
 
 export function TopBar({ orgName, userName }: TopBarProps) {
   const pathname = usePathname();
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("b-theme");
+    if (saved === "light") {
+      document.documentElement.classList.remove("dark");
+      setIsDark(false);
+    }
+  }, []);
+
+  function toggleTheme() {
+    const next = !isDark;
+    setIsDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("b-theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("b-theme", "light");
+    }
+  }
   const segments = pathname.split("/").filter(Boolean);
   const moduleSegment = segments[0];
   const subSegment = segments[1];
@@ -143,6 +165,20 @@ export function TopBar({ orgName, userName }: TopBarProps) {
             <Icon className="w-4 h-4" />
           </button>
         ))}
+
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          className="flex w-8 h-8 items-center justify-center border transition-colors"
+          style={{
+            background: isDark ? "var(--b-badge-yellow-bg)" : "var(--b-bg-secondary)",
+            borderColor: isDark ? "var(--b-badge-yellow-text)" : "var(--b-border-strong)",
+            color: isDark ? "var(--b-badge-yellow-text)" : "var(--b-text-muted)",
+          }}
+        >
+          {isDark ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+        </button>
 
         {/* User */}
         <button

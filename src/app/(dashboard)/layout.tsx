@@ -24,9 +24,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
     : industry === "facilities" ? "Meridian Facilities Group"
     : "Apex Construction Pty Ltd";
   let userName =
-    industry === "industrial" ? "Demo Industrial"
-    : industry === "facilities" ? "Demo Facilities"
-    : "Demo User";
+    industry === "industrial" ? "Sam Torres"
+    : industry === "facilities" ? "Jordan Lee"
+    : "Alex Chen";
 
   if (SUPABASE_CONFIGURED) {
     const supabase = await createClient();
