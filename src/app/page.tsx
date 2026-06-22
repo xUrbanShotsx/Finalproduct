@@ -171,6 +171,7 @@ const INDUSTRIES = [
     color: "#00ff7f",
     desc: "From SWMS and HRCW permits to plant pre-ops and work zone management. Built to the requirements of SafeWork NSW and state equivalents.",
     items: ["Incidents · SWMS · Permits", "Training Matrix & Register", "Plant & Equipment", "High Risk Work Licensing", "Work Zone Controls"],
+    href: "/signup",
   },
   {
     name: "Industrial",
@@ -178,6 +179,7 @@ const INDUSTRIES = [
     color: "#3b82f6",
     desc: "Permits to Work, LOTO procedures, JSA/JSEA and chemical process risk built for manufacturing and industrial facilities.",
     items: ["Permits to Work · LOTO", "JSA / JSEA Management", "Chemical & Process Risk", "Health Monitoring", "Operational Readiness"],
+    href: "/signup",
   },
   {
     name: "Facilities",
@@ -185,6 +187,15 @@ const INDUSTRIES = [
     color: "#a855f7",
     desc: "Building warden registers, isolation and shutdown procedures and statutory compliance obligations for facility managers.",
     items: ["Warden Register", "Isolation & Shutdown", "Essential Safety Measures", "Statutory Obligations", "Visitor & Access Control"],
+    href: "/signup",
+  },
+  {
+    name: "Residential Trades",
+    tag: "NEW",
+    color: "#ffd600",
+    desc: "Built for sole traders — plumbers, electricians, carpenters and more. Everything you need to stay compliant, in your pocket.",
+    items: ["Job Log & Scheduling", "SWMS Generation (AI)", "Incident Reporting", "Licence & Ticket Tracking", "AI Safety Assistant"],
+    href: "/tradie",
   },
 ];
 
@@ -453,9 +464,10 @@ function AIToolbox() {
 
 /* ─── Page ───────────────────────────────────────────────────────── */
 const PRODUCTS: [string, string, string][] = [
-  ["/signup", "Construction SMS", "Safety management for construction sites"],
-  ["/signup", "Industrial SMS",   "Safety management for industrial operations"],
-  ["/signup", "Facilities SMS",   "Safety management for facilities teams"],
+  ["/signup",   "Construction SMS", "Safety management for construction sites"],
+  ["/signup",   "Industrial SMS",   "Safety management for industrial operations"],
+  ["/signup",   "Facilities SMS",   "Safety management for facilities teams"],
+  ["/tradie",   "Tradie Solo",      "WHS tools for sole traders & individual tradies — $69/month"],
   ["/blueprints-iso", "Blueprints (ISO)", "ISO 9001 / 14001 / 45001 packs"],
 ];
 
@@ -714,8 +726,8 @@ export default function LandingPage() {
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
           <SectionLabel n="02" label="Industries" />
 
-          <div className="r-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "6px" }}>
-            {INDUSTRIES.map(({ name, tag, color, desc, items }) => (
+          <div className="r-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px" }}>
+            {INDUSTRIES.map(({ name, tag, color, desc, items, href }) => (
               <div key={name} style={{ background: "#0f0f0f", border: `1px solid ${color}55`, display: "flex", flexDirection: "column" }}>
                 {/* Colour bar */}
                 <div style={{ height: "3px", background: color }} />
@@ -744,7 +756,7 @@ export default function LandingPage() {
                 </div>
                 <div style={{ padding: "16px 24px", borderTop: `1px solid ${color}22` }}>
                   <Link
-                    href="/login"
+                    href={href}
                     style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12.5px", fontWeight: 600, color: "#555", textDecoration: "none" }}
                     onMouseOver={e => (e.currentTarget.style.color = color)}
                     onMouseOut={e => (e.currentTarget.style.color = "#555")}
@@ -807,6 +819,101 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── [05] PRICING ── */}
+      <section id="pricing-preview" style={{ background: "#080808", padding: "96px 0", borderBottom: "1px solid #1a1a1a" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+          <SectionLabel n="05" label="Pricing" />
+
+          <div style={{ marginBottom: "48px" }}>
+            <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 12px", lineHeight: 1.1 }}>
+              Flat pricing.<br />No per-user fees.
+            </h2>
+            <p style={{ fontSize: "15px", color: "#444", margin: 0, maxWidth: "440px", lineHeight: 1.65 }}>
+              One price based on workforce size. Every plan includes all modules — no add-ons.
+            </p>
+          </div>
+
+          <div className="r-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "6px", marginBottom: "28px" }}>
+            {[
+              { name: "Tradie Solo", price: "$69", sub: "Sole traders & individual tradies", badge: "NEW", color: "#ffd600", href: "/tradie",
+                features: ["1 user", "5 GB storage", "~100 AI calls / month", "Job log, SWMS & licences"] },
+              { name: "Small", price: "$249", sub: "Up to 15 workers on site", badge: null, color: "#555", href: "/pricing",
+                features: ["Unlimited users", "25 GB storage", "~300 AI calls / month", "All 9 WHS modules"] },
+              { name: "Medium", price: "$449", sub: "15–50 workers", badge: "POPULAR", color: "#ffffff", href: "/pricing",
+                features: ["Unlimited users", "75 GB storage", "~1,200 AI calls / month", "All 9 WHS modules"] },
+              { name: "Large", price: "$649", sub: "50–200+ workers", badge: null, color: "#555", href: "/pricing",
+                features: ["Unlimited users", "200 GB storage", "~4,000 AI calls / month", "All 9 WHS modules"] },
+            ].map((plan, i) => (
+              <div
+                key={plan.name}
+                style={{
+                  background: "#0f0f0f",
+                  border: `1px solid ${i === 2 ? "#2a2a2a" : "#1a1a1a"}`,
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                {i === 2 && <div style={{ height: "2px", background: "#ffffff", flexShrink: 0 }} />}
+                {plan.badge && (
+                  <div style={{
+                    position: "absolute", top: i === 2 ? "2px" : 0, right: 0,
+                    background: plan.name === "Tradie Solo" ? "#ffd600" : "#ffffff",
+                    color: "#0a0a0a",
+                    fontFamily: "monospace", fontSize: "8px", fontWeight: 700,
+                    letterSpacing: "0.1em", padding: "3px 10px", textTransform: "uppercase",
+                  }}>
+                    [{plan.badge}]
+                  </div>
+                )}
+                <div style={{ padding: "22px 20px 16px", borderBottom: "1px solid #1a1a1a" }}>
+                  <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#333", marginBottom: "10px" }}>{plan.name}</div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "4px", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "38px", fontWeight: 800, letterSpacing: "-0.04em", color: "#ffffff", lineHeight: 1 }}>{plan.price}</span>
+                    <span style={{ fontSize: "12px", color: "#333" }}>/ mo</span>
+                  </div>
+                  <p style={{ fontSize: "11.5px", color: "#444", margin: 0, lineHeight: 1.5 }}>{plan.sub}</p>
+                </div>
+                <div style={{ padding: "16px 20px", flex: 1 }}>
+                  {plan.features.map(f => (
+                    <div key={f} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "5px 0", borderBottom: "1px solid #141414" }}>
+                      <CheckCircle2 style={{ width: "11px", height: "11px", flexShrink: 0, color: plan.name === "Tradie Solo" ? "#ffd600" : "#1a8a4a" }} />
+                      <span style={{ fontSize: "11.5px", color: "#555" }}>{f}</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ padding: "14px 20px 18px" }}>
+                  <Link
+                    href={plan.href}
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+                      height: "36px", fontSize: "12.5px", fontWeight: 700, textDecoration: "none",
+                      background: "#ffd600", color: "#0a0a0a", border: "1px solid #ffd600",
+                    }}
+                    onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "#e6c000"; (e.currentTarget as HTMLElement).style.borderColor = "#e6c000"; }}
+                    onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "#ffd600"; (e.currentTarget as HTMLElement).style.borderColor = "#ffd600"; }}
+                  >
+                    {plan.name === "Tradie Solo" ? "Try Tradie Demo" : "Get started"} <ArrowRight size={12} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <Link
+              href="/pricing"
+              style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 600, color: "#444", textDecoration: "none" }}
+              onMouseOver={e => (e.currentTarget.style.color = "#888")}
+              onMouseOut={e => (e.currentTarget.style.color = "#444")}
+            >
+              View full pricing details <ArrowRight size={13} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA BANNER ── */}
       <section style={{ background: "#060606", padding: "88px 0", borderTop: "1px solid #1a1a1a" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
@@ -854,7 +961,7 @@ export default function LandingPage() {
                 <span style={{ fontFamily: "monospace", fontSize: "9px", fontWeight: 700, color: "#222" }}>V1.0</span>
               </div>
               <p style={{ fontSize: "12.5px", color: "#333", lineHeight: 1.7, margin: "0 0 20px" }}>
-                WHS management software for Australian construction, industrial and facilities industries.
+                WHS management software for Australian construction, industrial, facilities and residential trade industries.
               </p>
               <div style={{ display: "flex", gap: "8px" }}>
                 {["X", "IN", "IG"].map(s => (
@@ -867,8 +974,8 @@ export default function LandingPage() {
             {/* Links */}
             <div style={{ flex: 1, display: "flex", gap: "48px", flexWrap: "wrap" }}>
               {[
-                ["Product",    ["Platform", "Industries", "Resources", "Pricing", "Changelog"]],
-                ["Industries", ["Construction", "Industrial", "Facilities"]],
+                ["Product",    ["Platform", "Industries", "Resources", "Pricing", "Tradie Solo", "Changelog"]],
+                ["Industries", ["Construction", "Industrial", "Facilities", "Residential Trades"]],
                 ["Company",    ["About", "Contact", "Privacy", "Terms"]],
                 ["Legal",      ["Privacy Policy", "Terms of Service", "Cookie Policy"]],
               ].map(([section, links]) => (
@@ -878,7 +985,12 @@ export default function LandingPage() {
                     {(links as string[]).map(link => (
                       <li key={link}>
                         <a
-                          href={link === "Pricing" ? "/pricing" : "#"}
+                          href={
+                            link === "Pricing" ? "/pricing"
+                            : link === "Tradie Solo" ? "/tradie"
+                            : link === "Residential Trades" ? "/tradie"
+                            : "#"
+                          }
                           style={{ fontSize: "13px", color: "#333", textDecoration: "none" }}
                           onMouseOver={e => (e.currentTarget.style.color = "#666")}
                           onMouseOut={e => (e.currentTarget.style.color = "#333")}
