@@ -561,7 +561,7 @@ export default function LandingPage() {
                   <div style={{ minWidth: "240px", background: "#0f0f0f", border: "1px solid #222", padding: "6px", boxShadow: "0 20px 50px rgba(0,0,0,0.6)" }}>
                     {[
                       ["/newsroom", "Newsroom", "Updates, releases and announcements"],
-                      ["/#resources", "AI Toolbox", "See Briesa's AI features in action"],
+                      ["/ai-toolbox", "AI Toolbox", "See Briesa's AI features in action"],
                     ].map(([href, label, desc]) => (
                       <Link
                         key={label}
