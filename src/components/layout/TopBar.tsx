@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Plus, Search, Bell, HelpCircle, SlidersHorizontal, Sun, Moon } from "lucide-react";
+import { Plus, Search, Bell, HelpCircle, SlidersHorizontal, Sun, Moon, ShieldCheck } from "lucide-react";
 import type { Industry } from "@/config/modules";
+import { AuditModal } from "./AuditModal";
 
 const MODULE_LABELS: Record<string, string> = {
   safety: "Safety", people: "People", operations: "Operations",
@@ -21,6 +22,7 @@ interface TopBarProps {
 export function TopBar({ orgName, userName }: TopBarProps) {
   const pathname = usePathname();
   const [isDark, setIsDark] = useState(true);
+  const [auditOpen, setAuditOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("b-theme");
@@ -51,6 +53,7 @@ export function TopBar({ orgName, userName }: TopBarProps) {
     : null;
 
   return (
+    <>
     <header
       className="flex items-center h-12 px-4 border-b flex-shrink-0 gap-2 overflow-hidden"
       style={{ background: "var(--b-bg)", borderColor: "var(--b-border)" }}
@@ -124,6 +127,18 @@ export function TopBar({ orgName, userName }: TopBarProps) {
 
       {/* Right actions */}
       <div className="flex items-center gap-1 ml-auto">
+        {/* Audit button */}
+        <button
+          onClick={() => setAuditOpen(true)}
+          className="hidden md:flex items-center gap-1.5 px-3 h-[30px] border text-[11.4px] font-[600] transition-colors flex-shrink-0"
+          style={{ borderColor: "rgba(255,214,0,0.35)", color: "#ffd600", background: "rgba(255,214,0,0.06)" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,214,0,0.12)"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(255,214,0,0.06)"; }}
+        >
+          <ShieldCheck className="w-3.5 h-3.5" />
+          Audit
+        </button>
+
         <button
           className="hidden md:block px-3 h-[30px] text-[11.4px] transition-colors"
           style={{ color: "var(--b-text-tertiary)" }}
@@ -199,5 +214,8 @@ export function TopBar({ orgName, userName }: TopBarProps) {
         </button>
       </div>
     </header>
+
+    <AuditModal open={auditOpen} onClose={() => setAuditOpen(false)} />
+    </>
   );
 }
