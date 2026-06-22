@@ -25,6 +25,7 @@ export async function getIndustry(): Promise<Industry> {
   const cookieStore = await cookies();
   const demo = cookieStore.get("b-demo-industry")?.value;
   return demo === "industrial" ? "industrial"
-    : demo === "facilities" ? "facilities"
+    : demo === "facilities"   ? "facilities"
+    : demo === "realestate"   ? "realestate"
     : "construction";
 }

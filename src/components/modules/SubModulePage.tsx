@@ -19,6 +19,8 @@ const MOBILE_LABELS = {
 };
 
 const MODULE_LABELS: Record<ModuleKey, string> = {
+  properties: "Properties",
+  policies:   "Policies",
   safety: "Safety",
   people: "People",
   operations: "Operations",

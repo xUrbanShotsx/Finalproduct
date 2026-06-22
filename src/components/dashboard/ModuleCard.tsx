@@ -28,6 +28,8 @@ const ICON_MAP: Record<string, LucideIcon> = {
 };
 
 const MODULE_COLORS: Record<ModuleKey, string> = {
+  properties: "bg-yellow-50 border-yellow-100 hover:border-yellow-300",
+  policies:   "bg-orange-50 border-orange-100 hover:border-orange-300",
   safety: "bg-red-50 border-red-100 hover:border-red-300",
   people: "bg-blue-50 border-blue-100 hover:border-blue-300",
   operations: "bg-purple-50 border-purple-100 hover:border-purple-300",
@@ -40,6 +42,8 @@ const MODULE_COLORS: Record<ModuleKey, string> = {
 };
 
 const ICON_COLORS: Record<ModuleKey, string> = {
+  properties: "text-yellow-700 bg-yellow-100",
+  policies:   "text-orange-600 bg-orange-100",
   safety: "text-red-600 bg-red-100",
   people: "text-blue-600 bg-blue-100",
   operations: "text-purple-600 bg-purple-100",

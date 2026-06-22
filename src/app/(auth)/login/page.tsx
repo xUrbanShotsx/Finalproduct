@@ -34,6 +34,7 @@ export default function LoginPage() {
       const industry =
         email === "industrial@com"   && password === "industrial"   ? "industrial"
         : email === "facilities@com" && password === "facilities"   ? "facilities"
+        : email === "realestate@com" && password === "realestate"   ? "realestate"
         : "construction";
       document.cookie = `b-demo-industry=${industry}; path=/; max-age=86400`;
       // Logged-in customer dashboards are not the prospect demo — unlock add-ons.

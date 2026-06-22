@@ -8,6 +8,7 @@ import {
   Building2, BarChart3, GraduationCap, Map, LayoutDashboard,
   ChevronDown, ChevronRight, LogOut, Lock,
   Building, Users2, Activity, CreditCard, SlidersHorizontal,
+  Home, FileText,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,10 +16,10 @@ import { getSubModules, CORE_MODULES, type Industry, type ModuleKey } from "@/co
 
 const MODULE_ICONS: Record<string, LucideIcon> = {
   Shield, Users, Settings, AlertTriangle, CheckSquare,
-  Building2, BarChart3, GraduationCap, Map,
+  Building2, BarChart3, GraduationCap, Map, Home, FileText,
 };
 
-const MODULES_WITH_SUBMODULES: ModuleKey[] = ["safety", "people", "operations", "risk", "compliance", "insights", "training"];
+const MODULES_WITH_SUBMODULES: ModuleKey[] = ["properties", "policies", "safety", "people", "operations", "risk", "compliance", "insights", "training"];
 
 const BLUEPRINT_SUBS = [
   { id: "store",        name: "Blueprint Store" },
@@ -96,7 +97,7 @@ export function AppSidebar({ industry, userName, isDemo = false }: AppSidebarPro
           </span>
         </div>
 
-        {CORE_MODULES.map((mod) => {
+        {CORE_MODULES.filter(m => !m.industries || m.industries.includes(industry)).map((mod) => {
           const Icon = MODULE_ICONS[mod.icon] ?? Shield;
           const comingSoon = COMING_SOON.includes(mod.key);
           const subModules: { id: string; name: string }[] =

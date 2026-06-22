@@ -25,7 +25,12 @@ const BK = "#0a0a0a";
 // ── Page-specific suggested prompts ───────────────────────────────────────
 
 const SUGGESTIONS: Record<string, string[]> = {
-  "/dashboard":              ["Explain my compliance score", "What should I focus on today?", "How does Briesa calculate TRIFR?"],
+  "/dashboard":              ["Explain my compliance score", "What should I focus on today?", "What are my AML/CTF obligations?"],
+  "/properties/listings":    ["What AML checks are required before listing?", "Walk me through vendor ID verification", "What must a Section 32 / Vendor Statement contain?"],
+  "/properties/appraisals":  ["What must I disclose in a CMA?", "How do I document vendor price guide discussions?", "What is the cooling-off period for agency agreements?"],
+  "/policies/procedures":    ["What policies are required under the AML/CTF Act?", "How often should AML policies be reviewed?", "What is a Suspicious Matter Report?"],
+  "/policies/aml-ctf":       ["What is the AUSTRAC reporting threshold?", "Who must be identified as a beneficial owner?", "What records must I keep under AML/CTF?"],
+  "/policies/licensing":     ["What CPD hours are mandatory in NSW?", "What topics count as structured CPD?", "How do I submit my CPD hours?"],
   "/safety/incidents":       ["Walk me through an ICAM investigation", "What makes an incident notifiable?", "How does TapRooT work with ICAM?"],
   "/safety/actions":         ["Difference between Immediate, Systemic and Preventive?", "How do I prioritise corrective actions?", "What ICAM factor should this action address?"],
   "/safety/swms":            ["When is a SWMS legally required?", "What must a SWMS include?", "How often should SWMS be reviewed?"],
@@ -38,9 +43,9 @@ const SUGGESTIONS: Record<string, string[]> = {
 };
 
 const DEFAULT_SUGGESTIONS = [
-  "What are my PCBU duties under the WHS Act?",
-  "How do I navigate to incidents?",
-  "Explain the ICAM methodology",
+  "What are my AML/CTF obligations?",
+  "How do I navigate to listings?",
+  "Explain the vendor ID verification steps",
 ];
 
 // ── Bubble ─────────────────────────────────────────────────────────────────

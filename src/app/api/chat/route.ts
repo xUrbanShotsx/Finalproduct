@@ -6,6 +6,14 @@ const client = new Anthropic();
 const NAV_GUIDE = `
 BRIESA PLATFORM — module navigation:
 • Dashboard (/dashboard): overview, compliance score, AI insights, today's tasks
+• Properties (/properties): [real estate] listing management, AML/CTF compliance intake
+  – Listings (/properties/listings): active listings register, new listing intake with AML/CTF + vendor ID checklist, agency agreement, due diligence, marketing, access setup
+  – Appraisals (/properties/appraisals): property appraisal records, CMA reports
+  – Sales Pipeline (/properties/pipeline): prospect tracking from appraisal to settlement
+• Policies (/policies): [real estate] agency policies, AML/CTF program, licensing & CPD
+  – Policies & Procedures (/policies/procedures): document library for agency compliance policies
+  – AML/CTF Compliance (/policies/aml-ctf): AML/CTF program, risk assessments, AUSTRAC obligations, SMR procedure
+  – Licensing & CPD (/policies/licensing): licence renewals and CPD tracking
 • Safety (/safety): hub for all safety sub-modules
   – Incidents (/safety/incidents): report incidents; ICAM + TapRooT® investigation workflows; corrective actions
   – Actions (/safety/actions): all corrective/preventive actions — tagged by ICAM factor, TapRooT root cause, and type (Immediate / Systemic / Preventive)
@@ -65,11 +73,35 @@ Key metrics:
 • TRIFR = (recordable injuries × 1,000,000) / hours worked — industry benchmarks vary; construction target typically <5
 • LTIFR = (lost-time injuries × 1,000,000) / hours worked
 • Compliance score: audit-ready percentage across WHS obligations
+
+REAL ESTATE LEGISLATION AND COMPLIANCE (Australia):
+• AML/CTF Act 2006 (Cth): Real estate agents became reporting entities under AUSTRAC from 31 March 2026. Must complete customer due diligence (CDD) before marketing, listing or exchanging contracts.
+  – CDD requires: verify identity of all vendors (primary + secondary ID), identify beneficial owners, PEP screening, sanctions checks
+  – Enhanced CDD for high-risk transactions, PEPs and suspicious matters
+  – Suspicious Matter Reports (SMR) must be filed with AUSTRAC — tipping-off prohibited
+  – Records kept minimum 7 years
+• Property and Stock Agents Act 2002 (NSW): governs agency agreements, commissions, trust accounts, cooling-off periods and conduct
+  – Agency agreement must disclose commission, fees and rebates before signing
+  – Sole and exclusive agency agreements: 42-day maximum initial term
+  – Trust accounting: all client money held in statutory trust accounts; annual audit required
+• Privacy Act 1988 (Cth) + Australian Privacy Principles: governs collection and use of client personal information; Notifiable Data Breaches (NDB) scheme applies
+• Property and Stock Agents Regulation 2022 (NSW): CPD obligations — minimum structured and elective hours per year; REINSW or approved provider delivery
+• Section 32 / Vendor Statement (VIC) or equivalent: vendors must disclose title, encumbrances, outgoings and planning matters before exchange
+• Conveyancing Act 1919 (NSW) / Sale of Land Act 1962 (VIC): governs contract terms, cooling-off rights and purchaser protections
+• Trust accounting: separate trust account mandatory; interest to Statutory Interest Account; annual audit by approved auditor
 `.trim();
 
 function buildSystemPrompt(pathname: string, industry: string): string {
   const pageMap: Record<string, string> = {
-    "/dashboard":                    "Dashboard overview — compliance score, incidents, AI insights and tasks",
+    "/dashboard":                    "Dashboard overview — compliance score, AI insights and tasks",
+    "/properties":                   "Properties module — listings, appraisals, sales pipeline",
+    "/properties/listings":          "Listings register — active listings, AML/CTF compliance status, new listing intake with vendor ID and AML checklist",
+    "/properties/appraisals":        "Property appraisals — CMA reports, vendor price discussions",
+    "/properties/pipeline":          "Sales pipeline — prospect to settlement tracking",
+    "/policies":                     "Policies module — agency policies, AML/CTF program, licensing & CPD",
+    "/policies/procedures":          "Policies & Procedures library — agency compliance documents",
+    "/policies/aml-ctf":             "AML/CTF Compliance — AUSTRAC obligations, SMR procedure, risk assessments",
+    "/policies/licensing":           "Licensing & CPD — licence renewals, CPD tracking and submissions",
     "/safety":                       "Safety module hub",
     "/safety/incidents":             "Incidents register — ICAM/TapRooT investigation workflows, severity, status",
     "/safety/actions":               "Corrective actions — tagged by ICAM factor, TapRooT root cause, action type",
@@ -97,6 +129,7 @@ function buildSystemPrompt(pathname: string, industry: string): string {
   const industryLabel =
     industry === "industrial"  ? "industrial manufacturing/processing"
     : industry === "facilities" ? "facilities management"
+    : industry === "realestate" ? "real estate agency"
     : "construction";
 
   return [

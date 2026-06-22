@@ -1,4 +1,4 @@
-export type Industry = "construction" | "industrial" | "facilities";
+export type Industry = "construction" | "industrial" | "facilities" | "realestate";
 
 export type ModuleKey =
   | "safety"
@@ -9,7 +9,9 @@ export type ModuleKey =
   | "governance"
   | "insights"
   | "training"
-  | "blueprints";
+  | "blueprints"
+  | "properties"
+  | "policies";
 
 export type MobileAccess = "full" | "partial" | "read-only" | "none";
 
@@ -26,10 +28,11 @@ export interface CoreModule {
   key: ModuleKey;
   name: string;
   icon: string;
+  industries?: Industry[];
   subModules: SubModule[];
 }
 
-export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
+export const SAFETY_SUBMODULES: Partial<Record<Industry, SubModule[]>> = {
   construction: [
     {
       id: "incidents",
@@ -182,7 +185,7 @@ export const SAFETY_SUBMODULES: Record<Industry, SubModule[]> = {
   ],
 };
 
-export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
+export const PEOPLE_SUBMODULES: Partial<Record<Industry, SubModule[]>> = {
   construction: [
     {
       id: "inductions",
@@ -335,7 +338,7 @@ export const PEOPLE_SUBMODULES: Record<Industry, SubModule[]> = {
   ],
 };
 
-export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
+export const OPERATIONS_SUBMODULES: Partial<Record<Industry, SubModule[]>> = {
   construction: [
     {
       id: "safe-work-procedures",
@@ -440,7 +443,7 @@ export const OPERATIONS_SUBMODULES: Record<Industry, SubModule[]> = {
   ],
 };
 
-export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
+export const RISK_SUBMODULES: Partial<Record<Industry, SubModule[]>> = {
   construction: [
     {
       id: "hazard-register",
@@ -593,7 +596,7 @@ export const RISK_SUBMODULES: Record<Industry, SubModule[]> = {
   ],
 };
 
-export const COMPLIANCE_SUBMODULES: Record<Industry, SubModule[]> = {
+export const COMPLIANCE_SUBMODULES: Partial<Record<Industry, SubModule[]>> = {
   construction: [
     {
       id: "inspections-audits",
@@ -848,13 +851,126 @@ export const INSIGHTS_SUBMODULES: SubModule[] = [
   },
 ];
 
+export const PROPERTIES_SUBMODULES: SubModule[] = [
+  {
+    id: "listings",
+    name: "Listings",
+    description: "Active property listings, compliance status, new listing intake with AML/CTF and vendor ID checklist",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "appraisals",
+    name: "Appraisals",
+    description: "Property appraisal records, CMA reports and vendor pricing discussions",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+  {
+    id: "pipeline",
+    name: "Sales Pipeline",
+    description: "Prospect tracking from appraisal to listing to settlement",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+];
+
+export const POLICIES_SUBMODULES: SubModule[] = [
+  {
+    id: "procedures",
+    name: "Policies & Procedures",
+    description: "Agency policies, compliance procedures, and professional standards documentation",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "aml-ctf",
+    name: "AML/CTF Compliance",
+    description: "Anti-Money Laundering and Counter-Terrorism Financing program, risk assessments and reporting obligations",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+  {
+    id: "licensing",
+    name: "Licensing & CPD",
+    description: "Licence renewals, Continuing Professional Development tracking and regulator submissions",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+];
+
+export const RE_PEOPLE_SUBMODULES: SubModule[] = [
+  {
+    id: "clients",
+    name: "Clients",
+    description: "Vendor and buyer profiles, contact history and communication records",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "agents",
+    name: "Agents & Staff",
+    description: "Agent profiles, licences, commission splits and performance records",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+];
+
+export const RE_RISK_SUBMODULES: SubModule[] = [
+  {
+    id: "risk-register",
+    name: "Risk Register",
+    description: "Agency risk register — regulatory, financial, reputational and operational risks",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "complaints",
+    name: "Complaints",
+    description: "Client complaint register, investigation records and regulator notifications",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+];
+
+export const RE_COMPLIANCE_SUBMODULES: SubModule[] = [
+  {
+    id: "trust-accounting",
+    name: "Trust Accounting",
+    description: "Trust account register, receipts, disbursements and statutory audit trail",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "legislative-register",
+    name: "Legislative Register",
+    description: "Property law, agency legislation and real estate regulations applicable to the agency",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+];
+
 export const CORE_MODULES: Omit<CoreModule, "subModules">[] = [
-  { key: "safety",     name: "Safety",          icon: "Shield" },
+  { key: "properties", name: "Properties",      icon: "Home",          industries: ["realestate"] },
+  { key: "policies",   name: "Policies",         icon: "FileText",      industries: ["realestate"] },
+  { key: "safety",     name: "Safety",           icon: "Shield",        industries: ["construction", "industrial", "facilities"] },
   { key: "people",     name: "People",           icon: "Users" },
-  { key: "operations", name: "Operations",       icon: "Settings" },
+  { key: "operations", name: "Operations",       icon: "Settings",      industries: ["construction", "industrial", "facilities"] },
   { key: "risk",       name: "Risk Management",  icon: "AlertTriangle" },
   { key: "compliance", name: "Compliance",       icon: "CheckSquare" },
-  { key: "governance", name: "Governance",       icon: "Building2" },
+  { key: "governance", name: "Governance",       icon: "Building2",     industries: ["construction", "industrial", "facilities"] },
   { key: "insights",   name: "Insights",         icon: "BarChart3" },
   { key: "training",   name: "Training",         icon: "GraduationCap" },
   { key: "blueprints", name: "Blueprints",       icon: "Map" },
@@ -862,13 +978,15 @@ export const CORE_MODULES: Omit<CoreModule, "subModules">[] = [
 
 export function getSubModules(module: ModuleKey, industry: Industry): SubModule[] {
   switch (module) {
-    case "safety":      return SAFETY_SUBMODULES[industry];
-    case "people":      return PEOPLE_SUBMODULES[industry];
-    case "operations":  return OPERATIONS_SUBMODULES[industry];
-    case "risk":        return RISK_SUBMODULES[industry];
-    case "compliance":  return COMPLIANCE_SUBMODULES[industry];
-    case "insights":    return INSIGHTS_SUBMODULES;
-    case "training":    return TRAINING_SUBMODULES;
-    default:            return [];
+    case "properties": return industry === "realestate" ? PROPERTIES_SUBMODULES : [];
+    case "policies":   return industry === "realestate" ? POLICIES_SUBMODULES : [];
+    case "safety":     return SAFETY_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
+    case "people":     return industry === "realestate" ? RE_PEOPLE_SUBMODULES : PEOPLE_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
+    case "operations": return OPERATIONS_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
+    case "risk":       return industry === "realestate" ? RE_RISK_SUBMODULES : RISK_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
+    case "compliance": return industry === "realestate" ? RE_COMPLIANCE_SUBMODULES : COMPLIANCE_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
+    case "insights":   return INSIGHTS_SUBMODULES;
+    case "training":   return TRAINING_SUBMODULES;
+    default:           return [];
   }
 }

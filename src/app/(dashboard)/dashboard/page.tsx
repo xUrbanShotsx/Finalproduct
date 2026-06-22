@@ -154,6 +154,38 @@ const AI_INSIGHTS: Record<Industry, InsightItem[]> = {
       href: "/people/inductions",
     },
   ],
+  realestate: [
+    {
+      type: "AML ALERT",
+      typeBg: "rgba(240,96,96,0.1)",
+      typeColor: "#f06060",
+      confidence: "Action required",
+      title: "3 vendor AML/CTF checks overdue",
+      body: "32 Harbour St, 82 Pacific Hwy and 14 Cove Rd have outstanding AML/CTF verification steps. Under the AML/CTF Act 2006, checks must be completed before exchange of contracts.",
+      action: "View listings",
+      href: "/properties/listings",
+    },
+    {
+      type: "PRICE GAP",
+      typeBg: "var(--b-badge-yellow-bg)",
+      typeColor: "var(--b-badge-yellow-text)",
+      confidence: "Market analysis",
+      title: "Vendor expectation gap on 3 listings",
+      body: "Current vendor price expectations are 8–14% above comparable sales data. AI-generated CMA reports are ready for your review — presenting updated market data may accelerate time to list.",
+      action: "View appraisals",
+      href: "/properties/appraisals",
+    },
+    {
+      type: "TREND",
+      typeBg: "var(--b-badge-green-bg)",
+      typeColor: "var(--b-badge-green-text)",
+      confidence: "Q2 data",
+      title: "Average days on market down 8%",
+      body: "Properties listed this quarter are selling 8% faster than Q1. Listings with professional photography and AML cleared upfront are transacting 12 days faster on average.",
+      action: "View insights",
+      href: "/insights",
+    },
+  ],
 };
 
 
@@ -175,6 +207,12 @@ const TASKS: Record<Industry, { id: string; label: string; sub: string }[]> = {
     { id: "INC-031",  label: "ICAM/TapRooT — complete INC-031 investigation",   sub: "Day 5 · ICAM analysis pending · 2 actions open" },
     { id: "AUD-08",   label: "Complete AUD-08 building audit",                   sub: "Scheduled · Tower B" },
     { id: "ISO-012",  label: "Approve isolation plan — HVAC Unit 4",            sub: "Maintenance scheduled tomorrow" },
+  ],
+  realestate: [
+    { id: "AML-032",  label: "Complete AML/CTF check — 32 Harbour St vendor file", sub: "Overdue · required before exchange" },
+    { id: "LST-007",  label: "Upload listing — 7 Marine Parade",                   sub: "Photos received · portal upload pending" },
+    { id: "AGR-015",  label: "Agency agreement renewal — Mitchell & Lee",           sub: "Expires 15 Jul · renewal required" },
+    { id: "CPD-2026", label: "Submit CPD hours — FY2026",                          sub: "38/40 hours logged · 2 hours remaining" },
   ],
 };
 
@@ -199,6 +237,12 @@ const STATS: Record<Industry, StatItem[]> = {
     { label: "ESM Due",         value: "5",   sub: "next: ESM-007",         icon: "file",  tone: "yellow" },
     { label: "Induction",       value: "96%", sub: "4 contractors outstanding", icon: "users", tone: "blue" },
   ],
+  realestate: [
+    { label: "Active Listings",  value: "14",  sub: "↑ 2 this month",          icon: "file",  tone: "green" },
+    { label: "AML Checks Due",   value: "3",   sub: "action required",         icon: "alert", tone: "red" },
+    { label: "Compliance Score", value: "91%", sub: "audit ready",             icon: "file",  tone: "green" },
+    { label: "CPD Hours",        value: "38",  sub: "of 40 · FY target",       icon: "users", tone: "yellow" },
+  ],
 };
 
 type BannerData = { lead: React.ReactNode; workersInScope: string; artifacts: string };
@@ -218,6 +262,11 @@ const BANNER: Record<Industry, BannerData> = {
     lead: <>Essential Safety Measures annual schedule is due. I&apos;ve compiled inspection records for 5 fire and emergency systems across 3 buildings — review and approve in ~3 min.</>,
     workersInScope: "38",
     artifacts: "5",
+  },
+  realestate: {
+    lead: <>3 vendor AML/CTF checks are overdue across active listings. I&apos;ve prepared the verification steps and flagged the relevant files — complete before exchange of contracts.</>,
+    workersInScope: "3",
+    artifacts: "3",
   },
 };
 
@@ -239,6 +288,11 @@ const REGULATION: Record<Industry, RegItem> = {
     source: "Standards Australia · Effective 1 Jul 2024",
     impact: "Tracking matrix impact — 5 ESM schedules, 1 policy",
   },
+  realestate: {
+    title: "AML/CTF Act 2006 — enhanced customer due diligence obligations for real estate agents",
+    source: "AUSTRAC · Effective 31 Mar 2026",
+    impact: "Applies to all vendor onboarding — 3 active files require review",
+  },
 };
 
 const STAT_ICON = { file: FileText, alert: AlertTriangle, users: Users } as const;
@@ -254,8 +308,9 @@ export default async function DashboardPage() {
   const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
 
   let industry: Industry =
-    demoCookie === "industrial" ? "industrial"
-    : demoCookie === "facilities" ? "facilities"
+    demoCookie === "industrial"  ? "industrial"
+    : demoCookie === "facilities"  ? "facilities"
+    : demoCookie === "realestate"  ? "realestate"
     : "construction";
 
   if (SUPABASE_CONFIGURED) {

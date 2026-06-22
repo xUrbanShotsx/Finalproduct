@@ -15,17 +15,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const demoCookie  = cookieStore.get("b-demo-industry")?.value ?? "construction";
   const isProspectDemo = cookieStore.get("b-demo-prospect")?.value === "1";
 
-  let industry: "construction" | "industrial" | "facilities" =
-    demoCookie === "industrial" ? "industrial"
-    : demoCookie === "facilities" ? "facilities"
+  let industry: "construction" | "industrial" | "facilities" | "realestate" =
+    demoCookie === "industrial"  ? "industrial"
+    : demoCookie === "facilities"  ? "facilities"
+    : demoCookie === "realestate"  ? "realestate"
     : "construction";
   let orgName  =
-    industry === "industrial" ? "Pacific Industrial Pty Ltd"
-    : industry === "facilities" ? "Meridian Facilities Group"
+    industry === "industrial"  ? "Pacific Industrial Pty Ltd"
+    : industry === "facilities"  ? "Meridian Facilities Group"
+    : industry === "realestate"  ? "Harbour & Bay Real Estate"
     : "Apex Construction Pty Ltd";
   let userName =
-    industry === "industrial" ? "Sam Torres"
-    : industry === "facilities" ? "Jordan Lee"
+    industry === "industrial"  ? "Sam Torres"
+    : industry === "facilities"  ? "Jordan Lee"
+    : industry === "realestate"  ? "Taylor Reid"
     : "Alex Chen";
 
   if (SUPABASE_CONFIGURED) {
