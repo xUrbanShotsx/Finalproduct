@@ -50,9 +50,13 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
           <AppSidebar industry={industry} orgName={orgName} userName={userName} isDemo={isDemo} />
         </div>
 
-        <main className="flex-1 overflow-auto b-has-bottomnav" style={{ background: "var(--b-bg-canvas)" }}>
+        {/* Main content — min-w-0 lets it shrink when the chat panel is open */}
+        <main className="flex-1 min-w-0 overflow-auto b-has-bottomnav" style={{ background: "var(--b-bg-canvas)" }}>
           {children}
         </main>
+
+        {/* AI chat panel — desktop: inline 25 vw column; mobile: floating overlay */}
+        <AiChatWidget industry={industry} />
       </div>
 
       {/* Mobile full-screen module launcher */}
@@ -62,9 +66,6 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
       <ResponsiveTableLabels />
 
       {isDemo && <DashboardOnboarding industry={industry} />}
-
-      {/* AI chat widget — always visible on dashboard */}
-      <AiChatWidget industry={industry} />
 
       {/* Mobile bottom tab bar */}
       <nav
