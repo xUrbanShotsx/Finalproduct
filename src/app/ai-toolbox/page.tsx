@@ -588,7 +588,7 @@ export default function AIToolboxPage() {
           <Reveal delay={0.24}>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "12px 28px", background: YELLOW }}>
-                Start free — no credit card <ArrowRight size={16} />
+                Sign Up Today <ArrowRight size={16} />
               </Link>
               <Link href="/demo" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 600, color: "#777", textDecoration: "none", padding: "12px 28px", border: "1px solid #222" }}>
                 Book a demo
@@ -818,7 +818,7 @@ export default function AIToolboxPage() {
           <Reveal delay={0.2}>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, color: "#0a0a0a", textDecoration: "none", padding: "14px 32px", background: YELLOW }}>
-                Start free — no credit card <ArrowRight size={16} />
+                Sign Up Today <ArrowRight size={16} />
               </Link>
               <Link href="/demo" style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 600, color: "#555", textDecoration: "none", padding: "14px 32px", border: "1px solid #222" }}>
                 Book a live demo
