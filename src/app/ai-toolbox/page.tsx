@@ -51,6 +51,16 @@ function GlobalStyles() {
         from { width: 0%; }
         to   { width: 100%; }
       }
+      @keyframes marquee {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+      }
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: marquee 28s linear infinite;
+      }
+      .ticker-track:hover { animation-play-state: paused; }
       .cap-card {
         background: #0a0a0a;
         padding: 28px 24px;
@@ -657,14 +667,19 @@ export default function AIToolboxPage() {
         </div>
       </section>
 
-      {/* ── Stats bar ── */}
-      <section style={{ borderBottom: "1px solid #1a1a1a", background: "#080808" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", borderLeft: "1px solid #1a1a1a" }}>
-            {STATS.map((s, i) => (
-              <AnimatedStat key={i} value={s.value} label={s.label} note={s.note} delay={i * 0.06} />
-            ))}
-          </div>
+      {/* ── Stats ticker ── */}
+      <section style={{ background: YELLOW, borderTop: "1px solid #e8c200", borderBottom: "1px solid #e8c200", overflow: "hidden", padding: "0" }}>
+        <div className="ticker-track">
+          {[...STATS, ...STATS].map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: "0", flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "10px", padding: "18px 36px", whiteSpace: "nowrap" }}>
+                <span style={{ fontSize: "26px", fontWeight: 900, letterSpacing: "-0.04em", color: "#0a0a0a", lineHeight: 1 }}>{s.value}</span>
+                <span style={{ fontSize: "13px", fontWeight: 700, color: "#0a0a0a" }}>{s.label}</span>
+                <span style={{ fontSize: "12px", color: "#0a0a0a", opacity: 0.5 }}>— {s.note}</span>
+              </div>
+              <span style={{ color: "#0a0a0a", opacity: 0.25, fontSize: "20px", fontWeight: 300, flexShrink: 0 }}>|</span>
+            </div>
+          ))}
         </div>
       </section>
 
