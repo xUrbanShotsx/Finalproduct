@@ -58,7 +58,7 @@ export function TradieDashboard() {
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-[22px] font-[800] tracking-tight" style={{ color: "var(--b-text)" }}>
-            {greeting}, Jake 👋
+            {greeting}, Jye 👋
           </h1>
           <p className="text-[13px] mt-0.5" style={{ color: "var(--b-text-muted)" }}>{date}</p>
         </div>

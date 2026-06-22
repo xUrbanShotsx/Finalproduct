@@ -29,7 +29,7 @@ export default function TradieSettingsPage() {
           </div>
           <div className="px-4 py-4 space-y-3">
             {[
-              { label: "Full Name",       value: "Jake Sullivan",        type: "text"  },
+              { label: "Full Name",       value: "Jye",                  type: "text"  },
               { label: "Trade",           value: "Licensed Plumber",     type: "text"  },
               { label: "Licence Number",  value: "PL-089423",           type: "text"  },
               { label: "Email",           value: "trady@com",            type: "email" },

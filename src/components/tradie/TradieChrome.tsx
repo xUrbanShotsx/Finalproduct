@@ -81,7 +81,7 @@ export function TradieChrome({ children }: Props) {
             J
           </div>
           <div className="min-w-0">
-            <p className="text-[12px] font-[600] truncate" style={{ color: "var(--b-text)" }}>Jake Sullivan</p>
+            <p className="text-[12px] font-[600] truncate" style={{ color: "var(--b-text)" }}>Jye</p>
             <p className="text-[10.5px] truncate" style={{ color: "var(--b-text-muted)" }}>Licensed Plumber</p>
           </div>
         </div>
