@@ -31,6 +31,13 @@ export default function LoginPage() {
     setError(null);
 
     if (isDemo) {
+      /* Tradie plan — dedicated lightweight dashboard */
+      if (email === "trady@com" && password === "trady") {
+        document.cookie = "b-demo-plan=tradie; path=/; max-age=86400";
+        router.push("/tradie");
+        return;
+      }
+
       const industry =
         email === "industrial@com"   && password === "industrial"   ? "industrial"
         : email === "facilities@com" && password === "facilities"   ? "facilities"

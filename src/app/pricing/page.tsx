@@ -14,6 +14,21 @@ function BLogo({ size = 24, color = "currentColor" }: { size?: number; color?: s
 
 const PLANS = [
   {
+    key: "tradie",
+    name: "Tradie Solo",
+    price: "$69",
+    tagline: "For sole traders & individual tradies — plumbers, electricians, carpenters and more.",
+    highlight: false,
+    badge: "New" as string | null,
+    capacity: [
+      { label: "Users",           value: "1 (you)" },
+      { label: "Storage",         value: "5 GB" },
+      { label: "Docs / month",    value: "Up to 30" },
+      { label: "AI generations",  value: "~100 calls" },
+      { label: "Token cap",       value: "100K / month" },
+    ],
+  },
+  {
     key: "small",
     name: "Small",
     price: "$249",
