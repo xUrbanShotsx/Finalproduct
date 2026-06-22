@@ -646,7 +646,7 @@ export default function AIToolboxPage() {
           <Reveal delay={0.08}>
             <h1 style={{ fontSize: "clamp(40px, 6vw, 72px)", fontWeight: 900, lineHeight: 1.05, letterSpacing: "-0.04em", color: "#ffffff", margin: "0 0 24px" }}>
               Your AI-powered<br />
-              <span className="shimmer-text">compliance team</span>
+              <span style={{ color: YELLOW }}>compliance team</span>
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
