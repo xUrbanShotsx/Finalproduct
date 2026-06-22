@@ -77,6 +77,11 @@ const DEFAULT_SUGGESTIONS = [
   "Explain the ICAM methodology",
 ];
 
+// ── Brand colours ─────────────────────────────────────────────────────────
+const Y = "#ffd600";   // Briesa yellow
+const YHover = "#f0cb00";
+const BK = "#0a0a0a";  // Near-black
+
 // ── Bubble component ───────────────────────────────────────────────────────
 
 function Bubble({ msg }: { msg: Message }) {
@@ -85,33 +90,25 @@ function Bubble({ msg }: { msg: Message }) {
     <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-3`}>
       {!isUser && (
         <div
-          className="w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5 mr-2"
-          style={{ background: "var(--b-accent-bg)", border: "1px solid var(--b-accent-border)" }}
+          className="w-6 h-6 flex items-center justify-center flex-shrink-0 mt-0.5 mr-2 flex-shrink-0"
+          style={{ background: Y, border: `1px solid ${Y}` }}
         >
-          <Sparkles className="w-3 h-3" style={{ color: "var(--b-accent-text)" }} />
+          <Sparkles className="w-3 h-3" style={{ color: BK }} />
         </div>
       )}
       <div
         className="max-w-[84%] px-3 py-2.5 text-[12.5px] leading-relaxed whitespace-pre-wrap"
         style={
           isUser
-            ? {
-                background: "var(--b-accent-bg)",
-                color: "var(--b-accent-text)",
-                border: "1px solid var(--b-accent-border)",
-              }
-            : {
-                background: "var(--b-bg-secondary)",
-                color: "var(--b-text)",
-                border: "1px solid var(--b-border)",
-              }
+            ? { background: Y, color: BK, border: `1px solid ${Y}` }
+            : { background: "var(--b-bg-secondary)", color: "var(--b-text)", border: "1px solid var(--b-border)" }
         }
       >
         {msg.content}
         {msg.streaming && (
           <span
             className="inline-block ml-0.5 w-1.5 h-3.5 align-middle animate-pulse"
-            style={{ background: "var(--b-accent-text)" }}
+            style={{ background: Y }}
           />
         )}
       </div>
@@ -237,9 +234,9 @@ export function AiChatWidget({ industry }: { industry: Industry }) {
         >
           <div
             className="w-6 h-6 flex items-center justify-center flex-shrink-0"
-            style={{ background: "var(--b-accent-bg)", border: "1px solid var(--b-accent-border)" }}
+            style={{ background: Y, border: `1px solid ${Y}` }}
           >
-            <Sparkles className="w-3.5 h-3.5" style={{ color: "var(--b-accent-text)" }} />
+            <Sparkles className="w-3.5 h-3.5" style={{ color: BK }} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[13px] font-semibold" style={{ color: "var(--b-text)" }}>Briesa AI</div>
@@ -295,7 +292,7 @@ export function AiChatWidget({ industry }: { industry: Industry }) {
                       borderColor: "var(--b-border)",
                       color: "var(--b-text)",
                     }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--b-accent-border)"}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = Y}
                     onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--b-border)"}
                   >
                     {s}
@@ -330,18 +327,14 @@ export function AiChatWidget({ industry }: { industry: Industry }) {
               borderColor: "var(--b-border-strong)",
               color: "var(--b-text)",
             }}
-            onFocus={e => (e.target as HTMLElement).style.borderColor = "var(--b-accent-text)"}
+            onFocus={e => (e.target as HTMLElement).style.borderColor = Y}
             onBlur={e => (e.target as HTMLElement).style.borderColor = "var(--b-border-strong)"}
           />
           <button
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading}
             className="w-[36px] h-[36px] flex items-center justify-center flex-shrink-0 transition-colors disabled:opacity-40"
-            style={{
-              background: "var(--b-accent-bg)",
-              border: "1px solid var(--b-accent-border)",
-              color: "var(--b-accent-text)",
-            }}
+            style={{ background: Y, border: `1px solid ${Y}`, color: BK }}
           >
             <Send className="w-3.5 h-3.5" />
           </button>
@@ -362,16 +355,16 @@ export function AiChatWidget({ industry }: { industry: Industry }) {
         className="fixed right-4 sm:right-6 z-[48] flex items-center gap-2 px-4 h-[42px] transition-all"
         style={{
           bottom: "72px",
-          background: open ? "var(--b-bg)" : "var(--b-accent-bg)",
-          border: `1px solid ${open ? "var(--b-border)" : "var(--b-accent-border)"}`,
-          color: open ? "var(--b-text-muted)" : "var(--b-accent-text)",
-          boxShadow: open ? "none" : "0 4px 16px rgba(0,0,0,0.14)",
+          background: open ? "var(--b-bg)" : Y,
+          border: `1px solid ${open ? "var(--b-border)" : Y}`,
+          color: open ? "var(--b-text-muted)" : BK,
+          boxShadow: open ? "none" : "0 4px 16px rgba(0,0,0,0.18)",
         }}
         onMouseEnter={e => {
-          if (!open) (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg-hover)";
+          if (!open) (e.currentTarget as HTMLElement).style.background = YHover;
         }}
         onMouseLeave={e => {
-          if (!open) (e.currentTarget as HTMLElement).style.background = "var(--b-accent-bg)";
+          if (!open) (e.currentTarget as HTMLElement).style.background = Y;
         }}
       >
         {open ? (
@@ -385,7 +378,7 @@ export function AiChatWidget({ industry }: { industry: Industry }) {
         {messages.length > 0 && !open && (
           <span
             className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-            style={{ background: "var(--b-accent-text)" }}
+            style={{ background: BK }}
           />
         )}
       </button>
