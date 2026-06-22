@@ -174,7 +174,7 @@ export function ToolboxPage() {
       ref: `TBX-${new Date().toISOString().slice(2,10).replace(/-/g,"")}-${String(prev.length + 1).padStart(3,"0")}`,
       topic: f.topic || "General Safety",
       presenter: f.facilitator || "—",
-      attendees: f.attendees.split(/[\n,]/).filter(x => x.trim()).length,
+      attendees: f.count ?? 0,
       site: f.site || "Site 01",
       date: f.date || new Date().toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric" }),
       signedOff: false,
