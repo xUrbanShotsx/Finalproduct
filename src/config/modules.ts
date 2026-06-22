@@ -11,7 +11,8 @@ export type ModuleKey =
   | "training"
   | "blueprints"
   | "properties"
-  | "policies";
+  | "policies"
+  | "aml-ctf";
 
 export type MobileAccess = "full" | "partial" | "read-only" | "none";
 
@@ -888,19 +889,62 @@ export const POLICIES_SUBMODULES: SubModule[] = [
     offlineCapable: false,
   },
   {
-    id: "aml-ctf",
-    name: "AML/CTF Compliance",
-    description: "Anti-Money Laundering and Counter-Terrorism Financing program, risk assessments and reporting obligations",
-    industries: ["realestate"],
-    mobileAccess: "partial",
-    offlineCapable: false,
-  },
-  {
     id: "licensing",
     name: "Licensing & CPD",
     description: "Licence renewals, Continuing Professional Development tracking and regulator submissions",
     industries: ["realestate"],
     mobileAccess: "full",
+    offlineCapable: false,
+  },
+];
+
+export const AML_CTF_SUBMODULES: SubModule[] = [
+  {
+    id: "cdd",
+    name: "Customer Due Diligence",
+    description: "Vendor identity verification records, beneficial owner identification, PEP and sanctions screening per transaction",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "risk-assessments",
+    name: "Risk Assessments",
+    description: "Transaction-level AML/CTF risk ratings — low, medium and high risk categorisation with documented rationale",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+  {
+    id: "smr",
+    name: "Suspicious Matter Reports",
+    description: "AUSTRAC Suspicious Matter Report register — draft, submit and track SMR obligations with tipping-off controls",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
+    offlineCapable: false,
+  },
+  {
+    id: "transaction-monitoring",
+    name: "Transaction Monitoring",
+    description: "Ongoing monitoring of property transactions for unusual patterns, structuring or high-risk indicators",
+    industries: ["realestate"],
+    mobileAccess: "partial",
+    offlineCapable: false,
+  },
+  {
+    id: "training",
+    name: "AML Training Records",
+    description: "Staff AML/CTF training completion records, assessment results and annual refresher tracking",
+    industries: ["realestate"],
+    mobileAccess: "full",
+    offlineCapable: false,
+  },
+  {
+    id: "austrac-reporting",
+    name: "AUSTRAC Reporting",
+    description: "Annual Compliance Reports, threshold transaction reports and AUSTRAC portal submission history",
+    industries: ["realestate"],
+    mobileAccess: "read-only",
     offlineCapable: false,
   },
 ];
@@ -964,6 +1008,7 @@ export const RE_COMPLIANCE_SUBMODULES: SubModule[] = [
 
 export const CORE_MODULES: Omit<CoreModule, "subModules">[] = [
   { key: "properties", name: "Properties",      icon: "Home",          industries: ["realestate"] },
+  { key: "aml-ctf",   name: "AML / CTF",        icon: "ShieldAlert",   industries: ["realestate"] },
   { key: "policies",   name: "Policies",         icon: "FileText",      industries: ["realestate"] },
   { key: "safety",     name: "Safety",           icon: "Shield",        industries: ["construction", "industrial", "facilities"] },
   { key: "people",     name: "People",           icon: "Users" },
@@ -979,6 +1024,7 @@ export const CORE_MODULES: Omit<CoreModule, "subModules">[] = [
 export function getSubModules(module: ModuleKey, industry: Industry): SubModule[] {
   switch (module) {
     case "properties": return industry === "realestate" ? PROPERTIES_SUBMODULES : [];
+    case "aml-ctf":   return industry === "realestate" ? AML_CTF_SUBMODULES : [];
     case "policies":   return industry === "realestate" ? POLICIES_SUBMODULES : [];
     case "safety":     return SAFETY_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];
     case "people":     return industry === "realestate" ? RE_PEOPLE_SUBMODULES : PEOPLE_SUBMODULES[industry as "construction" | "industrial" | "facilities"] ?? [];

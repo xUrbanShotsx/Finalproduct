@@ -20,6 +20,7 @@ const MOBILE_LABELS = {
 
 const MODULE_LABELS: Record<ModuleKey, string> = {
   properties: "Properties",
+  "aml-ctf":  "AML / CTF",
   policies:   "Policies",
   safety: "Safety",
   people: "People",

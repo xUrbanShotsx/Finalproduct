@@ -8,7 +8,7 @@ import {
   Building2, BarChart3, GraduationCap, Map, LayoutDashboard,
   ChevronDown, ChevronRight, LogOut, Lock,
   Building, Users2, Activity, CreditCard, SlidersHorizontal,
-  Home, FileText,
+  Home, FileText, ShieldAlert,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -16,10 +16,10 @@ import { getSubModules, CORE_MODULES, type Industry, type ModuleKey } from "@/co
 
 const MODULE_ICONS: Record<string, LucideIcon> = {
   Shield, Users, Settings, AlertTriangle, CheckSquare,
-  Building2, BarChart3, GraduationCap, Map, Home, FileText,
+  Building2, BarChart3, GraduationCap, Map, Home, FileText, ShieldAlert,
 };
 
-const MODULES_WITH_SUBMODULES: ModuleKey[] = ["properties", "policies", "safety", "people", "operations", "risk", "compliance", "insights", "training"];
+const MODULES_WITH_SUBMODULES: ModuleKey[] = ["properties", "aml-ctf", "policies", "safety", "people", "operations", "risk", "compliance", "insights", "training"];
 
 const BLUEPRINT_SUBS = [
   { id: "store",        name: "Blueprint Store" },

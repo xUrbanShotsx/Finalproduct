@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, Home, AlertCircle, CheckCircle2, Clock, Search } from "lucide-react";
 import { NewListingDrawer } from "./NewListingDrawer";
+import { PropertyDetailDrawer } from "./PropertyDetailDrawer";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -70,6 +71,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
 export function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>(DEMO_LISTINGS);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"All" | ListingStatus>("All");
 
@@ -197,6 +199,7 @@ export function ListingsPage() {
                   key={l.ref}
                   className="b-tr cursor-pointer"
                   style={{ borderBottom: idx < filtered.length - 1 ? "1px solid var(--b-border)" : "none" }}
+                  onClick={() => setSelectedListing(l)}
                 >
                   <td className="px-4 py-3.5" data-label="Property">
                     <div className="flex items-center gap-2.5">
@@ -241,6 +244,13 @@ export function ListingsPage() {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         onSave={handleSave}
+      />
+
+      {/* Property detail drawer */}
+      <PropertyDetailDrawer
+        listing={selectedListing}
+        open={!!selectedListing}
+        onClose={() => setSelectedListing(null)}
       />
     </PageShell>
   );
