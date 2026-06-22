@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, AlertTriangle, Clock, CheckCircle2, MapPin, Search } from "lucide-react";
+import { Plus, AlertTriangle, Clock, CheckCircle2, MapPin, Search, ShieldAlert } from "lucide-react";
 import { PageShell, Stat, SeverityBadge, StatusBadge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 import { ReportIncidentDrawer } from "./ReportIncidentDrawer";
 import { IcamInvestigationDrawer, type IncidentRow } from "./IcamInvestigationDrawer";
+import { RaiseRiskDrawer, type RaiseRiskSource } from "../risk/RaiseRiskDrawer";
 
 const RECORDS: IncidentRow[] = [
   { ref: "INC-044", date: "13 Jun 2024", time: "09:14", type: "Near Miss",        location: "Site 01 — Level 3",  severity: "High"   as const, status: "Under Investigation" as const, assignee: "J. Smith",  daysOpen: 3,    icamStatus: "In Progress" },
@@ -41,10 +42,24 @@ export function IncidentsPage() {
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
   const [site, setSite] = useState("");
+  const [raiseRiskSource, setRaiseRiskSource] = useState<RaiseRiskSource | null>(null);
+  const [raisedRisks, setRaisedRisks] = useState<Set<string>>(new Set());
 
   function openInvestigation(r: IncidentRow) {
     setSelectedIncident(r);
     setInvestigationOpen(true);
+  }
+
+  function openRaiseRisk(e: React.MouseEvent, r: IncidentRow) {
+    e.stopPropagation();
+    setRaiseRiskSource({
+      sourceRef:   `Incident ${r.ref}`,
+      title:       `${r.type} — ${r.location}`,
+      location:    r.location,
+      site:        r.location.split(" — ")[0] ?? "Site 01",
+      riskLevel:   r.severity === "Critical" || r.severity === "High" ? "High" : "Medium",
+      sourceRoute: "/safety/incidents",
+    });
   }
 
   return (
@@ -155,6 +170,24 @@ export function IncidentsPage() {
                           {r.daysOpen}d open
                         </span>
                       )}
+                      {/* Raise to Risk — High/Critical only */}
+                      {(r.severity === "High" || r.severity === "Critical") && (
+                        raisedRisks.has(r.ref) ? (
+                          <span className="flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5" style={{ background: "rgba(240,96,96,0.08)", color: "#f06060" }}>
+                            <ShieldAlert className="w-3 h-3" /> Risk Logged
+                          </span>
+                        ) : (
+                          <button
+                            onClick={e => openRaiseRisk(e, r)}
+                            className="flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5 border transition-colors"
+                            style={{ borderColor: "rgba(240,96,96,0.3)", color: "#f06060", background: "rgba(240,96,96,0.05)" }}
+                            onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.12)"; }}
+                            onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.05)"; }}
+                          >
+                            <ShieldAlert className="w-3 h-3" /> → Risk Register
+                          </button>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>
@@ -186,6 +219,19 @@ export function IncidentsPage() {
         open={investigationOpen}
         onClose={() => setInvestigationOpen(false)}
         incident={selectedIncident}
+      />
+
+      <RaiseRiskDrawer
+        open={raiseRiskSource !== null}
+        onClose={() => setRaiseRiskSource(null)}
+        source={raiseRiskSource}
+        onSaved={(ref) => {
+          if (raiseRiskSource) {
+            const incRef = raiseRiskSource.sourceRef.replace("Incident ", "");
+            setRaisedRisks(prev => new Set([...prev, incRef]));
+          }
+          setRaiseRiskSource(null);
+        }}
       />
     </>
   );

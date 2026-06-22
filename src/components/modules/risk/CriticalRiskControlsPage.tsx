@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
-import { Plus, CheckCircle2, XCircle, AlertCircle, Clock } from "lucide-react";
+import { Plus, CheckCircle2, XCircle, AlertCircle, Clock, ShieldAlert, ClipboardList } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { CriticalRiskControlsDrawer } from "./CriticalRiskControlsDrawer";
+import { RaiseRiskDrawer, type RaiseRiskSource } from "./RaiseRiskDrawer";
 import { PageShell, Stat, Badge, matchesTab, matchesSite, siteOptionsOf } from "../shared";
 
 type VerifyResult = "Verified" | "Failed" | "Partial" | "Not Checked";
@@ -42,12 +44,13 @@ const RESULT_CONFIG: Record<VerifyResult, { icon: typeof CheckCircle2; color: st
   "Not Checked": { icon: Clock,        color: "var(--b-text-muted)",        bg: "var(--b-bg-active)",       label: "Not Checked" },
 };
 
-function ControlCard({ r }: { r: typeof RECORDS[number] }) {
+function ControlCard({ r, onRaiseRisk, onAction }: { r: typeof RECORDS[number]; onRaiseRisk: (r: typeof RECORDS[number]) => void; onAction: (ref: string) => void }) {
   const res = RESULT_CONFIG[r.result];
   const Icon = res.icon;
   const typeStyle = CRC_TYPE_COLORS[r.crcType] ?? { bg: "var(--b-bg-active)", color: "var(--b-text-tertiary)" };
   const isFail = r.result === "Failed";
   const isPartial = r.result === "Partial";
+  const needsAction = isFail || isPartial;
   return (
     <div
       className="border flex flex-col"
@@ -71,6 +74,28 @@ function ControlCard({ r }: { r: typeof RECORDS[number] }) {
             {r.failureAction}
           </p>
         )}
+        {needsAction && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            <button
+              onClick={() => onRaiseRisk(r)}
+              className="flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5 border transition-colors"
+              style={{ borderColor: "rgba(240,96,96,0.3)", color: "#f06060", background: "rgba(240,96,96,0.05)" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.12)"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.05)"; }}
+            >
+              <ShieldAlert className="w-3 h-3" /> → Risk Register
+            </button>
+            <button
+              onClick={() => onAction(r.ref)}
+              className="flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5 border transition-colors"
+              style={{ borderColor: "var(--b-border-strong)", color: "var(--b-text-muted)", background: "var(--b-bg-secondary)" }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "var(--b-bg-active)"; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "var(--b-bg-secondary)"; }}
+            >
+              <ClipboardList className="w-3 h-3" /> Corrective Action →
+            </button>
+          </div>
+        )}
       </div>
       {/* Footer */}
       <div className="flex items-center justify-between px-3 py-2 border-t" style={{ borderColor: "var(--b-border)" }}>
@@ -92,12 +117,29 @@ export function CriticalRiskControlsPage() {
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
   const [site, setSite] = useState("");
+  const [raiseRiskSource, setRaiseRiskSource] = useState<RaiseRiskSource | null>(null);
+  const router = useRouter();
   const failed  = rows.filter(r => r.result === "Failed").length;
   const partial = rows.filter(r => r.result === "Partial").length;
 
   // Sort: Failed first, then Partial, then Not Checked, then Verified
   const ORDER: VerifyResult[] = ["Failed","Partial","Not Checked","Verified"];
   const sorted = [...rows].filter(r => matchesTab(tab, r) && matchesSite(site, r)).sort((a, b) => ORDER.indexOf(a.result) - ORDER.indexOf(b.result));
+
+  function handleRaiseRisk(r: typeof RECORDS[number]) {
+    setRaiseRiskSource({
+      sourceRef:   r.ref,
+      title:       r.controlName,
+      location:    r.site,
+      site:        r.site.split(",")[0].trim(),
+      riskLevel:   r.result === "Failed" ? "Critical" : "High",
+      sourceRoute: "/risk/critical-risk-controls",
+    });
+  }
+
+  function handleAction(ref: string) {
+    router.push(`/safety/actions?source=${encodeURIComponent(ref)}`);
+  }
 
   return (
     <>
@@ -126,7 +168,7 @@ export function CriticalRiskControlsPage() {
       onSiteChange={setSite}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        {sorted.map(r => <ControlCard key={r.ref} r={r} />)}
+        {sorted.map(r => <ControlCard key={r.ref} r={r} onRaiseRisk={handleRaiseRisk} onAction={handleAction} />)}
       </div>
     </PageShell>
     <CriticalRiskControlsDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onAdd={(f) => setRows(prev => {
@@ -136,6 +178,12 @@ export function CriticalRiskControlsPage() {
       const prefix = String(base[idKey]).replace(/[-\s].*$/, "");
       return [{ ...base, ...overlay, [idKey]: `${prefix}-${1000 + prev.length}` } as (typeof RECORDS)[number], ...prev];
     })} />
+    <RaiseRiskDrawer
+      open={raiseRiskSource !== null}
+      onClose={() => setRaiseRiskSource(null)}
+      source={raiseRiskSource}
+      onSaved={() => setRaiseRiskSource(null)}
+    />
     </>
   );
 }

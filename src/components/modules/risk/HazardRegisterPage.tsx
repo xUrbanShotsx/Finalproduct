@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Plus, ChevronDown, ChevronRight } from "lucide-react";
+import { Plus, ChevronDown, ChevronRight, ClipboardList } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { HazardRegisterDrawer } from "./HazardRegisterDrawer";
 import { PageShell, Stat, Badge } from "../shared";
 
@@ -33,10 +34,11 @@ const HAZARD_TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   "Mechanical":   { bg: "var(--b-badge-blue-bg)",   color: "var(--b-badge-blue-text)" },
 };
 
-function RiskBand({ level, items }: { level: RiskLevel; items: typeof RECORDS }) {
+function RiskBand({ level, items, onAction }: { level: RiskLevel; items: typeof RECORDS; onAction: (ref: string) => void }) {
   const [open, setOpen] = useState(true);
   const cfg = RISK_CONFIG[level];
   if (items.length === 0) return null;
+  const needsAction = level === "Critical" || level === "High";
   return (
     <div className="border" style={{ borderColor: cfg.border }}>
       {/* Band header */}
@@ -81,6 +83,17 @@ function RiskBand({ level, items }: { level: RiskLevel; items: typeof RECORDS })
               </div>
               <p className="text-[12.5px] font-[500]" style={{ color: "var(--b-text)" }}>{r.hazard}</p>
               <p className="text-[11.5px]" style={{ color: "var(--b-text-muted)" }}>{r.controls}</p>
+              {needsAction && (
+                <button
+                  onClick={() => onAction(r.ref)}
+                  className="flex items-center gap-1 text-[10.5px] font-semibold px-2 py-0.5 border mt-1 transition-colors"
+                  style={{ borderColor: "rgba(240,96,96,0.3)", color: "#f06060", background: "rgba(240,96,96,0.05)" }}
+                  onMouseOver={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.12)"; }}
+                  onMouseOut={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,96,96,0.05)"; }}
+                >
+                  <ClipboardList className="w-3 h-3" /> Corrective Action →
+                </button>
+              )}
             </div>
             {/* Right: meta */}
             <div className="flex-shrink-0 text-right space-y-1">
@@ -101,6 +114,12 @@ export function HazardRegisterPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [rows, setRows] = useState(RECORDS);
   const [tab, setTab] = useState("");
+  const router = useRouter();
+
+  function handleAction(hazRef: string) {
+    router.push(`/safety/actions?source=${encodeURIComponent(hazRef)}`);
+  }
+
   return (
     <>
     <PageShell
@@ -133,6 +152,7 @@ export function HazardRegisterPage() {
             key={level}
             level={level}
             items={rows.filter(r => r.residualRisk === level).filter(r => tab === "Overdue Review" ? r.overdue : true)}
+            onAction={handleAction}
           />
         ))}
       </div>
