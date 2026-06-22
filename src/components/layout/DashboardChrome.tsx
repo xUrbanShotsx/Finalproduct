@@ -9,6 +9,7 @@ import { TopBar } from "./TopBar";
 import { MobileMenu } from "./MobileMenu";
 import { ResponsiveTableLabels } from "./ResponsiveTableLabels";
 import { DashboardOnboarding } from "@/components/dashboard/DashboardOnboarding";
+import { AiChatWidget } from "./AiChatWidget";
 import type { Industry } from "@/config/modules";
 
 interface Props {
@@ -61,6 +62,9 @@ export function DashboardChrome({ industry, orgName, userName, isDemo, children 
       <ResponsiveTableLabels />
 
       {isDemo && <DashboardOnboarding industry={industry} />}
+
+      {/* AI chat widget — always visible on dashboard */}
+      <AiChatWidget industry={industry} />
 
       {/* Mobile bottom tab bar */}
       <nav
